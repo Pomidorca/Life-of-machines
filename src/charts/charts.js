@@ -141,7 +141,13 @@ export const barOptions = {
             display: true,
             text: 'Изменения структуры парка оборудования',
             font: {
-                size: 20
+                size: function(context) {
+                    if (context.chart.width < 500) {
+                        return 14
+                    } else {
+                        return 20
+                    }
+                }
             }
         },
         legend: {
@@ -154,6 +160,15 @@ export const barOptions = {
             title: {
                 display: true,
                 text: 'Количество оборудования, ед.',
+                font: {
+                    size: function(context) {
+                        if (context.chart.width < 500) {
+                            return 10
+                        } else {
+                            return 16
+                        }
+                    }
+                }
             }
         },
     },
@@ -1189,6 +1204,15 @@ export const SpecificFilledTomorrowsOptions = {
         title: {
             display: true,
             text: 'Удельные накопленные затраты ',
+            font: {
+                size: function(context) {
+                    if(context.chart.width < 500) {
+                        return 9
+                    } else {
+                        return 12
+                    }
+                }
+            }
         }
        }
     }
@@ -1248,7 +1272,13 @@ export const cost = {
           display: true,
           text: 'Удельное накопленные затраты, руб./т.км',
           font: {
-            size: 12
+            size: function(context) {
+              if(context.chart.width < 500) {
+                return 9
+              } else {
+                return 12
+              }
+            }
           }
         },
         ticks: {
