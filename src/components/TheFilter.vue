@@ -2,7 +2,7 @@
     <div class="px-6 py-10 bg-[#F2F2F2] min-h-[100%] max-w-[302px]">
         <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-3.5 text-[#979DAC]">
             <input class="w-[238px] outline-none" type="text" placeholder="Поиск">
-            <button><img src="@/assets/img/filter/Search_Magnifying_Glass.svg"></button>
+            <button><img src="/public/img/filter/Search_Magnifying_Glass.svg"></button>
         </div>
 
 
@@ -10,9 +10,9 @@
             <h4 class="text-xl text-[#001233] leading-5 font-medium">Вид машин</h4>
             <div class="flex relative">
                 <button class="absolute top-1/2 -translate-y-1/2 right-2 z-10 " @click="scrollRight"><img
-                        src="@/assets/img/filter/Frame 16.svg" alt=""></button>
+                        src="/public/img/filter/Frame 16.svg" alt=""></button>
                 <button class="absolute top-1/2 -translate-y-1/2 left-2 z-10 " @click="scrollLeft"><img
-                        src="@/assets/img/filter/Frame 34.svg" alt=""></button>
+                        src="/public/img/filter/Frame 34.svg" alt=""></button>
                 <div class="flex gap-x-5 mt-3 overflow-x-auto snap-none max-w-[302px] relative scroll-container cursor-pointer"
                     ref="scrollContainer">
                     <CardTechnique @selectTechnique="selectTechnique" />
