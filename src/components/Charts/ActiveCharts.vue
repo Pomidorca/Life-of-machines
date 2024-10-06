@@ -24,7 +24,7 @@
       </div>
 
     </div>
-    <div v-else-if="mode === 'DynamicStructure'">
+    <div class="container" v-else-if="mode === 'DynamicStructure'">
       <div class="drop-shadow-2xl rounded-2xl px-6 py-3.5 bg-white">
         <h2 class="text-center text-xl font-medium text-[#001233]">Динамика структуры и параметры парка оборудования
         </h2>
@@ -63,7 +63,7 @@
 
           <div>
             <h2 class="py-1 px-1 w-full bg-[#db752d] mb-3 text-white">Графки ввода:</h2>
-            <DataTable :value="equipmentData" class="p-datatable-gridlines" tableStyle="min-width: 50rem; min-height: 10rem">
+            <DataTable :value="equipmentData" class="p-datatable-gridlines" tableStyle="min-width: 40rem; min-height: 10rem">
               <Column field="name" header="Оборудование"></Column>
               <Column v-for="year in years" :key="year" :header="year.toString()">
                 <template #body="slotProps">
