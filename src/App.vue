@@ -2,6 +2,7 @@
   import TheHeader from '@/components/TheHeader.vue';
   import TheFilter from '@/components/TheFilter.vue';
   import TheInfoTech from '@/components/TheInfoTech.vue';
+  import TheServiceLife from './components/TheServiceLife.vue';
 </script>
 
 <template>
@@ -9,13 +10,16 @@
     <header>
       <TheHeader />
     </header>
-    <div>
-      <TheFilter />
-    </div>
-    <div class="container">
-      <div class="flex flex-col gap-y-8 pt-10 px-6">
-        <TheInfoTech />
-        <router-view />
+    <div class="w-full">
+      <TheInfoTech />
+      <div class="flex">
+        <TheFilter />
+        <div class="container pl-6">
+          <TheServiceLife />
+          <div class="mt-10">
+            <router-view />
+          </div>
+        </div>
       </div>
     </div>
   </div>
