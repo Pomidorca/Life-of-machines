@@ -14,17 +14,19 @@ const router = createRouter({
     {
       path: '/active',
       name: 'active',
-      component: () => import('@/views/ActiveView.vue')
+      component: () => import('@/views/ActiveView.vue'),
+    },
+    {
+      path: '/:pageName', 
+      component: () => import(`@/views/${$route.params.pageName}View.vue`),
+      props: (route) => ({
+        mode: route.query.mode || 'GeneralInformation' && 'DynamicStructure', 
+      }),
     },
     {
       path: '/time',
       name: 'time',
       component: () => import('@/views/TimeView.vue')
-    },
-    {
-      path: '/DynamicsStructure',
-      name: 'DynamicsStructure',
-      component: () => import('@/views/DynamicsStructureView.vue')
     },
     {
       path: '/TechnicalEconomicIndicators',
