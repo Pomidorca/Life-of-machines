@@ -31,7 +31,7 @@
         <div class="flex gap-x-5 mt-5">
           <div>
             <h2 class="py-1 px-1 w-full bg-[#91cf4e] mb-3 text-white">Текущее состояние:</h2>
-            <DataTable :value="currentState" showGridlines tableStyle="min-width: 30rem">
+            <DataTable :value="currentState" showGridlines tableStyle="min-width: 34rem">
               <Column class="" field="Group" header="Группа"></Column>
 
               <Column header="Оборудование">
@@ -62,8 +62,8 @@
           </div>
 
           <div>
-            <h2 class="py-1 px-1 w-full bg-[#db752d] mb-3 text-white">Графки ввода:</h2>
-            <DataTable :value="equipmentData" class="p-datatable-gridlines" tableStyle="min-width: 40rem; min-height: 10rem">
+            <h2 class="py-1 px-1 w-full bg-[#db752d] mb-3 text-white">График ввода:</h2>
+            <DataTable :value="equipmentData" class="p-datatable-gridlines" tableStyle="min-width: 45rem; min-height: 10.7rem">
               <Column field="name" header="Оборудование"></Column>
               <Column v-for="year in years" :key="year" :header="year.toString()">
                 <template #body="slotProps">
