@@ -87,6 +87,7 @@
         Title,
         Tooltip,
         Legend,
+        ScatterController
     } from 'chart.js'
     import {
         Line
@@ -106,6 +107,7 @@
         PointElement,
         LineElement,
         BarElement,
+        ScatterController,
         Title,
         Tooltip,
         Legend,
