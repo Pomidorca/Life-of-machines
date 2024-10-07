@@ -13,7 +13,7 @@
             <div class="flex flex-col mt-3 gap-y-2">
                 <router-link
                     class="w-full py-3 rounded-lg text-center text-[#979DAC] font-medium text-xl leading-5 bg-white"
-                    :class="{ 'text-[blue]': $route.query.mode === 'GeneralInformation' }"
+                    :class="{ 'text-[blue]': !$route.query.mode || $route.query.mode === 'GeneralInformation' }" 
                     :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: 'GeneralInformation' }}">
                     Общие сведения
                 </router-link>
