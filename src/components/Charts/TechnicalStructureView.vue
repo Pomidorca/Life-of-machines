@@ -17,7 +17,7 @@
 
     <div v-else-if="mode === 'DynamicStructure'">
       <div class="drop-shadow-2xl rounded-2xl px-6 py-3.5 bg-white mb-10">
-        <div class="flex gap-x-5 mt-5">
+        <div class="flex flex-col gap-5 min-[1620px]:flex-row">
           <div>
             <h2 class="py-1 px-1 w-full bg-[#91cf4e] mb-3 text-white">Текущее состояние:</h2>
             <DataTable :value="currentState" showGridlines tableStyle="min-width: 34rem">
