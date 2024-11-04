@@ -1,5 +1,5 @@
 <template>
-    <div class="px-6 py-10 bg-[#F2F2F2] min-h-[100%] max-w-[302px]">
+    <div class="flex flex-col justify-between px-6 py-10 bg-[#F2F2F2] min-h-[100vh] max-w-[302px]">
         <div>
             <h3 class="text-xl text-[#001233] font-medium leading-6">Оборудование</h3>
             <div class="h-80 overflow-y-auto px-4 py-3 bg-white mt-3 rounded-lg drop-shadow-lg">
@@ -9,27 +9,12 @@
 
 
         <div class="mt-5">
-            <h5 class="text-xl text-[#001233] font-medium leading-6">Динамика структуры и параметры парка</h5>
-            <div class="flex flex-col mt-3 gap-y-2">
-                <router-link
-                    class="w-full py-3 rounded-lg text-center text-[#979DAC] font-medium text-xl leading-5 bg-white"
-                    :class="{ 'text-[blue]': !$route.query.mode || $route.query.mode === 'GeneralInformation' }" 
-                    :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: 'GeneralInformation' }}">
-                    Общие сведения
-                </router-link>
-                <router-link
-                    class="w-full py-3 rounded-lg text-center text-[#979DAC] font-medium text-xl leading-5 bg-white"
-                    :class="{ 'text-[blue]': $route.query.mode === 'DynamicStructure' }"
-                    :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: 'DynamicStructure' }}">
-                    Динамика структуры
-                </router-link>
-            </div>
-        </div>
-
-
-        <div class="mt-5">
-            <h2 class="text-xl text-[#001233] font-medium leading-6">Срок службы</h2>
-            <div class="flex flex-col mt-3 gap-y-3 ">
+            <div class="flex flex-col mt-3 gap-y-3">
+                <div class="flex justify-between">
+                    <button class="py-2 px-6 bg-[#0554F2] rounded-lg text-white font-semibold">Мес.</button>
+                    <button class="py-2 px-6 bg-transparent border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold">Кв.</button>
+                    <button class="py-2 px-6 bg-transparent border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold">Год</button>
+                </div>
                 <!-- <input type="range"> -->
                 <div class="flex gap-x-3">
                     <div>

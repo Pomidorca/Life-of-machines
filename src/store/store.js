@@ -12,7 +12,7 @@ const store = createStore({
                 },
                 {
                     id: 1,
-                    title: 'Время',
+                    title: 'КФВ',
                     img: 'img/header/2.svg',
                     route: '/time',
                 },
@@ -44,7 +44,7 @@ const store = createStore({
                     id: 6,
                     title: 'STR',
                     img: 'img/header/7.svg',
-                    route: '/Structure'
+                    route: '/STR'
                 },
                 {
                     id: 7,

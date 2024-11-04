@@ -20,7 +20,7 @@ const router = createRouter({
       path: '/:pageName', 
       component: () => import(`@/views/${$route.params.pageName}View.vue`),
       props: (route) => ({
-        mode: route.query.mode || 'GeneralInformation' && 'DynamicStructure', 
+        mode: route.query.mode || 'GeneralInformation' && 'DynamicStructure' && 'analysis', 
       }),
     },
     {
@@ -47,6 +47,16 @@ const router = createRouter({
       path: '/TechnicalStructure',
       name: 'TechnicalStructure',
       component: () => import('@/views/TechnicalStructureView.vue')
+    },
+    {
+      path: '/STR',
+      name: 'STR',
+      component: () => import('@/views/STRView.vue')
+    },
+    {
+      path: '/NPV',
+      name: 'NPV',
+      component: () => import('@/views/NPVView.vue')
     }
   ]
 })

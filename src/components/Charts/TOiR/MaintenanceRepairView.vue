@@ -1,16 +1,7 @@
 <template>
     <div class="container">
         <div v-if="mode === 'GeneralInformation'">
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-              <Doughnut :options="StructureEmergencyDowntimesOptions" :data="StructureEmergencyDowntimes" />
-            </div>
-        
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
-              <Doughnut :options="StructureEmergencyDowntimesOptionsTwo" :data="StructureEmergencyDowntimesTwo" />
-            </div>
-        </div>
-
-        <div v-else-if="mode === 'DynamicStructure'">
+            
             <div class="grid grid-cols-2 gap-6 mt-10">
               <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
                 <Bar :options="ActualAccidentRateOptions" :data="ActualAccidentRate" />
@@ -31,6 +22,17 @@
         
             <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
               <Bar :options="MeanTimeBetweenFailuresOptions" :data="MeanTimeBetweenFailures" />
+            </div>
+            
+        </div>
+
+        <div v-else-if="mode === 'DynamicStructure'">
+          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+              <Doughnut :options="StructureEmergencyDowntimesOptions" :data="StructureEmergencyDowntimes" />
+            </div>
+        
+            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+              <Doughnut :options="StructureEmergencyDowntimesOptionsTwo" :data="StructureEmergencyDowntimesTwo" />
             </div>
         </div>
   
@@ -61,7 +63,7 @@
     import {
       Doughnut
     } from 'vue-chartjs';
-    import * as charts from '@/charts/charts.js';
+    import * as charts from '@/components/Charts/TOiR/index.js';
   
     ChartJS.register(
       ArcElement,

@@ -2,7 +2,6 @@
   import TheHeader from '@/components/TheHeader.vue';
   import TheFilter from '@/components/TheFilter.vue';
   import TheInfoTech from '@/components/TheInfoTech.vue';
-  import TheServiceLife from './components/TheServiceLife.vue';
 </script>
 
 <template>
@@ -15,8 +14,7 @@
       <div class="flex">
         <TheFilter />
         <div class="container pl-6">
-          <TheServiceLife />
-          <div class="mt-10">
+          <div class="">
             <router-view />
           </div>
         </div>
