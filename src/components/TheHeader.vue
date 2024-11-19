@@ -13,5 +13,5 @@
 </template>
 
 <script setup>
-  import ItemHeader from './ItemHeader.vue';
+import ItemHeader from './ItemHeader.vue';
 </script>

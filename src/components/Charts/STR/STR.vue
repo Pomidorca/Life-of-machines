@@ -2,7 +2,8 @@
     <div v-if="mode === 'GeneralInformation'">
         <div class="flex gap-x-4">
             <div class="inline-flex flex-col gap-y-2 max-w-[157px]">
-                <button class="px-4 py-1 bg-[#0554F2] text-white text-base font-semibold rounded-lg">Стратегия №1</button>
+                <button class="px-4 py-1 bg-[#0554F2] text-white text-base font-semibold rounded-lg">Стратегия
+                    №1</button>
                 <span
                     class="px-4 py-1 bg-[#F2F2F2] text-[10px] leading-3 font-medium rounded-lg border border-[#001233] text-center">текущая
                     стратегия <br> обслуживания</span>
@@ -39,19 +40,19 @@
 
         <div class="grid grid-cols-1 gap-y-4 mt-6">
 
-            <div class="drop-shadow-2xl rounded-2xl flex px-6 py-3.5 bg-white justify-center">  
+            <div class="drop-shadow-2xl rounded-2xl flex px-6 py-3.5 bg-white justify-center">
                 <Table />
             </div>
 
-            <div class="drop-shadow-2xl rounded-2xl flex px-6 py-3.5 bg-white justify-center">  
+            <div class="drop-shadow-2xl rounded-2xl flex px-6 py-3.5 bg-white justify-center">
                 <Table />
             </div>
 
-            <div class="drop-shadow-2xl rounded-2xl flex px-6 py-3.5 bg-white justify-center">  
+            <div class="drop-shadow-2xl rounded-2xl flex px-6 py-3.5 bg-white justify-center">
                 <Table />
             </div>
         </div>
-        
+
     </div>
 
 
@@ -59,54 +60,54 @@
     <div v-if="mode === 'DynamicStructure'"></div>
 </template>
 <script>
-    import {
-        Chart as ChartJS,
-        ArcElement,
-        CategoryScale,
-        LinearScale,
-        PointElement,
-        LineElement,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend,
-    } from 'chart.js'
-    import {
+import {
+    Chart as ChartJS,
+    ArcElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js'
+import {
+    Line,
+    Doughnut,
+    Bar
+} from 'vue-chartjs'
+import * as charts from '@/components/Charts/KTG/index.js';
+import DateKtg from '@/components/DateForKTG.vue';
+import Table from '@/components/TableForSTR.vue'
+
+ChartJS.register(
+    ArcElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+)
+
+export default {
+    name: 'App',
+    components: {
         Line,
+        Bar,
         Doughnut,
-        Bar
-    } from 'vue-chartjs'
-    import * as charts from '@/components/Charts/KTG/index.js';
-    import DateKtg from '@/components/DateForKTG.vue';
-    import Table from '@/components/TableForSTR.vue'
-
-    ChartJS.register(
-        ArcElement,
-        CategoryScale,
-        LinearScale,
-        PointElement,
-        LineElement,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend
-    )
-
-    export default {
-        name: 'App',
-        components: {
-            Line,
-            Bar,
-            Doughnut,
-            DateKtg,
-            Table
-        },
-        props: {
-            mode: String,
-            default: 'GeneralInformation'
-        },
-        data() {
-            return charts
-        }
+        DateKtg,
+        Table
+    },
+    props: {
+        mode: String,
+        default: 'GeneralInformation'
+    },
+    data() {
+        return charts
     }
+}
 </script>

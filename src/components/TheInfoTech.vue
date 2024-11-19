@@ -4,10 +4,6 @@
     </div>
 </template>
 <script setup>
-    import TheAvailabilityTech from '@/components/TheAvailabilityTech.vue';
-    import TheServiceLife from '@/components/TheServiceLife.vue';
 import CardsTechnique from './CardsTechnique.vue';
 </script>
-<style>
-
-</style>
+<style></style>

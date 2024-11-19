@@ -57,7 +57,8 @@ const router = createRouter({
       path: '/NPV',
       name: 'NPV',
       component: () => import('@/views/NPVView.vue')
-    }
+    },
+    
   ]
 })
 

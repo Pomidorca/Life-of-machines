@@ -12,8 +12,10 @@
             <div class="flex flex-col mt-3 gap-y-3">
                 <div class="flex justify-between">
                     <button class="py-2 px-6 bg-[#0554F2] rounded-lg text-white font-semibold">Мес.</button>
-                    <button class="py-2 px-6 bg-transparent border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold">Кв.</button>
-                    <button class="py-2 px-6 bg-transparent border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold">Год</button>
+                    <button
+                        class="py-2 px-6 bg-transparent border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold">Кв.</button>
+                    <button
+                        class="py-2 px-6 bg-transparent border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold">Год</button>
                 </div>
                 <!-- <input type="range"> -->
                 <div class="flex gap-x-3">
@@ -35,5 +37,5 @@
     </div>
 </template>
 <script setup>
-    import Equipment from './Equipment.vue';
+import Equipment from './Equipment.vue';
 </script>

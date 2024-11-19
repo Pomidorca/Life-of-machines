@@ -65,56 +65,56 @@
 
 
 <script>
-    import {
-        Chart as ChartJS,
-        ArcElement,
-        CategoryScale,
-        LinearScale,
-        PointElement,
-        LineElement,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend,
-    } from 'chart.js'
-    import {
+import {
+    Chart as ChartJS,
+    ArcElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js'
+import {
+    Line,
+    Doughnut,
+    Bar
+} from 'vue-chartjs'
+import * as charts from '@/components/Charts/NPV/index.js';
+import StrategiesForNPV from '@/components/StrategiesForNPV.vue'
+import BoundaryConditionsForNPV from '@/components/BoundaryConditionsForNPV.vue';
+import ChDDTableForNPV from '@/components/ChDDTableForNPV.vue';
+
+ChartJS.register(
+    ArcElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+)
+
+export default {
+    name: 'App',
+    components: {
         Line,
+        Bar,
         Doughnut,
-        Bar
-    } from 'vue-chartjs'
-    import * as charts from '@/components/Charts/NPV/index.js';
-    import StrategiesForNPV from '@/components/StrategiesForNPV.vue'
-    import BoundaryConditionsForNPV from '@/components/BoundaryConditionsForNPV.vue';
-    import ChDDTableForNPV from '@/components/ChDDTableForNPV.vue';
-
-    ChartJS.register(
-        ArcElement,
-        CategoryScale,
-        LinearScale,
-        PointElement,
-        LineElement,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend
-    )
-
-    export default {
-        name: 'App',
-        components: {
-            Line,
-            Bar,
-            Doughnut,
-            StrategiesForNPV,
-            BoundaryConditionsForNPV,
-            ChDDTableForNPV
-        },
-        props: {
-            mode: String,
-            default: 'GeneralInformation'
-        },
-        data() {
-            return charts
-        }
+        StrategiesForNPV,
+        BoundaryConditionsForNPV,
+        ChDDTableForNPV
+    },
+    props: {
+        mode: String,
+        default: 'GeneralInformation'
+    },
+    data() {
+        return charts
     }
+}
 </script>

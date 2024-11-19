@@ -9,7 +9,9 @@
             стратегия <br> обслуживания</span>
         </div>
         <div class="inline-flex flex-col gap-y-2 max-w-[157px]">
-          <button class="px-4 py-1 bg-[#F2F2F2] text-[#979DAC] text-base font-medium rounded-lg border border-[#979DAC]">Стратегия №2</button>
+          <button
+            class="px-4 py-1 bg-[#F2F2F2] text-[#979DAC] text-base font-medium rounded-lg border border-[#979DAC]">Стратегия
+            №2</button>
           <span
             class="px-4 py-1 bg-[#F2F2F2] text-[#979DAC] text-[10px] leading-3 font-medium rounded-lg border border-[#979DAC] text-center">риск-ориентированный
             <br> подход (роп)</span>
@@ -42,54 +44,54 @@
   </div>
 </template>
 <script>
-  import {
-    Chart as ChartJS,
-    ArcElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from 'chart.js'
-  import {
-    Line
-  } from 'vue-chartjs'
-  import {
-    Bar
-  } from 'vue-chartjs';
-  import {
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import {
+  Line
+} from 'vue-chartjs'
+import {
+  Bar
+} from 'vue-chartjs';
+import {
+  Doughnut
+} from 'vue-chartjs';
+import * as charts from '@/components/Charts/TCO/index.js';
+
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
+export default {
+  name: 'App',
+  components: {
+    Line,
+    Bar,
     Doughnut
-  } from 'vue-chartjs';
-  import * as charts from '@/components/Charts/TCO/index.js';
-
-  ChartJS.register(
-    ArcElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-  )
-
-  export default {
-    name: 'App',
-    components: {
-      Line,
-      Bar,
-      Doughnut
-    },
-    props: {
-      mode: String,
-      default: 'GeneralInformation'
-    },
-    data() {
-      return charts
-    }
+  },
+  props: {
+    mode: String,
+    default: 'GeneralInformation'
+  },
+  data() {
+    return charts
   }
+}
 </script>

@@ -6,7 +6,6 @@
     </div>
 </template>
 <script setup>
-    import CardTechnique from './CardsTechnique.vue'
+import CardTechnique from './CardsTechnique.vue'
 </script>
-<style scoped>
-</style>
+<style scoped></style>

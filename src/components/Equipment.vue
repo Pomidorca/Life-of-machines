@@ -10,13 +10,14 @@
         <div v-if="equipment.showUnderName">
             <div class="flex mb-3 ml-6" v-for="item in equipment.UnderName" :key="item.id">
                 <input class="rounded-lg" type="checkbox">
-                <label class="text-[#979DAC] ml-2">{{ item.name }}</label> </div>
+                <label class="text-[#979DAC] ml-2">{{ item.name }}</label>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    const handleClick = (equipment) => {
-        equipment.showUnderName = !equipment.showUnderName;
-    };
+const handleClick = (equipment) => {
+    equipment.showUnderName = !equipment.showUnderName;
+};
 </script>
