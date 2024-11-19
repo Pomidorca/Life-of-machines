@@ -13,23 +13,27 @@
                 <div class="flex flex-col gap-y-6 mt-8">
                     <div class="flex flex-col">
                         <label class="text-lg text-[#001233]">Имя</label>
-                        <input class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border"
+                        <input
+                            class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                             type="text" placeholder="имя">
                     </div>
                     <div class="flex flex-col">
                         <label class="text-lg text-[#001233]">Email</label>
-                        <input class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border"
+                        <input
+                            class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                             type="email" placeholder="Email">
                     </div>
                     <div v-if="isAuth" class="flex flex-col gap-y-6">
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Придумайте пароль</label>
-                            <input class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border"
+                            <input
+                                class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                                 type="password" placeholder="Пароль">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Повторите пароль</label>
-                            <input class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border"
+                            <input
+                                class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                                 type="password" placeholder="Пароль">
                             <span class="pl-6 text-sm text-[#979DAC]">Пароль должен содержать*</span>
                         </div>
@@ -37,7 +41,8 @@
                     <div v-else>
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Введите пароль</label>
-                            <input class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border"
+                            <input
+                                class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                                 type="password" placeholder="Пароль">
                         </div>
                     </div>
