@@ -79,7 +79,7 @@ const descritpionPage = computed(() => {
 })
 
 const titleForm = computed(() => {
-    return isAuth.value ? 'Зарегистрироваться' : 'Войти';
+    return isAuth.value ? 'Регистрация' : 'Войти';
 })
 
 const toggle = computed(() => {
