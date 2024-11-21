@@ -1,10 +1,11 @@
-import { createStore } from "vuex";
+import {
+    createStore
+} from "vuex";
 
 const store = createStore({
     state() {
         return {
-            header: [
-                {
+            header: [{
                     id: 0,
                     title: 'Актив',
                     img: 'img/header/1.svg',
@@ -19,7 +20,7 @@ const store = createStore({
                 {
                     id: 2,
                     title: 'ТЭП',
-                    img: 'img/header/3.svg' ,
+                    img: 'img/header/3.svg',
                     route: '/TechnicalEconomicIndicators'
                 },
                 {
@@ -53,8 +54,7 @@ const store = createStore({
                     route: '/NPV'
                 }
             ],
-            techniques: [
-                {
+            techniques: [{
                     id: 1,
                     image: 'img/tech/alltech.png',
                     title: 'Все машины',
@@ -106,55 +106,98 @@ const store = createStore({
 
             ],
             selectedTechnique: null,
-            equipments: [
-                {
+            equipments: [{
                     id: 0,
                     title: 'EX1200',
-                    UnderName: [ 
-                      { id: 1, name: 'EX1200-1' },
-                      { id: 2, name: 'EX1200-32' },
-                      { id: 3, name: 'EX1200-45' },
-                      { id: 4, name: 'EX1200-056' } 
+                    UnderName: [{
+                            id: 1,
+                            name: 'EX1200-1'
+                        },
+                        {
+                            id: 2,
+                            name: 'EX1200-32'
+                        },
+                        {
+                            id: 3,
+                            name: 'EX1200-45'
+                        },
+                        {
+                            id: 4,
+                            name: 'EX1200-056'
+                        }
                     ]
-                  },
-                  {
+                },
+                {
                     id: 1,
                     title: 'HD785',
-                    UnderName: [ 
-                      { id: 1, name: 'HD785-1' },
-                      { id: 2, name: 'HD785-32' },
-                      { id: 3, name: 'HD785-45' },
-                      { id: 4, name: 'HD785-056' } 
+                    UnderName: [{
+                            id: 1,
+                            name: 'HD785-1'
+                        },
+                        {
+                            id: 2,
+                            name: 'HD785-32'
+                        },
+                        {
+                            id: 3,
+                            name: 'HD785-45'
+                        },
+                        {
+                            id: 4,
+                            name: 'HD785-056'
+                        }
                     ]
-                  },
-                  {
+                },
+                {
                     id: 2,
                     title: 'PC 1250',
-                    UnderName: [ 
-                      { id: 1, name: 'PC 1250-1' },
-                      { id: 2, name: 'PC 1250-32' },
-                      { id: 3, name: 'PC 1250-45' },
-                      { id: 4, name: 'PC 1250-056' } 
+                    UnderName: [{
+                            id: 1,
+                            name: 'PC 1250-1'
+                        },
+                        {
+                            id: 2,
+                            name: 'PC 1250-32'
+                        },
+                        {
+                            id: 3,
+                            name: 'PC 1250-45'
+                        },
+                        {
+                            id: 4,
+                            name: 'PC 1250-056'
+                        }
                     ]
-                  },
-                  {
+                },
+                {
                     id: 3,
                     title: 'PC 3000',
-                    UnderName: [ 
-                      { id: 1, name: 'PC 3000-1' },
-                      { id: 2, name: 'PC 3000-32' },
-                      { id: 3, name: 'PC 3000-45' },
-                      { id: 4, name: 'PC 3000-056' } 
+                    UnderName: [{
+                            id: 1,
+                            name: 'PC 3000-1'
+                        },
+                        {
+                            id: 2,
+                            name: 'PC 3000-32'
+                        },
+                        {
+                            id: 3,
+                            name: 'PC 3000-45'
+                        },
+                        {
+                            id: 4,
+                            name: 'PC 3000-056'
+                        }
                     ]
-                  },  
-                
+                },
+
             ],
         }
     },
     mutations: {
         selectTechnique(state, technique) {
             state.selectTechnique = technique
-            
+
         }
     }
 })

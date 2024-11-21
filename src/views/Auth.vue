@@ -21,14 +21,14 @@
                         <label class="text-lg text-[#001233]">Email</label>
                         <input
                             class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                            type="email" placeholder="Email">
+                            type="email" placeholder="Email" v-model="username">
                     </div>
                     <div v-if="isAuth" class="flex flex-col gap-y-6">
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Придумайте пароль</label>
                             <input
                                 class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                                type="password" placeholder="Пароль">
+                                type="password" placeholder="Пароль" v-model="password">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Повторите пароль</label>
@@ -48,8 +48,8 @@
                     </div>
                 </div>
                 <div class="flex flex-col items-center mt-12">
-                    <button
-                        class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl">Авторизоваться</button>
+                    <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl"
+                        @click="auth">Авторизоваться</button>
                     <button @click="toggleAuth"
                         class="text-[#0554F2] text-xl font-medium mt-5 flex gap-x-2 items-center">{{
                             toggle }}
@@ -60,9 +60,30 @@
     </div>
 </template>
 <script setup>
+import { useAuthStore } from '@/store/auth';
 import { ref, computed } from 'vue';
 
+const authStore = useAuthStore();
 const isAuth = ref(true);
+const username = ref('');
+const password = ref('');
+
+const auth = async () => {
+    const post = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value
+        })
+    })
+    const data = await post.json();
+
+    console.log(data);
+
+}
 
 const toggleAuth = () => {
     isAuth.value = !isAuth.value
