@@ -1,23 +1,27 @@
 <template>
-  <div class="flex flex-col justify-between">
-    <div v-for="item in $store.state.header" :key="item.id">
-      <router-link @click.prevent="handleClick(item)" :to="item.route"
-        class="link flex gap-x-2 items-center px-4 py-3 w-44 rounded-lg font-medium"
-        :class="{ 'active': isActive(item) }">
-        <img :src="item.img" :class="{ 'router-link-active': $route.path === item.route }" />
-        <span>{{ item.title }}</span>
-      </router-link>
+  <div class="flex flex-col justify-between h-screen">
+    <div>
+      <div v-for="item in $store.state.header" :key="item.id">
+        <router-link @click.prevent="handleClick(item)" :to="item.route"
+          class="link flex gap-x-2 items-center px-4 py-3 w-44 rounded-lg font-medium"
+          :class="{ 'active': isActive(item) }">
+          <img :src="item.img" :class="{ 'router-link-active': $route.path === item.route }" />
+          <span>{{ item.title }}</span>
+        </router-link>
+      </div>
     </div>
-    <router-link to="auth"
-      class="link flex gap-x-2 items-center px-4 py-3 w-44 rounded-lg font-medium">Выход</router-link>
+    <button @click="authStore.logout()" class="px-4 flex gap-x-2 items-center font-medium text-xl text-[#FFFFFF]"><img
+        src="/img/Auth/Exit.svg" alt="">Выход</button>
   </div>
 </template>
 
 <script setup>
+import { useAuthStore } from '@/store/auth';
 import {
   reactive
 } from 'vue';
 
+const authStore = useAuthStore();
 const state = reactive({
   activeItem: null
 });

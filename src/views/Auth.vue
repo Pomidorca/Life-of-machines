@@ -21,14 +21,14 @@
                         <label class="text-lg text-[#001233]">Email</label>
                         <input
                             class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                            type="email" placeholder="Email" v-model="username">
+                            type="email" placeholder="Email (root@server.local)" v-model="username">
                     </div>
                     <div v-if="isAuth" class="flex flex-col gap-y-6">
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Придумайте пароль</label>
                             <input
                                 class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                                type="password" placeholder="Пароль" v-model="password">
+                                type="password" placeholder="Пароль (whoami)" v-model="password">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-lg text-[#001233]">Повторите пароль</label>
@@ -67,22 +67,17 @@ const authStore = useAuthStore();
 const isAuth = ref(true);
 const username = ref('');
 const password = ref('');
+console.log(authStore.accessToken)
 
 const auth = async () => {
-    const post = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: username.value,
-            password: password.value
-        })
-    })
-    const data = await post.json();
+    try {
+        await authStore.login({ username: username.value, password: password.value });
 
-    console.log(data);
-
+        console.log('Авторизация прошла успешно');
+        console.log('Токен доступа:', authStore.accessToken);
+    } catch (error) {
+        console.error('Ошибка авторизации:', error);
+    }
 }
 
 const toggleAuth = () => {

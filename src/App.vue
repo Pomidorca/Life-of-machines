@@ -3,10 +3,19 @@ import TheHeader from '@/components/TheHeader.vue';
 import TheFilter from '@/components/TheFilter.vue';
 import TheInfoTech from '@/components/TheInfoTech.vue';
 import TheAuth from '@/views/Auth.vue';
-import { ref } from 'vue';
+import { useAuthStore } from '@/store/auth';
+import { computed, onMounted } from 'vue';
+
+const authStore = useAuthStore();
+onMounted(() => {
+  authStore.loadFromLocalStorage();
+})
+
+const isAuth = computed(() => {
+  return authStore.accessToken !== null;
+})
 
 
-const isAuth = ref(false);
 </script>
 
 <template>
