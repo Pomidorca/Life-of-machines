@@ -34,7 +34,7 @@
                             <label class="text-lg text-[#001233]">Повторите пароль</label>
                             <input
                                 class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                                type="password" placeholder="Пароль">
+                                type="password" placeholder="Пароль" v-model="password">
                             <span class="pl-6 text-sm text-[#979DAC]">Пароль должен содержать*</span>
                         </div>
                     </div>
@@ -67,7 +67,6 @@ const authStore = useAuthStore();
 const isAuth = ref(true);
 const username = ref('');
 const password = ref('');
-console.log(authStore.accessToken)
 
 const auth = async () => {
     try {
