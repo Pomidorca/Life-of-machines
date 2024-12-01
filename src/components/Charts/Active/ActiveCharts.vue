@@ -1,27 +1,24 @@
 <template>
   <div>
     <div v-if="mode === 'GeneralInformation'">
-
-      <div class="grid grid-cols-2 gap-6">
-
+      <div v-if="loading">Загрузка...</div>
+      <div v-else-if="error">Ошибка: {{ error }}</div>
+      <div v-else class="grid grid-cols-2 gap-6">
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-          <Line :options="LineOptions" :data="line" />
+          <Line v-if="lineDate.value && lineDate.value.datasets && lineDate.value.datasets.length > 0"
+            :options="LineOptions" :data="lineDate.value" />
         </div>
-
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-          <Line :options="changeStructureOptions" :data="changeStructure" />
+          <Line :options="changeStructureOptions" :data="changeStructureData" />
         </div>
-
-
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-          <Bar :options="barOptionsTurnedTwo" :data="barTurnedTwo" />
+          <Bar :options="barOptionsTurnedTwo" :data="barTurnedTwoData" />
         </div>
-
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-          <Bar :options="barOptionsTurned" :data="barTurned" />
+          <Bar :options="barOptionsTurned" :data="barTurnedData" />
         </div>
-
       </div>
+
 
     </div>
     <div class="container" v-else-if="mode === 'DynamicStructure'">
@@ -41,7 +38,7 @@
 
 </template>
 
-<script>
+<script setup>
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -58,8 +55,14 @@ import {
   Line,
   Bar
 } from 'vue-chartjs';
-import * as charts from '@/components/Charts/Active/index.js';
+import { computed, onMounted } from "vue";
+import { useActiveStore } from '@/store/active';
 import TableForSTR from '@/components/TableForSTR.vue';
+import { LineOptions } from '@/components/Charts/Active/index.js';
+import { changeStructureOptions } from '@/components/Charts/Active/index.js';
+import { barOptionsTurned } from '@/components/Charts/Active/index.js';
+import { barOptionsTurnedTwo } from '@/components/Charts/Active/index.js';
+
 
 ChartJS.register(
   CategoryScale,
@@ -73,21 +76,28 @@ ChartJS.register(
   Filler
 );
 
-export default {
-  name: 'ChartsView',
-  components: {
-    Line,
-    Bar,
-    TableForSTR
-  },
-  props: {
-    mode: {
-      type: String,
-      default: 'GeneralInformation'
-    },
-  },
-  data() {
-    return charts
+const props = defineProps({
+  mode: {
+    type: String,
+    default: 'GeneralInformation'
   }
-};
+})
+const activeStore = useActiveStore();
+
+const loading = computed(() => activeStore.loading);
+const error = computed(() => activeStore.error);
+
+const lineDate = computed(() => activeStore.lineDate);
+const changeStructureData = computed(() => activeStore.changeStructureDate);
+const barTurnedData = computed(() => activeStore.barTurnedDate);
+const barTurnedTwoData = computed(() => activeStore.barTurnedTwoDate);
+
+
+
+console.log('Данные для графика', LineOptions.value)
+onMounted(async () => {
+  await activeStore.fetchData();
+  console.log(lineDate.value.datasets);
+
+});
 </script>

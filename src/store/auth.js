@@ -8,7 +8,7 @@ export const useAuthStore = defineStore("auth", {
         user: null,
     }),
     actions: {
-        async login(credentials)  {
+        async login(credentials) {
             try {
                 const response = await fetch('http://localhost:3000/auth/login', {
                     method: 'POST',
@@ -17,6 +17,7 @@ export const useAuthStore = defineStore("auth", {
                     },
                     body: JSON.stringify(credentials),
                 })
+
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -43,13 +44,14 @@ export const useAuthStore = defineStore("auth", {
             }
         },
         removeFromLocalStorage() {
-                localStorage.removeItem('accessToken');
+            localStorage.removeItem('accessToken');
         },
         loadFromLocalStorage() {
             try {
                 const accessToken = localStorage.getItem('accessToken');
                 console.log(accessToken);
-                
+
+
                 if (accessToken) {
                     this.accessToken = accessToken;
                 }

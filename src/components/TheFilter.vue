@@ -21,21 +21,38 @@
                 <div class="flex gap-x-3">
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">От</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date">
+                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="start">
                     </div>
                     <hr>
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">До</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date">
+                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="end">
                     </div>
                 </div>
                 <button
-                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Весь
+                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300"
+                    @click="activeStore.getActive(start, end)">Весь
                     период</button>
             </div>
         </div>
     </div>
 </template>
 <script setup>
+import { watchEffect, ref } from 'vue';
 import Equipment from './Equipment.vue';
+import { useActiveStore } from '@/store/active.js';
+
+const activeStore = useActiveStore();
+const start = ref('');
+const end = ref('');
+const activeData = ref(null);
+
+watchEffect(async () => {
+    if (start.value && end.value) {
+        await activeStore.getActive(start.value, end.value);
+        activeData.value = activeStore.activeData;
+    }
+})
+
+
 </script>

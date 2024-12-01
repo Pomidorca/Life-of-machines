@@ -1,45 +1,6 @@
-import {
-    useActiveStore
-} from "@/store/active";
-
-const active = useActiveStore();
-
-export const line = {
-    labels: active.line.labels,
-    datasets: [{
-            label: active.line.datasets[0].label,
-            data: active.line.datasets[0].data,
-            borderColor: active.line.datasets[0].borderColor,
-            backgroundColor: active.line.datasets[0].backgroundColor,
-            fill: active.line.datasets[0].fill,
-        },
-        {
-            label: active.line.datasets[1].label,
-            data: active.line.datasets[1].data,
-            borderColor: active.line.datasets[1].borderColor,
-            backgroundColor: active.line.datasets[1].backgroundColor,
-            fill: active.line.datasets[1].fill,
-        },
-        {
-            label: active.line.datasets[2].label,
-            data: active.line.datasets[2].data,
-            borderColor: active.line.datasets[2].borderColor,
-            backgroundColor: active.line.datasets[2].backgroundColor,
-            fill: active.line.datasets[2].fill,
-        },
-        {
-            label: active.line.datasets[3].label,
-            data: active.line.datasets[3].data,
-            borderColor: active.line.datasets[3].borderColor,
-            backgroundColor: active.line.datasets[3].backgroundColor,
-            fill: active.line.datasets[3].fill,
-            pointStyle: active.line.datasets[3].pointStyle,
-            pointBorderColor: active.line.datasets[3].pointBorderColor,
-        },
-    ]
-}
-
 let delayed;
+
+
 export const LineOptions = {
     responsive: true,
     maintainAspectRatio: true,
@@ -118,31 +79,6 @@ export const LineOptions = {
     }
 }
 
-export const changeStructure = {
-    labels: active.changeStructure.labels,
-    datasets: [{
-            label: active.changeStructure.datasets[0].label,
-            data: active.changeStructure.datasets[0].data,
-            backgroundColor: active.changeStructure.datasets[0].backgroundColor,
-            borderColor: active.changeStructure.datasets[0].borderColor,
-            borderWidth: active.changeStructure.datasets[0].borderWidth,
-        },
-        {
-            label: active.changeStructure.datasets[1].label,
-            data: active.changeStructure.datasets[1].data,
-            backgroundColor: active.changeStructure.datasets[1].backgroundColor,
-            borderColor: active.changeStructure.datasets[1].borderColor,
-            borderWidth: active.changeStructure.datasets[1].borderWidth,
-        },
-        {
-            label: active.changeStructure.datasets[2].label,
-            data: active.changeStructure.datasets[2].data,
-            backgroundColor: active.changeStructure.datasets[2].backgroundColor,
-            borderColor: active.changeStructure.datasets[2].borderColor,
-            borderWidth: active.changeStructure.datasets[2].borderWidth,
-        },
-    ]
-}
 
 export const changeStructureOptions = {
     responsive: true,
@@ -168,22 +104,6 @@ export const changeStructureOptions = {
     },
 }
 
-export const barTurned = {
-    labels: active.barTurned.labels,
-    datasets: [{
-            label: active.barTurned.datasets[0].label,
-            data: active.barTurned.datasets[0].data,
-            backgroundColor: active.barTurned.datasets[0].backgroundColor,
-            fill: active.barTurned.datasets[0].fill,
-        },
-        {
-            label: active.barTurned.datasets[1].label,
-            data: active.barTurned.datasets[1].data,
-            backgroundColor: active.barTurned.datasets[1].backgroundColor,
-            fill: active.barTurned.datasets[1].fill,
-        }
-    ]
-}
 
 export const barOptionsTurned = {
     responsive: true,
@@ -204,17 +124,6 @@ export const barOptionsTurned = {
     }
 }
 
-export const barTurnedTwo = {
-    labels: active.barTurnedTwo.labels,
-    datasets: [{
-        label: active.barTurnedTwo.datasets[0].label,
-        data: active.barTurnedTwo.datasets[0].data,
-        backgroundColor: [
-            active.barTurnedTwo.datasets[0].backgroundColor,
-        ],
-        fill: active.barTurnedTwo.datasets[0].fill,
-    }]
-}
 
 export const barOptionsTurnedTwo = {
     responsive: true,

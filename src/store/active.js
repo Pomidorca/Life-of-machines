@@ -1,96 +1,261 @@
 import {
     defineStore
 } from "pinia";
+import {
+    useAuthStore
+} from "./auth";
+import {
+    ref
+} from "vue";
+
 
 export const useActiveStore = defineStore('active', {
     state: () => ({
-        line: {
-            labels: ['2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-            datasets: [{
-                    label: 'Основное',
-                    data: [1, 1, 2, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 8],
-                    borderColor: '#31608c',
-                    backgroundColor: '#31608c',
-                    fill: true,
-                },
-                {
-                    label: 'Поддерживающее',
-                    data: [NaN, NaN, NaN, NaN, NaN, NaN, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6],
-                    fill: true,
-                    borderColor: '#3c6f9f',
-                    backgroundColor: '#3c6f9f',
-                },
-                {
-                    label: 'Вспомогательное',
-                    data: [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8],
-                    borderColor: '#7e9abf',
-                    backgroundColor: '#7e9abf',
-                    fill: true,
-                },
-                {
-                    label: 'Итого',
-                    data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    borderColor: '#0554F2',
-                    pointStyle: 'circle',
-                    backgroundColor: '#282b41',
-                    pointBorderColor: '#282b41',
-                    fill: false,
-                },
-            ]
+        loading: false,
+        error: null,
+        lineDate: ref({
+            labels: [],
+            datasets: []
+        }),
+        changeStructureDate: {
+            labels: [],
+            datasets: []
         },
-        changeStructure: {
-            labels: ['2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-            datasets: [{
-                    label: 'Основное',
-                    data: [1, 2, 2, 2.55, 3.55, 3.65, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12],
-                    backgroundColor: '#4078b0',
-                    borderColor: '#4078b0',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Поддерживающее',
-                    data: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 1, 2, 2, 3, 4, 5.67, 6.55, 5, 5, 6, 7, 8, 9, 10],
-                    backgroundColor: '#848484',
-                    borderColor: '#848484',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Вспомогательное',
-                    data: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3, 4, 5, 5, 5, 6.67, 7.55, 7.8, 8, 9, 10, 11, 11],
-                    backgroundColor: '#325aa3',
-                    borderColor: '#325aa3',
-                    borderWidth: 1
-                },
-            ]
+        barTurnedDate: {
+            labels: [],
+            datasets: []
         },
-        barTurned: {
-            labels: ['Вспомогательное', 'Поддерживающее', 'Основное', ],
-            datasets: [{
-                    label: 'Средний срок службы',
-                    data: [7, 9, 13],
-                    backgroundColor: '#7893b1',
-                    fill: false,
-                },
-                {
-                    label: 'Кол-во',
-                    data: [5, 6, 8],
-                    backgroundColor: '#3e6f9c',
-                    fill: false,
+        barTurnedTwoDate: {
+            labels: [],
+            datasets: []
+        },
+    }),
+    actions: {
+        async fetchData(yearStart, yearEnd) {
+            this.loading = true;
+            this.error = null;
+            const authStore = useAuthStore();
+            const token = authStore.accessToken;
+
+            if (!token) {
+                this.error = 'Токен не найден!';
+                this.loading = false;
+                return;
+            }
+            if (!yearStart || !yearEnd) {
+                yearStart = 2000;
+                yearEnd = 2024;
+            }
+
+            try {
+                const responses = await Promise.all([
+                    fetch(`http://localhost:3000/actives/charts/structure?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=1&machineTypeIds=`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    }),
+                    fetch(`http://localhost:3000/actives/charts/average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=1&machineTypeIds=`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    }),
+                    fetch(`http://localhost:3000/actives/charts/count-and-average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=1&machineTypeIds=`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    }),
+                    fetch(`http://localhost:3000/actives/charts/work-distribution?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=1&machineTypeIds=`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    }),
+                ]);
+
+                const data = await Promise.all(responses.map(res => res.json()));
+                console.log(data);
+
+
+                this.lineDate.value = {
+                    ...this.lineDate,
+                    ...transformLinedate(data[0])
+                };
+                this.changeStructureDate = {
+                    ...this.changeStructureDate,
+                    ...transformchangeStructuredate(data[1])
+                };
+                this.barTurnedTwoDate = {
+                    ...this.barTurnedTwoDate,
+                    ...transformbarTurnedTwoDate(data[2])
                 }
-            ]
-        },
-        barTurnedTwo: {
-            labels: ['Добычные работы', 'Вскрышные работы', 'Дополнительные работы', ],
-            datasets: [{
-                label: '',
-                data: [5, 6, 8],
-                backgroundColor: [
-                    '#4d4d4d',
-                    '#4d4d4d',
-                    '#4d4d4d',
-                ],
-                fill: false,
-            }]
+                this.barTurnedDate = {
+                    ...this.barTurnedDate,
+                    ...transformbarTurnedDate(data[3])
+                };
+                console.log('Данные после transformLinedate:', this.lineDate.value);
+
+            } catch (error) {
+                this.error = `Ошибка при загрузке данных: ${error.message}`;
+                console.error("Error fetching data:", error);
+            } finally {
+                this.loading = false;
+            }
         }
-    })
+
+    }
 })
+
+function transformLinedate(data) {
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        console.error("Ошибка: Некорректные данные получены от API:", data);
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
+    const labels = data.map(item => item.year);
+    const datasets = [{
+            label: 'Основное',
+            data: data.map(item => item.main),
+            borderColor: '#31608c',
+            backgroundColor: '#31608c',
+            fill: true,
+        },
+        {
+            label: 'Поддерживающее',
+            data: data.map(item => item.support),
+            borderColor: '#3c6f9f',
+            backgroundColor: '#3c6f9f',
+            fill: true,
+        },
+        {
+            label: 'Вспомогательное',
+            data: data.map(item => item.auxiliary),
+            borderColor: '#7e9abf',
+            backgroundColor: '#7e9abf',
+            fill: true,
+        },
+        {
+            label: 'Итого',
+            data: data.map(item => item.main + item.support + item.auxiliary),
+            borderColor: '#0554F2',
+            pointStyle: 'circle',
+            backgroundColor: '#282b41',
+            pointBorderColor: '#282b41',
+            fill: false,
+        },
+    ];
+
+    console.log("Проверка datasets:", datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data
+    })));
+
+    return {
+        labels,
+        datasets
+    };
+}
+
+function transformchangeStructuredate(data) {
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        console.error("Ошибка: Некорректные данные получены от API:", data);
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
+    const labels = data.map(item => item.year);
+    const datasets = [{
+            label: 'Основное',
+            data: data.map(item => item.main),
+            backgroundColor: '#4078b0',
+            borderColor: '#4078b0',
+            borderWidth: 1
+        },
+        {
+            label: 'Поддерживающее',
+            data: data.map(item => item.support),
+            backgroundColor: '#848484',
+            borderColor: '#848484',
+            borderWidth: 1
+        },
+        {
+            label: 'Вспомогательное',
+            data: data.map(item => item.auxiliary),
+            backgroundColor: '#325aa3',
+            borderColor: '#325aa3',
+            borderWidth: 1
+        },
+    ];
+
+    console.log("Проверка datasets:", datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data
+    })));
+
+    return {
+        labels,
+        datasets
+    };
+}
+
+function transformbarTurnedDate(data) {
+    console.error("Ошибка: Некорректные данные получены от API:", data);
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
+    const labels = data.map(item => item.workType);
+    const datasets = [{
+            label: [data.map(item => item.workType)],
+            data: data.map(item => item.count),
+            backgroundColor: '#4078b0',
+            borderColor: '#4078b0',
+            borderWidth: 1
+        },
+
+    ];
+
+    console.log("Проверка datasets:", datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data
+    })));
+
+    return {
+        labels,
+        datasets
+    };
+}
+
+function transformbarTurnedTwoDate(data) {
+    console.log(data);
+    console.error("Ошибка: Некорректные данные получены от API:", data);
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
+    const labels = '';
+    const datasets = [{
+            label: 'Поддерживающее',
+            data: [data.map(item => item)],
+            backgroundColor: '#4078b0',
+            borderColor: '#4078b0',
+            borderWidth: 1
+        },
+
+    ];
+
+    console.log("Проверка datasets:", datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data
+    })));
+
+    return {
+        labels,
+        datasets
+    };
+}
