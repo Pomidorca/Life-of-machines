@@ -5,8 +5,7 @@
       <div v-else-if="error">Ошибка: {{ error }}</div>
       <div v-else class="grid grid-cols-2 gap-6">
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-          <Line v-if="lineDate.value && lineDate.value.datasets && lineDate.value.datasets.length > 0"
-            :options="LineOptions" :data="lineDate.value" />
+          <Line :options="LineOptions" :data="lineDate" />
         </div>
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
           <Line :options="changeStructureOptions" :data="changeStructureData" />
@@ -94,10 +93,7 @@ const barTurnedTwoData = computed(() => activeStore.barTurnedTwoDate);
 
 
 
-console.log('Данные для графика', LineOptions.value)
 onMounted(async () => {
   await activeStore.fetchData();
-  console.log(lineDate.value.datasets);
-
 });
 </script>

@@ -43,7 +43,7 @@
                             <label class="text-lg text-[#001233]">Введите пароль</label>
                             <input
                                 class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                                type="password" placeholder="Пароль">
+                                type="password" placeholder="Пароль" v-model="password">
                         </div>
                     </div>
                 </div>

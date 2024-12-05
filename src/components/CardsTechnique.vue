@@ -1,6 +1,6 @@
 <template>
-  <div v-for="technique in techniques" :key="technique.id" @click="$emit('selectTechnique', technique)">
-    <div class="flex items-center gap-x-3.5">
+  <div v-for="technique in techniques" :key="technique.id">
+    <div class="flex items-center gap-x-3.5" @click="fetchData(technique.machineClassIds)">
       <div class="flex flex-col items-center gap-y-0.5">
         <img class="w-[64px] h-[64px] bg-cover bg-center bg-no-repeat" :src="technique.image" alt="tech">
         <p class="text-[#001233] text-xs font-normal">{{ technique.title }}</p>
@@ -15,22 +15,23 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import {
   computed
 } from "vue";
 import {
   useStore
 } from "vuex";
+import { useActiveStore } from "@/store/active";
 
-export default {
-  setup() {
-    const store = useStore();
-    const techniques = computed(() => store.state.techniques);
+const store = useStore();
+const techniques = computed(() => store.state.techniques);
+const activeStore = useActiveStore();
+const fetchData = (technique) => {
+  activeStore.fetchData({
+    machineClassIds: technique
+  })
+}
 
-    return {
-      techniques,
-    };
-  },
-};
+
 </script>

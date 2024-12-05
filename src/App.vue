@@ -8,7 +8,7 @@ import { computed, onMounted } from 'vue';
 
 const authStore = useAuthStore();
 onMounted(() => {
-  authStore.loadFromLocalStorage();
+  authStore.loadTokensFromSessionStorage();
 })
 
 const isAuth = computed(() => {

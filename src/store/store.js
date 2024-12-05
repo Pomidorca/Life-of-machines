@@ -60,6 +60,7 @@ const store = createStore({
                     title: 'Все машины',
                     total: '173',
                     repair: '15',
+                    machineClassIds: 1
                 },
                 {
                     id: 2,
@@ -67,6 +68,7 @@ const store = createStore({
                     title: 'Экскаватор',
                     total: '25',
                     repair: '2',
+                    machineClassIds: 5
                 },
                 {
                     id: 3,
@@ -74,6 +76,7 @@ const store = createStore({
                     title: 'Самосвал',
                     total: '100',
                     repair: '10',
+                    machineClassIds: 6
                 },
                 {
                     id: 4,
@@ -81,6 +84,7 @@ const store = createStore({
                     title: 'Автогрейдеры',
                     total: '8',
                     repair: '0',
+                    machineClassIds: 9
                 },
                 {
                     id: 5,
@@ -88,6 +92,7 @@ const store = createStore({
                     title: 'Бур.станки',
                     total: '10',
                     repair: '1',
+                    machineClassIds: 7
                 },
                 {
                     id: 6,
@@ -95,6 +100,7 @@ const store = createStore({
                     title: 'Бульдозеры',
                     total: '20',
                     repair: '2',
+                    machineClassIds: 8
                 },
                 {
                     id: 7,
@@ -102,6 +108,7 @@ const store = createStore({
                     title: 'Погрузчики',
                     total: '10',
                     repair: '0',
+                    machineClassIds: 10
                 }
 
             ],

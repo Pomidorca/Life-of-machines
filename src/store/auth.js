@@ -5,6 +5,7 @@ import {
 export const useAuthStore = defineStore("auth", {
     state: () => ({
         accessToken: null,
+        refreshToken: null,
         user: null,
     }),
     actions: {
@@ -16,8 +17,7 @@ export const useAuthStore = defineStore("auth", {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(credentials),
-                })
-
+                });
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -26,39 +26,56 @@ export const useAuthStore = defineStore("auth", {
 
                 const data = await response.json();
                 this.accessToken = data.access_token;
-                this.saveToLocalStorage();
+                this.refreshToken = data.refresh_token;
+                this.saveTokensToSessionStorage();
             } catch (error) {
                 console.error('Ошибка авторизации:', error);
             }
         },
         logout() {
             this.accessToken = null;
+            this.refreshToken = null;
             this.user = null;
-            this.removeFromLocalStorage();
+            this.removeFromSessionStorage();
         },
-        saveToLocalStorage() {
+        saveTokensToSessionStorage() {
+            sessionStorage.setItem('accessToken', this.accessToken);
+            sessionStorage.setItem('refreshToken', this.refreshToken);
+        },
+        removeFromSessionStorage() {
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('refreshToken');
+        },
+        loadTokensFromSessionStorage() {
+            this.accessToken = sessionStorage.getItem('accessToken');
+            this.refreshToken = sessionStorage.getItem('refreshToken');
+        },
+        async refreshAccessToken() {
             try {
-                localStorage.setItem('accessToken', this.accessToken);
-            } catch (error) {
-                console.error('Ошибка сохранения токена:', error);
-            }
-        },
-        removeFromLocalStorage() {
-            localStorage.removeItem('accessToken');
-        },
-        loadFromLocalStorage() {
-            try {
-                const accessToken = localStorage.getItem('accessToken');
-                console.log(accessToken);
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        refreshToken: this.refreshToken
+                    }),
+                });
 
-
-                if (accessToken) {
-                    this.accessToken = accessToken;
+                if (!response.ok) {
+                    throw new Error('Ошибка обновления токена');
                 }
+
+                const data = await response.json();
+                this.accessToken = data.access_token;
+                this.saveTokensToSessionStorage();
+                return this.accessToken;
             } catch (error) {
-                console.error('Ошибка загрузки токена:', error);
-                this.accessToken = null;
+                console.error('Ошибка обновления токена:', error);
+                this.logout();
+                return null;
             }
         }
+
     },
 });
