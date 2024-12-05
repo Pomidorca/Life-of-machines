@@ -37,9 +37,15 @@ export const useActiveStore = defineStore('active', {
             labels: [],
             datasets: []
         },
+        filterParams: ref({
+            yearStart: 2000,
+            yearEnd: 2024,
+            machineClassIds: 1,
+            machineTypeIds: []
+        }),
     }),
     actions: {
-        async fetchData(filterParams) {
+        async fetchData() {
             this.loading = true;
             this.error = null;
             const authStore = useAuthStore();
@@ -51,31 +57,34 @@ export const useActiveStore = defineStore('active', {
                 return;
             }
             const {
-                yearStart = 2000, yearEnd = 2024, machineClassIds = 1, machineTypeIds = ''
-            } = filterParams || {};
+                yearStart,
+                yearEnd,
+                machineClassIds,
+                machineTypeIds
+            } = this.filterParams;
             try {
                 const responses = await Promise.all([
-                    fetch(`http://localhost:3000/actives/charts/structure?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&${machineTypeIds}=`, {
+                    fetch(`http://localhost:3000/actives/charts/structure?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`http://localhost:3000/actives/charts/average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&${machineTypeIds}=`, {
+                    fetch(`http://localhost:3000/actives/charts/average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`http://localhost:3000/actives/charts/work-distribution?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&${machineTypeIds}=`, {
+                    fetch(`http://localhost:3000/actives/charts/work-distribution?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`http://localhost:3000/actives/charts/count-and-average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&${machineTypeIds}=`, {
+                    fetch(`http://localhost:3000/actives/charts/count-and-average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`http://localhost:3000/actives/machine-list?&machineClassIds=${machineClassIds}&machineTypeIds=`, {
+                    fetch(`http://localhost:3000/actives/machine-list?&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
@@ -98,7 +107,13 @@ export const useActiveStore = defineStore('active', {
             } finally {
                 this.loading = false;
             }
-        }
+        },
+        updateFilterParams(params) {
+            this.$patch(state => {
+                Object.assign(state.filterParams, params);
+            });
+            this.fetchData();
+        },
 
     }
 })

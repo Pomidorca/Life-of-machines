@@ -24,15 +24,14 @@
                 <div class="flex gap-x-3">
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">От</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date" ref="startDateInput"
-                            @change="extractYear('start')">
+                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="startDate" @change="updateYearRange">
                     </div>
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">До</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date" ref="endDateInput" @change="extractYear('end')">
+                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="endDate" @change="updateYearRange">
                     </div>
                 </div>
-                <button @click="fetchData"
+                <button @click="updateYearRange"
                     class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Весь
                     период</button>
             </div>
@@ -46,31 +45,25 @@ import Equipment from './Equipment.vue';
 import { useActiveStore } from '@/store/active.js';
 
 const activeStore = useActiveStore();
-const yearStart = ref(null);
-const yearEnd = ref(null);
+const startDate = ref(null);
+const endDate = ref(null);
 const toggle = ref('Год');
-const startDateInput = ref(null);
-const endDateInput = ref(null);
 
 
 const handleClick = (value) => {
     toggle.value = value;
 }
 
-const extractYear = (type) => {
-    const dateInput = type === 'start' ? startDateInput.value : endDateInput.value;
-    if (dateInput && dateInput.value) {
-        const year = new Date(dateInput.value).getFullYear();
-        if (type === 'start') {
-            yearStart.value = year;
-        } else {
-            yearEnd.value = year;
-        }
+const updateYearRange = () => {
+    const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
+    const endYear = endDate.value ? new Date(endDate.value).getFullYear() : 2000;
+
+    if (startYear > endYear) {
+        console.error("Ошибка: 'Начало' не может быть позже 'Конца'.");
+        return;
     }
+
+    activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
 };
 
-const fetchData = () => {
-    activeStore.fetchData({ yearStart: yearStart.value, yearEnd: yearEnd.value });
-    console.log(yearStart.value, yearEnd.value);
-};
 </script>
