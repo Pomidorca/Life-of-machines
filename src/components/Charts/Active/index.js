@@ -4,8 +4,6 @@ let delayed;
 export const LineOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    height: 100,
-    width: 100,
     plugins: {
         title: {
             display: true,
@@ -82,8 +80,7 @@ export const LineOptions = {
 
 export const changeStructureOptions = {
     responsive: true,
-    maintainAspectRatio: true,
-    height: 300,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             position: 'bottom'

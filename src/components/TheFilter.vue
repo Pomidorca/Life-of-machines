@@ -32,8 +32,7 @@
                     </div>
                 </div>
                 <button @click="updateYearRange"
-                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Весь
-                    период</button>
+                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Принять</button>
             </div>
         </div>
     </div>
