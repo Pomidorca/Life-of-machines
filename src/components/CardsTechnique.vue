@@ -18,21 +18,38 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useActiveStore } from "@/store/active";
 import { useMachineStore } from "@/store/machine";
+import { useRoute, useRouter } from "vue-router";
 
+const route = useRoute();
+const router = useRouter();
 const store = useStore();
 const techniques = computed(() => store.state.techniques);
 const machineStore = useMachineStore();
 const activeStore = useActiveStore();
-const selectedTechniqueId = ref(null); // Новая переменная
+const selectedTechniqueId = ref(null);
 
 const selectTechnique = (technique) => {
-  selectedTechniqueId.value = technique.id; // Обновляем ID выбранной техники
+  selectedTechniqueId.value = technique.id;
   activeStore.updateFilterParams({ machineClassIds: technique.machineClassIds });
+  updateUrl(technique);
 };
+
+const updateUrl = (technique) => {
+  const otherParams = { ...route.query, };
+  delete otherParams.machineClassIds;
+  const newQuery = { ...otherParams, machineClassIds: technique.machineClassIds };
+  router.replace({ path: route.path, query: newQuery });
+}
+
+onMounted(() => {
+  if (techniques.value.length > 0) {
+    selectTechnique(techniques.value[0]);
+  }
+})
 
 const fetchTechniques = (machineClassIds) => {
   machineStore.fetchMachines({ machineClassId: machineClassIds });

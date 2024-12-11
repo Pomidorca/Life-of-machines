@@ -8,8 +8,7 @@ const router = createRouter({
     import.meta.env.BASE_URL),
   routes: [{
       path: '/',
-      name: 'home',
-      component: () => import('@/views/ActiveView.vue')
+      redirect: '/active'
     },
     {
       path: '/active',
@@ -17,11 +16,9 @@ const router = createRouter({
       component: () => import('@/views/ActiveView.vue'),
     },
     {
-      path: '/:pageName', 
-      component: () => import(`@/views/${$route.params.pageName}View.vue`),
-      props: (route) => ({
-        mode: route.query.mode || 'GeneralInformation' && 'DynamicStructure' && 'analysis', 
-      }),
+      path: '/:pageName',
+      component: () => import(`@/views/${pageName}View.vue`),
+      props: true
     },
     {
       path: '/time',
@@ -58,7 +55,7 @@ const router = createRouter({
       name: 'NPV',
       component: () => import('@/views/NPVView.vue')
     },
-    
+
   ]
 })
 

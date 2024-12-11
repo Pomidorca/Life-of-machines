@@ -1,2 +1,4 @@
-import {ref } from 'vue'
+import {
+    ref
+} from 'vue'
 export const mode = ref('GeneralInformation')

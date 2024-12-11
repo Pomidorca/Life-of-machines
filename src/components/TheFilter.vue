@@ -24,34 +24,73 @@
                 <div class="flex gap-x-3">
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">От</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="startDate" @change="updateYearRange">
+                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="startDate" @change="updateYearRange"
+                            max="2040-01-01" min="1900-01-01">
                     </div>
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">До</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="endDate" @change="updateYearRange">
+                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="endDate" @change="updateYearRange"
+                            max="2040-01-01" min="1900-01-01">
                     </div>
                 </div>
                 <button @click="updateYearRange"
-                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Принять</button>
+                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Применить</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Equipment from './Equipment.vue';
 import { useActiveStore } from '@/store/active.js';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
+const router = useRouter();
 const activeStore = useActiveStore();
 const startDate = ref(null);
 const endDate = ref(null);
 const toggle = ref('Год');
 
+const loadStateFromStorage = () => {
+    const storedState = localStorage.getItem('sidebarState');
+    if (storedState) {
+        try {
+            const parsedState = JSON.parse(storedState);
+            startDate.value = parsedState.startDate;
+            endDate.value = parsedState.endDate;
+            toggle.value = parsedState.toggle;
+        } catch (error) {
+            console.error("Ошибка при загрузке состояния из localStorage:", error);
+        }
+    }
+};
+
+const saveStateToStorage = () => {
+    localStorage.setItem('sidebarState', JSON.stringify({ startDate: startDate.value, endDate: endDate.value, toggle: toggle.value }));
+};
 
 const handleClick = (value) => {
     toggle.value = value;
+    saveStateToStorage();
+    updateUrl()
+};
+
+const updateUrl = () => {
+    const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
+    const endYear = endDate.value ? new Date(endDate.value).getFullYear() : 2024;
+    const timeRange = startYear && endYear ? `${startYear}-${endYear}` : '';
+
+    const newQuery = {
+        ...route.query,
+        toggle: toggle.value,
+        timeRange: timeRange,
+    };
+
+    router.push({ path: route.path, query: newQuery });
 }
+
 
 const updateYearRange = () => {
     const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
@@ -63,6 +102,15 @@ const updateYearRange = () => {
     }
 
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
+    saveStateToStorage();
+    updateUrl();
 };
+
+onMounted(() => {
+    if (startDate.value && endDate.value) {
+        updateYearRange();
+    }
+    loadStateFromStorage();
+});
 
 </script>

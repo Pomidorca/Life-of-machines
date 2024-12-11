@@ -7,9 +7,11 @@ export const useAuthStore = defineStore("auth", {
         accessToken: null,
         refreshToken: null,
         user: null,
+        errorMessage: null,
     }),
     actions: {
         async login(credentials) {
+            this.errorMessage = null;
             try {
                 const response = await fetch('http://localhost:3000/auth/login', {
                     method: 'POST',
@@ -21,12 +23,14 @@ export const useAuthStore = defineStore("auth", {
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.message || 'Ошибка авторизации');
+                    this.errorMessage = errorData.message || 'Ошибка авторизации';
+                    throw new Error(this.errorMessage);
                 }
 
                 const data = await response.json();
                 this.accessToken = data.access_token;
                 this.refreshToken = data.refresh_token;
+                this.user = data.user;
                 this.saveTokensToSessionStorage();
             } catch (error) {
                 console.error('Ошибка авторизации:', error);
@@ -41,10 +45,12 @@ export const useAuthStore = defineStore("auth", {
         saveTokensToSessionStorage() {
             sessionStorage.setItem('accessToken', this.accessToken);
             sessionStorage.setItem('refreshToken', this.refreshToken);
+            sessionStorage.setItem('user', JSON.stringify(this.user));
         },
         removeFromSessionStorage() {
             sessionStorage.removeItem('accessToken');
             sessionStorage.removeItem('refreshToken');
+            sessionStorage.removeItem('user');
         },
         loadTokensFromSessionStorage() {
             this.accessToken = sessionStorage.getItem('accessToken');
@@ -52,7 +58,7 @@ export const useAuthStore = defineStore("auth", {
         },
         async refreshAccessToken() {
             try {
-                const response = await fetch('http://localhost:3000/auth/login', {
+                const response = await fetch('http://localhost:3000/auth/refresh', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="flex flex-col justify-center items-center w-[50%]">
-            <div class="w-full max-w-[424px]">
+            <div class="flex flex-col w-full max-w-[424px]">
                 <h2 class="text-[#001233] font-semibold text-4xl">{{ titleForm }}</h2>
                 <div class="flex flex-col gap-y-6 mt-8">
                     <div class="flex flex-col">
@@ -34,7 +34,7 @@
                             <label class="text-lg text-[#001233]">Повторите пароль</label>
                             <input
                                 class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                                type="password" placeholder="Пароль" v-model="password">
+                                type="password" placeholder="Пароль" v-model="passwordReapet">
                             <span class="pl-6 text-sm text-[#979DAC]">Пароль должен содержать*</span>
                         </div>
                     </div>
@@ -47,7 +47,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col items-center mt-12">
+                <div class="h-5 text-center mt-2">
+                    <span v-if="authStore.errorMessage" class="text-red-500">{{ authStore.errorMessage }}</span>
+                </div>
+                <div class="flex flex-col items-center mt-6">
                     <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl"
                         @click="auth">Авторизоваться</button>
                     <button @click="toggleAuth"
@@ -64,9 +67,10 @@ import { useAuthStore } from '@/store/auth';
 import { ref, computed } from 'vue';
 
 const authStore = useAuthStore();
-const isAuth = ref(true);
+const isAuth = ref(false);
 const username = ref('');
 const password = ref('');
+const passwordReapet = ref('');
 
 const auth = async () => {
     try {
@@ -76,6 +80,7 @@ const auth = async () => {
         console.log('Токен доступа:', authStore.accessToken);
     } catch (error) {
         console.error('Ошибка авторизации:', error);
+
     }
 }
 

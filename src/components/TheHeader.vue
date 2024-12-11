@@ -21,13 +21,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import ItemHeader from './ItemHeader.vue';
 import { useAuthStore } from '@/store/auth';
 
 const showMenu = ref(true);
 const authStore = useAuthStore();
+
+const loadShowMEnuFromStorage = () => {
+  const storedShowMenu = localStorage.getItem('showMenu');
+  if (storedShowMenu !== null) {
+    showMenu.value = JSON.parse(storedShowMenu);
+  }
+}
+
+const saveShowMenuToStorage = () => {
+  localStorage.setItem('showMenu', JSON.stringify(showMenu.value));
+}
 const toggleMenu = () => {
   showMenu.value = !showMenu.value;
+  saveShowMenuToStorage();
 };
+
+onMounted(() => {
+  loadShowMEnuFromStorage();
+});
 </script>
