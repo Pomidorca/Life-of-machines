@@ -42,13 +42,14 @@ const updateUrl = (technique) => {
   const otherParams = { ...route.query, };
   delete otherParams.machineClassIds;
   const newQuery = { ...otherParams, machineClassIds: technique.machineClassIds };
-  router.replace({ path: route.path, query: newQuery });
+  router.push({ path: route.path, query: newQuery });
 }
 
 onMounted(() => {
   if (techniques.value.length > 0) {
     selectTechnique(techniques.value[0]);
   }
+  updateUrl(techniques.value[0]);
 })
 
 const fetchTechniques = (machineClassIds) => {

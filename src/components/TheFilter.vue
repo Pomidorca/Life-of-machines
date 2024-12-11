@@ -94,16 +94,15 @@ const updateUrl = () => {
 
 const updateYearRange = () => {
     const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
-    const endYear = endDate.value ? new Date(endDate.value).getFullYear() : 2000;
+    const endYear = endDate.value ? new Date(endDate.value).getFullYear() : 2024;
 
     if (startYear > endYear) {
         console.error("Ошибка: 'Начало' не может быть позже 'Конца'.");
         return;
     }
 
-    activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
+    activeStore.updateYearRange(startYear, endYear); // Изменено: вызов функции в store
     saveStateToStorage();
-    updateUrl();
 };
 
 onMounted(() => {
@@ -111,6 +110,7 @@ onMounted(() => {
         updateYearRange();
     }
     loadStateFromStorage();
+    updateUrl();
 });
 
 </script>
