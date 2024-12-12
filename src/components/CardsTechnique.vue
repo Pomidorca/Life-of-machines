@@ -1,7 +1,7 @@
 <template>
   <div v-for="technique in techniques" :key="technique.id" class="mb-4">
     <div class="flex items-center gap-x-3.5 relative p-2"
-      @click="fetchTechniques(technique.machineClassIds), selectTechnique(technique)"
+      @click="fetchTechniques(technique.machineClassIds), selectTechnique(technique.machineClassIds)"
       :class="{ 'selected-technique': selectedTechniqueId === technique.id }">
       <div class="flex flex-col items-center gap-y-0.5">
         <img class="w-[64px] h-[64px] bg-cover bg-center bg-no-repeat rounded-md" :src="technique.image" alt="tech">
@@ -32,24 +32,41 @@ const machineStore = useMachineStore();
 const activeStore = useActiveStore();
 const selectedTechniqueId = ref(null);
 
+const loadStateFromLocalStorage = () => {
+  const storedState = localStorage.getItem('TypeTechnique');
+  if (storedState) {
+    try {
+      const parsedState = JSON.parse(storedState);
+      selectedTechniqueId.value = parsedState.selectedTechniqueId;
+    } catch (error) {
+      console.error("Ошибка при загрузке состояния из localStorage:", error);
+    }
+  }
+}
+
+const saveToLocalStorage = () => {
+  localStorage.setItem('TypeTechnique', JSON.stringify({ selectedTechniqueId: selectedTechniqueId.value }));
+}
+
 const selectTechnique = (technique) => {
-  selectedTechniqueId.value = technique.id;
-  activeStore.updateFilterParams({ machineClassIds: technique.machineClassIds });
+  if (technique === undefined) return
+  selectedTechniqueId.value = technique;
+  activeStore.updateFilterParams({ machineClassIds: route.query.machineClassIds || 1 });
   updateUrl(technique);
+  saveToLocalStorage();
 };
 
 const updateUrl = (technique) => {
-  const otherParams = { ...route.query, };
-  delete otherParams.machineClassIds;
-  const newQuery = { ...otherParams, machineClassIds: technique.machineClassIds };
+  const newQuery = { ...route.query, machineClassIds: technique };
   router.push({ path: route.path, query: newQuery });
 }
 
 onMounted(() => {
   if (techniques.value.length > 0) {
-    selectTechnique(techniques.value[0]);
+    selectTechnique();
   }
-  updateUrl(techniques.value[0]);
+  loadStateFromLocalStorage();
+  updateUrl();
 })
 
 const fetchTechniques = (machineClassIds) => {

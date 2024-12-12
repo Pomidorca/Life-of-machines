@@ -54,7 +54,7 @@ const endDate = ref(null);
 const toggle = ref('Год');
 
 const loadStateFromStorage = () => {
-    const storedState = localStorage.getItem('sidebarState');
+    const storedState = localStorage.getItem('filterDate');
     if (storedState) {
         try {
             const parsedState = JSON.parse(storedState);
@@ -68,7 +68,7 @@ const loadStateFromStorage = () => {
 };
 
 const saveStateToStorage = () => {
-    localStorage.setItem('sidebarState', JSON.stringify({ startDate: startDate.value, endDate: endDate.value, toggle: toggle.value }));
+    localStorage.setItem('filterDate', JSON.stringify({ startDate: startDate.value, endDate: endDate.value, toggle: toggle.value }));
 };
 
 const handleClick = (value) => {
@@ -101,7 +101,7 @@ const updateYearRange = () => {
         return;
     }
 
-    activeStore.updateYearRange(startYear, endYear); // Изменено: вызов функции в store
+    activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     saveStateToStorage();
 };
 

@@ -63,7 +63,7 @@ const store = createStore({
                     machineClassIds: 1
                 },
                 {
-                    id: 2,
+                    id: 5,
                     image: '/img/tech/1.png',
                     title: 'Экскаватор',
                     total: '25',
@@ -71,7 +71,7 @@ const store = createStore({
                     machineClassIds: 5
                 },
                 {
-                    id: 3,
+                    id: 6,
                     image: 'img/tech/2.png',
                     title: 'Самосвал',
                     total: '100',
@@ -79,7 +79,7 @@ const store = createStore({
                     machineClassIds: 6
                 },
                 {
-                    id: 4,
+                    id: 9,
                     image: 'img/tech/3.png',
                     title: 'Автогрейдеры',
                     total: '8',
@@ -87,7 +87,7 @@ const store = createStore({
                     machineClassIds: 9
                 },
                 {
-                    id: 5,
+                    id: 7,
                     image: 'img/tech/4.png',
                     title: 'Бур.станки',
                     total: '10',
@@ -95,7 +95,7 @@ const store = createStore({
                     machineClassIds: 7
                 },
                 {
-                    id: 6,
+                    id: 8,
                     image: 'img/tech/5.png',
                     title: 'Бульдозеры',
                     total: '20',
@@ -103,7 +103,7 @@ const store = createStore({
                     machineClassIds: 8
                 },
                 {
-                    id: 7,
+                    id: 10,
                     image: 'img/tech/6.png',
                     title: 'Погрузчики',
                     total: '10',
@@ -115,12 +115,6 @@ const store = createStore({
             selectedTechnique: null,
         }
     },
-    mutations: {
-        selectTechnique(state, technique) {
-            state.selectTechnique = technique
-
-        }
-    }
 })
 
 export default store

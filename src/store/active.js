@@ -99,7 +99,6 @@ export const useActiveStore = defineStore('active', {
                 this.changeStructureDate = transformchangeStructuredate(data[1]);
                 this.barTurnedTwoDate = transformbarTurnedTwoDate(data[2]);
                 this.barTurnedDate = transformbarTurnedDate(data[3]);
-                console.log('Данные после transformLinedate:', this.lineDate.value);
 
             } catch (error) {
                 this.error = `Ошибка при загрузке данных: ${error.message}`;

@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="h-5 text-center mt-2">
-                    <span v-if="authStore.errorMessage" class="text-red-500">{{ authStore.errorMessage }}</span>
+                    <span v-if="authStore.errorMessage" class="text-red-500">Неправильные данные</span>
                 </div>
                 <div class="flex flex-col items-center mt-6">
                     <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl"
