@@ -1,5 +1,5 @@
 <template>
-  <div v-for="technique in techniques" :key="technique.id" class="mb-4">
+  <div v-for="technique in techniques" :key="technique.id" class="space-y-4">
     <div class="flex items-center gap-x-3.5 relative p-2"
       @click="fetchTechniques(technique.machineClassIds), selectTechnique(technique.machineClassIds)"
       :class="{ 'selected-technique': selectedTechniqueId === technique.id }">

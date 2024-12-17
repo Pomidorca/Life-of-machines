@@ -1,3 +1,27 @@
+<template>
+  <main v-if="isAuth">
+    <div class="flex">
+      <header>
+        <TheHeader />
+      </header>
+      <div class="w-full">
+        <TheInfoTech />
+        <div class="flex">
+          <TheFilter />
+          <div class="container pl-6">
+            <div>
+              <router-view />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <main v-else>
+    <TheAuth />
+  </main>
+</template>
+
 <script setup>
 import TheHeader from '@/components/TheHeader.vue';
 import TheFilter from '@/components/TheFilter.vue';
@@ -17,30 +41,6 @@ const isAuth = computed(() => {
 
 
 </script>
-
-<template>
-  <main v-if="isAuth">
-    <div class="flex">
-      <header>
-        <TheHeader />
-      </header>
-      <div class="w-full">
-        <TheInfoTech />
-        <div class="flex">
-          <TheFilter />
-          <div class="container pl-6">
-            <div class="">
-              <router-view />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-  <main v-else>
-    <TheAuth />
-  </main>
-</template>
 
 
 <style scoped></style>

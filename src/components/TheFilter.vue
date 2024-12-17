@@ -103,6 +103,7 @@ const updateYearRange = () => {
 
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     saveStateToStorage();
+    updateUrl();
 };
 
 onMounted(() => {

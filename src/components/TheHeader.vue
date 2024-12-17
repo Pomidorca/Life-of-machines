@@ -7,7 +7,7 @@
           <button @click="toggleMenu"><img class="w-6 h-6" src="/img/header/burger.svg" alt="burger"></button>
         </div>
         <div class="menu-container transition-width duration-300 ease-in-out mt-8"
-          :class="[showMenu ? 'w-[200px]' : 'w-[40px]']">
+          :class="[showMenu ? 'w-[200px]' : 'w-[40px]', !isSlowDevice ? 'animate' : '']">
           <ItemHeader :showMenu="showMenu" @toggleMenu="toggleMenu" />
         </div>
       </div>
