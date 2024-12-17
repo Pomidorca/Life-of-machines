@@ -19,7 +19,7 @@ export const useMachineStore = defineStore('machine', {
             const authStore = useAuthStore();
             const token = authStore.accessToken;
             const {
-                machineClassId = 5
+                machineClassId = 1
             } = filterParams || {};
             try {
                 const response = await fetch(`http://localhost:3000/data/machine-classes/${machineClassId}`, {
@@ -33,7 +33,11 @@ export const useMachineStore = defineStore('machine', {
                 }
 
                 const data = await response.json();
-                this.machineTypes = data.machineTypes;
+                if (machineClassId === 1) {
+                    this.machineTypes = data.children;
+                } else {
+                    this.machineTypes = data.machineTypes;
+                }
 
             } catch (error) {
                 this.error = error;

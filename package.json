@@ -12,6 +12,7 @@
     "@mdi/font": "^7.4.47",
     "@primevue/themes": "^4.0.7",
     "chart.js": "^4.4.6",
+    "dotenv": "^16.4.7",
     "frappe-gantt": "^0.8.1",
     "pinia": "^2.2.6",
     "primevue": "^4.0.7",
