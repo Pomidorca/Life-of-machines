@@ -34,6 +34,7 @@
 .modal-body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     max-width: 80vw;
     width: 45vmax;
     max-height: 30vmax;

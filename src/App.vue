@@ -1,7 +1,7 @@
 <template>
   <adaptiveModal class="adaptive-modal">
       <template v-slot:header>
-          <h2 > Мобильное приложение недоступно, <br> зайдите через компьютер </h2>
+          <h2> Мобильное приложение недоступно. <br> Пожалуйста, войдите через компьютер. </h2>
       </template>
       <template v-slot:main>
           <img class="adaptive-img" src="/img/Auth/adaptive.png">
