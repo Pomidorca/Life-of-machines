@@ -33,12 +33,20 @@ export const useMachineStore = defineStore('machine', {
                 }
 
                 const data = await response.json();
+
+                let machineTypes = [];
                 if (machineClassId === 1) {
-                    this.machineTypes = data.children;
+                    const children = data.children.flatMap(child => child.children || []);
+                    machineTypes = children.flatMap(child => child.machineTypes || []);
+                } else if (machineClassId >= 2) {
+                    machineTypes = data.machineTypes || [];
                 } else {
-                    this.machineTypes = data.machineTypes;
+                    machineTypes = [];
+                    console.warm('Неизвестный machineClassId', machineClassId);
                 }
 
+                this.machineTypes = machineTypes;
+                this.selectedMachineType = machineTypes[0];
             } catch (error) {
                 this.error = error;
             } finally {

@@ -48,25 +48,26 @@ const saveToLocalStorage = () => {
   localStorage.setItem('TypeTechnique', JSON.stringify({ selectedTechniqueId: selectedTechniqueId.value }));
 }
 
-const selectTechnique = (technique) => {
-  if (technique === undefined) return
-  selectedTechniqueId.value = technique;
-  activeStore.updateFilterParams({ machineClassIds: route.query.machineClassIds || 1 });
-  updateUrl(technique);
+const selectTechnique = (techniqueId) => {
+  if (!techniqueId) return
+  selectedTechniqueId.value = techniqueId;
+  activeStore.updateFilterParams({ machineClassIds: techniqueId || 1 });
+  updateUrl(techniqueId);
   saveToLocalStorage();
 };
 
-const updateUrl = (technique) => {
-  const newQuery = { ...route.query, machineClassIds: technique };
+const updateUrl = (techniqueId) => {
+  const newQuery = { ...route.query, machineClassIds: techniqueId };
   router.push({ path: route.path, query: newQuery });
 }
 
 onMounted(() => {
-  if (techniques.value.length > 0) {
-    selectTechnique();
-  }
   loadStateFromLocalStorage();
-  updateUrl();
+  if (techniques.value.length > 0) {
+    const initialTechnique = route.query.machineClassIds || techniques.value[0].id;
+    selectTechnique(initialTechnique);
+    updateUrl(initialTechnique);
+  }
 })
 
 const fetchTechniques = (machineClassIds) => {
