@@ -7,7 +7,7 @@ import store from '@/store/store'
 import {
     createPinia
 } from 'pinia'
-import '@/assets/style.css'
+import '@/assets/style.scss'
 
 const app = createApp(App)
 app.use(store)

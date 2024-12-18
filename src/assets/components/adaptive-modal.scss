@@ -1,0 +1,30 @@
+.adaptive-modal { 
+    background-color: #fff;
+    overflow: hidden;
+    display: none;
+
+    @media (max-width: 720px) {
+        display: block;
+    }
+
+    .adaptive-img {
+        width: 100%;
+        height: auto;
+        margin: auto;
+        pointer-events: none;
+    }
+
+    h2 {
+        font-family: "Roboto", serif;
+        font-weight: 500;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}
+
+.main-wrapper {
+    display: block;
+    @media (max-width: 720px) {
+        display: none;
+    }
+}
