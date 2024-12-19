@@ -7,9 +7,6 @@ import {
 import {
     ref
 } from "vue";
-import {
-    config
-} from '@/config/config';
 
 /*
            Все машины = 1
@@ -20,6 +17,9 @@ import {
            Бульдозеры = 8
            Погрузчики = 10
            */
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL
+
 export const useActiveStore = defineStore('active', {
     state: () => ({
         loading: false,
@@ -53,7 +53,6 @@ export const useActiveStore = defineStore('active', {
             this.error = null;
             const authStore = useAuthStore();
             const token = authStore.accessToken;
-            const apiUrl = config.apiUrl;
 
             if (!token) {
                 this.error = 'Токен не найден!';
@@ -68,27 +67,27 @@ export const useActiveStore = defineStore('active', {
             } = this.filterParams;
             try {
                 const responses = await Promise.all([
-                    fetch(`${apiUrl}/actives/charts/structure?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
+                    fetch(`${API_BASE_URL}/actives/charts/structure?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`${apiUrl}/actives/charts/average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
+                    fetch(`${API_BASE_URL}/actives/charts/average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`${apiUrl}/actives/charts/work-distribution?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
+                    fetch(`${API_BASE_URL}/actives/charts/work-distribution?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`${apiUrl}/actives/charts/count-and-average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
+                    fetch(`${API_BASE_URL}/actives/charts/count-and-average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                     }),
-                    fetch(`${apiUrl}/actives/machine-list?&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
+                    fetch(`${API_BASE_URL}/actives/machine-list?&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },

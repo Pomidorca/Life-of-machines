@@ -2,6 +2,8 @@ import {
     defineStore
 } from "pinia";
 
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL
 export const useAuthStore = defineStore("auth", {
     state: () => ({
         accessToken: null,
@@ -13,7 +15,7 @@ export const useAuthStore = defineStore("auth", {
         async login(credentials) {
             this.errorMessage = null;
             try {
-                const response = await fetch('http://localhost:3000/auth/login', {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -58,7 +60,7 @@ export const useAuthStore = defineStore("auth", {
         },
         async refreshAccessToken() {
             try {
-                const response = await fetch('http://localhost:3000/auth/refresh', {
+                const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -1,8 +1,9 @@
 <template>
   <div v-for="item in $store.state.header" :key="item.id">
     <router-link @click.prevent="handleClick(item)" :to="item.route"
-      class="link flex gap-x-2 items-center px-1 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
-      <img :src="item.img" class="w-8 h-8" :class="{ 'active-img': isActive(item) }" />
+      class="link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
+      <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6"
+        :class="{ 'active-img': isActive(item) }" />
       <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
     </router-link>
   </div>
@@ -44,7 +45,6 @@ function isActive(item) {
 
 .active {
   background-color: white;
-  color: #0554f2;
   transition: all 0.3s ease;
 }
 </style>

@@ -5,6 +5,8 @@ import {
     useAuthStore
 } from './auth';
 
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL
 export const useMachineStore = defineStore('machine', {
     state: () => ({
         machineTypes: [],
@@ -22,7 +24,7 @@ export const useMachineStore = defineStore('machine', {
                 machineClassId = 1
             } = filterParams || {};
             try {
-                const response = await fetch(`http://localhost:3000/data/machine-classes/${machineClassId}`, {
+                const response = await fetch(`${API_BASE_URL}/data/machine-classes/${machineClassId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },

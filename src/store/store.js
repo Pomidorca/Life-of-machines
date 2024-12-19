@@ -8,49 +8,57 @@ const store = createStore({
             header: [{
                     id: 0,
                     title: 'Актив',
-                    img: 'img/header/1.svg',
+                    img: 'img/header/active.svg',
+                    imgActive: 'img/header/active_active.svg',
                     route: '/active',
                 },
                 {
                     id: 1,
                     title: 'КФВ',
-                    img: 'img/header/2.svg',
+                    img: 'img/header/kfv.svg',
+                    imgActive: 'img/header/kfv_active.svg',
                     route: '/time',
                 },
                 {
                     id: 2,
                     title: 'ТЭП',
-                    img: 'img/header/3.svg',
+                    img: 'img/header/tei.svg',
+                    imgActive: 'img/header/tei_active.svg',
                     route: '/TechnicalEconomicIndicators'
                 },
                 {
                     id: 3,
                     title: 'ТОиР',
-                    img: 'img/header/4.svg',
+                    img: 'img/header/toir.svg',
+                    imgActive: 'img/header/toir_active.svg',
                     route: '/MaintenanceRepair'
                 },
                 {
                     id: 4,
                     title: 'КТГ',
-                    img: 'img/header/5.svg',
+                    img: 'img/header/ktg.svg',
+                    imgActive: 'img/header/ktg_active.svg',
                     route: '/TechnicalCosts'
                 },
                 {
                     id: 5,
                     title: 'ТСО',
-                    img: 'img/header/6.svg',
+                    img: 'img/header/tco.svg',
+                    imgActive: 'img/header/tco_active.svg',
                     route: '/TechnicalStructure'
                 },
                 {
                     id: 6,
                     title: 'STR',
-                    img: 'img/header/7.svg',
+                    img: 'img/header/str.svg',
+                    imgActive: 'img/header/str_active.svg',
                     route: '/STR'
                 },
                 {
                     id: 7,
                     title: 'NPV',
-                    img: 'img/header/8.svg',
+                    img: 'img/header/npv.svg',
+                    imgActive: 'img/header/npv_active.svg',
                     route: '/NPV'
                 }
             ],

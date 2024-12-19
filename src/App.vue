@@ -1,11 +1,11 @@
 <template>
   <adaptiveModal class="adaptive-modal">
-      <template v-slot:header>
-          <h2> Мобильное приложение недоступно. <br> Пожалуйста, войдите через компьютер. </h2>
-      </template>
-      <template v-slot:main>
-          <img class="adaptive-img" src="/img/Auth/adaptive.png">
-      </template>
+    <template v-slot:header>
+      <h2> Мобильное приложение недоступно. <br> Пожалуйста, войдите через компьютер. </h2>
+    </template>
+    <template v-slot:main>
+      <img class="adaptive-img" src="/img/Auth/adaptive.png">
+    </template>
   </adaptiveModal>
   <div class="main-wrapper">
     <main v-if="isAuth">
@@ -17,7 +17,7 @@
           <TheInfoTech />
           <div class="flex">
             <TheFilter />
-            <div class="container pl-6">
+            <div class="pl-6 container">
               <div>
                 <router-view />
               </div>
