@@ -48,7 +48,34 @@ export const useActiveStore = defineStore('active', {
         }),
     }),
     actions: {
+        loadFilterParamsFromLocalStorage() {
+            const storedFilterDate = localStorage.getItem('filterDate');
+            const storedClassTechnique = localStorage.getItem('TypeTechnique');
+
+            if (storedFilterDate) {
+                try {
+                    const parsedFilterDate = JSON.parse(storedFilterDate);
+                    const startYear = parsedFilterDate.startDate = new Date(parsedFilterDate.startDate).getFullYear();
+                    const endYear = parsedFilterDate.endDate = new Date(parsedFilterDate.endDate).getFullYear();
+                    this.filterParams.yearStart = startYear || this.filterParams.yearStart;
+                    this.filterParams.yearEnd = endYear || this.filterParams.yearEnd;
+                } catch (error) {
+                    console.error("Ошибка при загрузке состояния из localStorage:", error);
+                }
+            }
+
+            if (storedClassTechnique) {
+                try {
+                    const parsedTypeTechnique = JSON.parse(storedClassTechnique);
+                    this.filterParams.machineClassIds = parsedTypeTechnique.selectedTechniqueId || this.filterParams.machineClassIds;
+                } catch (error) {
+                    console.error("Ошибка при загрузке состояния из localStorage:", error);
+                }
+            }
+
+        },
         async fetchData() {
+            this.loadFilterParamsFromLocalStorage();
             this.loading = true;
             this.error = null;
             const authStore = useAuthStore();

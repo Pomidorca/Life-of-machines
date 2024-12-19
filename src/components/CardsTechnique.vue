@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useActiveStore } from "@/store/active";
 import { useMachineStore } from "@/store/machine";
@@ -42,35 +42,43 @@ const loadStateFromLocalStorage = () => {
       console.error("Ошибка при загрузке состояния из localStorage:", error);
     }
   }
-}
+};
 
 const saveToLocalStorage = () => {
   localStorage.setItem('TypeTechnique', JSON.stringify({ selectedTechniqueId: selectedTechniqueId.value }));
-}
-
-const selectTechnique = (techniqueId) => {
-  if (!techniqueId) return
-  selectedTechniqueId.value = techniqueId;
-  activeStore.updateFilterParams({ machineClassIds: techniqueId || 1 });
-  updateUrl(techniqueId);
-  saveToLocalStorage();
 };
 
-const updateUrl = (techniqueId) => {
-  const newQuery = { ...route.query, machineClassIds: techniqueId };
-  router.push({ path: route.path, query: newQuery });
-}
+const selectTechnique = (techniqueId) => {
+  if (!techniqueId) return;
+  selectedTechniqueId.value = techniqueId;
+  activeStore.updateFilterParams({ machineClassIds: techniqueId });
+  saveToLocalStorage();
+  activeStore.fetchData();
+
+};
+
 
 onMounted(() => {
   loadStateFromLocalStorage();
-  if (techniques.value.length > 0) {
-    const initialTechnique = route.query.machineClassIds || techniques.value[0].id;
+
+  if (!selectedTechniqueId.value && techniques.value.length > 0) {
+    const initialTechnique = techniques.value[0].id;
     selectTechnique(initialTechnique);
-    updateUrl(initialTechnique);
+  } else if (selectedTechniqueId.value) {
+    selectTechnique(selectedTechniqueId.value);
   }
-})
+
+});
+
+
+watch(selectedTechniqueId, (newTechniqueId) => {
+  if (newTechniqueId) {
+    fetchTechniques(newTechniqueId);
+  }
+});
 
 const fetchTechniques = (machineClassIds) => {
   machineStore.fetchMachines({ machineClassId: machineClassIds });
 };
+
 </script>
