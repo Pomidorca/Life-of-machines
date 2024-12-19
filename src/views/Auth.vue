@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <div class="bg-[#0554F2] w-[50%] h-[100vh] pt-16"
-            style="background-image: url(/img/Auth/1.png); background-position: right; background-size: auto; background-repeat: no-repeat;">
+            style="background-image: url(/img/Auth/1.png); background-position: right bottom; background-size: auto; background-repeat: no-repeat;">
             <div class="px-10">
                 <h1 class="text-[40px] text-white font-semibold leading-10">{{ greetings }}</h1>
                 <p class="mt-5 text-white text-xl">{{ descritpionPage }}</p>
@@ -75,9 +75,6 @@ const passwordReapet = ref('');
 const auth = async () => {
     try {
         await authStore.login({ username: username.value, password: password.value });
-
-        console.log('Авторизация прошла успешно');
-        console.log('Токен доступа:', authStore.accessToken);
     } catch (error) {
         console.error('Ошибка авторизации:', error);
 

@@ -1,6 +1,7 @@
 import {
     defineStore
 } from "pinia";
+import UserDataService from "@/services/UserDataService.js";
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL
@@ -15,25 +16,37 @@ export const useAuthStore = defineStore("auth", {
         async login(credentials) {
             this.errorMessage = null;
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(credentials),
-                });
+                 await UserDataService.postLogin(credentials)
+                    .then((response) => {
+                        const data = response.data;
+                        this.accessToken = data.access_token;
+                        this.refreshToken = data.refresh_token;
+                        this.saveTokensToSessionStorage()
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        this.errorMessage = 'Ошибка авторизации';
+                    })
+                // const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify(credentials),
+                // });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    this.errorMessage = errorData.message || 'Ошибка авторизации';
-                    throw new Error(this.errorMessage);
-                }
+                // if (!response.ok) {
+                //     const errorData = await response.json();
+                //     this.errorMessage = errorData.message || 'Ошибка авторизации';
+                //     throw new Error(this.errorMessage);
+                // }
 
-                const data = await response.json();
-                this.accessToken = data.access_token;
-                this.refreshToken = data.refresh_token;
-                this.user = data.user;
-                this.saveTokensToSessionStorage();
+                // const data = await response.data;
+                // console.log(data.access_token)
+                // this.accessToken = data.access_token;
+                // this.refreshToken = data.refresh_token;
+                // this.user = data.user;
+                // this.saveTokensToSessionStorage();
             } catch (error) {
                 console.error('Ошибка авторизации:', error);
             }
@@ -46,13 +59,12 @@ export const useAuthStore = defineStore("auth", {
         },
         saveTokensToSessionStorage() {
             sessionStorage.setItem('accessToken', this.accessToken);
+
             sessionStorage.setItem('refreshToken', this.refreshToken);
-            sessionStorage.setItem('user', JSON.stringify(this.user));
         },
         removeFromSessionStorage() {
             sessionStorage.removeItem('accessToken');
             sessionStorage.removeItem('refreshToken');
-            sessionStorage.removeItem('user');
         },
         loadTokensFromSessionStorage() {
             this.accessToken = sessionStorage.getItem('accessToken');
