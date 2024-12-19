@@ -45,6 +45,7 @@ function isActive(item) {
 
 .active {
   background-color: white;
+  color: #0554F2;
   transition: all 0.3s ease;
 }
 </style>
