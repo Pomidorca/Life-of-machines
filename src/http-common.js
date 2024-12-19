@@ -34,6 +34,7 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
 function logout() {
     this.accessToken = null;
     this.refreshToken = null;
