@@ -26,18 +26,13 @@
 
 
 
-<script>
+<script setup>
 import ChartsView from '@/components/Charts/TCO/TechnicalStructureView.vue';
+import { computed, watch } from 'vue'
+import { useRoute } from 'vue-router';
 
-export default {
-  name: 'TechnicalStructureView',
-  components: {
-    ChartsView
-  },
-  computed: {
-    mode() {
-      return this.$route.query.mode || 'GeneralInformation';
-    }
-  }
-}
+const route = useRoute();
+const mode = computed(() => route.query.mode || 'GeneralInformation');
+
+watch(mode)
 </script>

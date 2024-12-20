@@ -22,10 +22,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useActiveStore } from "@/store/active";
 import { useMachineStore } from "@/store/machine";
-import { useRoute, useRouter } from "vue-router";
 
-const route = useRoute();
-const router = useRouter();
 const store = useStore();
 const techniques = computed(() => store.state.techniques);
 const machineStore = useMachineStore();

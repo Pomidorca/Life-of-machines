@@ -24,18 +24,15 @@
 </template>
 
 
-<script>
+<script setup>
 import ChartViews from '@/components/Charts/TOiR/MaintenanceRepairView.vue';
+import { computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
-export default {
-  name: 'MaintenanceRepairView',
-  components: {
-    ChartViews
-  },
-  computed: {
-    mode() {
-      return this.$route.query.mode || 'GeneralInformation';
-    }
-  }
-}
+const route = useRoute();
+const mode = computed(() => route.query.mode || 'GeneralInformation');
+
+watch(mode)
+
+
 </script>

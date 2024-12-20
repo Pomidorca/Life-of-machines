@@ -32,19 +32,13 @@
 </template>
 
 
-<script>
+<script setup>
 import ChartsView from '@/components/Charts/TEI/TEIView.vue';
+import { computed, watch } from 'vue'
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const mode = computed(() => route.query.mode || 'GeneralInformation');
 
-export default {
-  name: 'TEIView',
-  components: {
-    ChartsView
-  },
-  computed: {
-    mode() {
-      return this.$route.query.mode || 'GeneralInformation';
-    }
-  }
-}
+watch(mode)
 </script>
