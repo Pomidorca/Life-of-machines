@@ -44,7 +44,7 @@ export const useActiveStore = defineStore('active', {
             yearStart: 2000,
             yearEnd: 2024,
             machineClassIds: 1,
-            machineTypeIds: []
+            machineTypeIds: [],
         }),
     }),
     actions: {
