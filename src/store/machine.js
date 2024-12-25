@@ -1,13 +1,9 @@
 import {
     defineStore
 } from 'pinia';
-import {
-    useAuthStore
-} from './auth';
+
 import MachineClassesDataService from '@/services/MachineClassesDataService';
 
-const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL
 export const useMachineStore = defineStore('machine', {
     state: () => ({
         machineTypes: [],

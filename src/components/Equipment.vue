@@ -33,9 +33,22 @@ import { useActiveStore } from '@/store/active';
 
 const machineStore = useMachineStore();
 const activeStore = useActiveStore();
-const selectedMachineTypeIds = ref([]);
+const emit = defineEmits(['machineIdsChanged', 'resetEquipment']);
 
-const loadState = () => {
+const selectedMachineTypeIds = ref([]);
+const selectedMachineIds = ref([]);
+
+
+
+
+const reset = () => {
+    t
+    selectedMachineTypeIds.value = [];
+    selectedMachineIds.value = [];
+    emit('resetEquipment');
+};
+
+const loadStateFromStorage = () => {
     try {
         const storedTypeIds = JSON.parse(localStorage.getItem('selectedMachineTypeIds')) || [];
 
@@ -47,9 +60,12 @@ const loadState = () => {
 };
 
 
-const saveState = () => {
+const saveStateToStorage = () => {
     localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
-    activeStore.updateFilterParams({ machineTypeIds: selectedMachineTypeIds.value });
+    localStorage.setItem('selectedMachineIds', JSON.stringify(selectedMachineIds.value));
+    activeStore.updateFilterParams({
+        machineTypeIds: selectedMachineTypeIds.value,
+    });
 };
 
 const handleClick = (machineType) => {
@@ -59,8 +75,8 @@ const handleClick = (machineType) => {
 
 onMounted(() => {
     machineStore.fetchMachines();
-    loadState();
+    loadStateFromStorage();
 });
 
-watch([selectedMachineTypeIds], saveState, { deep: true }); 
+watch([selectedMachineTypeIds], saveStateToStorage, { deep: true });
 </script>
