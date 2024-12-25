@@ -13,9 +13,9 @@
         <header>
           <TheHeader />
         </header>
-        <div class="w-full">
+        <div class="w-full flex flex-col">
           <TheInfoTech />
-          <div class="flex">
+          <div class="flex flex-1">
             <TheFilter />
             <div class="pl-6 container">
               <div>

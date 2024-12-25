@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col justify-between px-6 py-10 bg-[#F2F2F2] min-h-[100vh] max-w-[302px] min-w-[302px]">
+    <div class="flex flex-col justify-between px-6 py-10 bg-[#F2F2F2] max-w-[302px] min-w-[302px]">
         <div>
             <h3 class="text-xl text-[#001233] font-medium leading-6">Оборудование</h3>
             <div class="h-80 overflow-y-auto px-4 py-3 bg-white mt-3 rounded-lg drop-shadow-lg">
