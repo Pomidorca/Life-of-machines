@@ -30,7 +30,7 @@ const activeStore = useActiveStore();
 const selectedTechniqueId = ref(null);
 
 const loadStateFromLocalStorage = () => {
-  const storedState = localStorage.getItem('TypeTechnique');
+  const storedState = localStorage.getItem('CardsTechnique');
   if (storedState) {
     try {
       const parsedState = JSON.parse(storedState);
@@ -42,7 +42,7 @@ const loadStateFromLocalStorage = () => {
 };
 
 const saveToLocalStorage = () => {
-  localStorage.setItem('TypeTechnique', JSON.stringify({ selectedTechniqueId: selectedTechniqueId.value }));
+  localStorage.setItem('CardsTechnique', JSON.stringify({ selectedTechniqueId: selectedTechniqueId.value }));
 };
 
 const selectTechnique = (techniqueId) => {

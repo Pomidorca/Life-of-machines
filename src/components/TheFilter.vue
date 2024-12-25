@@ -33,8 +33,12 @@
                             max="2040-01-01" min="1900-01-01">
                     </div>
                 </div>
-                <button @click="updateYearRange"
-                    class="py-3 bg-[#0554F2] text-white text-2xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Применить</button>
+                <div class="flex justify-between gap-x-3">
+                    <!-- <button @click="resetButton"
+                        class="py-3 px-2 bg-[#ff6384] text-white text-xl leading-5 font-medium rounded-lg hover:bg-[#b64961] duration-300">Сбросить</button> -->
+                    <button @click="updateYearRange"
+                        class="py-3 w-full bg-[#0554F2] text-white text-xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Применить</button>
+                </div>
             </div>
         </div>
     </div>
@@ -52,12 +56,15 @@ const activeStore = useActiveStore();
 const startDate = ref(null);
 const endDate = ref(null);
 const toggle = ref('Год');
+const selectedMachineTypeIds = ref([]);
 
 const loadStateFromStorage = () => {
     const storedState = localStorage.getItem('filterDate');
+    const storedTypeIds = localStorage.getItem('selectedMachineTypeIds');
     if (storedState) {
         try {
             const parsedState = JSON.parse(storedState);
+            selectedMachineTypeIds.value = storedTypeIds;
             startDate.value = parsedState.startDate;
             endDate.value = parsedState.endDate;
             toggle.value = parsedState.toggle;
@@ -66,6 +73,16 @@ const loadStateFromStorage = () => {
         }
     }
 };
+
+const resetButton = () => {
+    startDate.value = null;
+    endDate.value = null;
+    selectedMachineTypeIds.value = [];
+    toggle.value = 'Год';
+    saveStateToStorage();
+    updateUrl();
+    activeStore.updateFilterParams({ yearStart: 2000, yearEnd: 2024 });
+}
 
 const saveStateToStorage = () => {
     localStorage.setItem('filterDate', JSON.stringify({ startDate: startDate.value, endDate: endDate.value, toggle: toggle.value }));
