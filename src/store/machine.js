@@ -8,10 +8,15 @@ export const useMachineStore = defineStore('machine', {
     state: () => ({
         machineTypes: [],
         selectedMachineType: null,
+        selectedMachineTypeIds: [],
         loading: false,
         error: null,
     }),
     actions: {
+        resetMachineTypes() {
+            this.selectedMachineTypeIds = [];
+            localStorage.setItem('selectedMachineTypeIds', JSON.stringify([]));
+        },
         async fetchMachines(filterParams) {
             this.loading = true;
             this.error = null;

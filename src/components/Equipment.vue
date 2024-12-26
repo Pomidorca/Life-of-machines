@@ -28,13 +28,30 @@
 
 <script setup>
 import { useMachineStore } from '@/store/machine';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { useActiveStore } from '@/store/active';
 
 const machineStore = useMachineStore();
 const activeStore = useActiveStore();
 
-const selectedMachineTypeIds = ref([]);
+const selectedMachineTypeIds = computed({
+    get() {
+        return machineStore.selectedMachineTypeIds
+    },
+    set(value) {
+        machineStore.selectedMachineTypeIds = value
+    },
+});
+
+
+
+const saveStateToStorage = () => {
+    localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
+    activeStore.updateFilterParams({
+        machineTypeIds: selectedMachineTypeIds.value,
+    });
+};
+
 
 const loadStateFromStorage = () => {
     try {
@@ -48,12 +65,6 @@ const loadStateFromStorage = () => {
 };
 
 
-const saveStateToStorage = () => {
-    localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
-    activeStore.updateFilterParams({
-        machineTypeIds: selectedMachineTypeIds.value,
-    });
-};
 
 const handleClick = (machineType) => {
     machineType.showDetails = !machineType.showDetails;

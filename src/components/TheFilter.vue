@@ -48,11 +48,13 @@
 import { ref, onMounted } from 'vue';
 import Equipment from './Equipment.vue';
 import { useActiveStore } from '@/store/active.js';
+import { useMachineStore } from '@/store/machine.js';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 const activeStore = useActiveStore();
+const machineStore = useMachineStore();
 const startDate = ref(null);
 const endDate = ref(null);
 const toggle = ref('Год');
@@ -89,6 +91,8 @@ const resetButton = () => {
     selectedMachineTypeIds.value = [];
     activeStore.updateFilterParams({ machineTypeIds: [] });
     localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
+    machineStore.resetMachineTypes()
+
 }
 
 const updateUrl = () => {
