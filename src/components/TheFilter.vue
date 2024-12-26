@@ -3,7 +3,7 @@
         <div>
             <h3 class="text-xl text-[#001233] font-medium leading-6">Оборудование</h3>
             <div class="h-80 overflow-y-auto px-4 py-3 bg-white mt-3 rounded-lg drop-shadow-lg">
-                <Equipment @machine-ids-changed="handleMachineIdsChange" @reset-equipment="resetButton" />
+                <Equipment />
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="flex justify-between gap-x-3">
-                    <button @click="resetButton" v-if="startDate && endDate"
+                    <button @click="resetButton"
                         class="py-3 px-2 bg-[#ff6384] text-white text-xl leading-5 font-medium rounded-lg hover:bg-[#b64961] duration-300">Сбросить</button>
                     <button @click="updateYearRange"
                         class="py-3 w-full bg-[#0554F2] text-white text-xl leading-5 font-medium rounded-lg hover:bg-[#2905f2] duration-300">Применить</button>
@@ -60,13 +60,14 @@ const selectedMachineTypeIds = ref([]);
 
 const loadStateFromStorage = () => {
     const storedState = localStorage.getItem('filterDate');
-    const storedTypeIds = localStorage.getItem('selectedMachineTypeIds');
+    const machineTypeIds = localStorage.getItem('selectedMachineTypeIds');
     if (storedState) {
         try {
+            const pasedMashineType = JSON.parse(machineTypeIds);
             const parsedState = JSON.parse(storedState);
-            selectedMachineTypeIds.value = storedTypeIds;
-            startDate.value = parsedState.startDate ? new Date(parsedState.startDate).getFullYear() : null;
-            endDate.value = parsedState.endDate ? new Date(parsedState.endDate).getFullYear() : null;
+            selectedMachineTypeIds.value = pasedMashineType;
+            startDate.value = parsedState.startDate;
+            endDate.value = parsedState.endDate;
             toggle.value = parsedState.toggle;
         } catch (error) {
             console.error("Ошибка при загрузке состояния из localStorage:", error);
@@ -74,20 +75,8 @@ const loadStateFromStorage = () => {
     }
 };
 
-
-const resetButton = () => {
-    startDate.value = new Date(2000, 0, 1);
-    endDate.value = new Date(2024, 0, 1);
-    toggle.value = 'Год';
-    selectedMachineTypeIds.value = ref([]);
-    activeStore.updateFilterParams({ yearStart: startDate.value, yearEnd: endDate.value });
-    saveStateToStorage();
-    updateUrl();
-}
-
 const saveStateToStorage = () => {
     localStorage.setItem('filterDate', JSON.stringify({ startDate: startDate.value, endDate: endDate.value, toggle: toggle.value }));
-    localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
 };
 
 const handleClick = (value) => {
@@ -95,6 +84,12 @@ const handleClick = (value) => {
     saveStateToStorage();
     updateUrl()
 };
+
+const resetButton = () => {
+    selectedMachineTypeIds.value = [];
+    activeStore.updateFilterParams({ machineTypeIds: [] });
+    localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
+}
 
 const updateUrl = () => {
     const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
@@ -127,14 +122,12 @@ const updateYearRange = () => {
 
 onMounted(() => {
     loadStateFromStorage();
-
     if (!startDate.value || !endDate.value) {
-        resetButton();
+        resetButton()
     } else {
-        updateUrl();
-        activeStore.updateFilterParams({ yearStart: startDate.value, yearEnd: endDate.value });
+        updateYearRange()
     }
-
+    updateUrl();
 });
 
 </script>

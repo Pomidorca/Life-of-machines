@@ -33,20 +33,8 @@ import { useActiveStore } from '@/store/active';
 
 const machineStore = useMachineStore();
 const activeStore = useActiveStore();
-const emit = defineEmits(['machineIdsChanged', 'resetEquipment']);
 
 const selectedMachineTypeIds = ref([]);
-const selectedMachineIds = ref([]);
-
-
-
-
-const reset = () => {
-    t
-    selectedMachineTypeIds.value = [];
-    selectedMachineIds.value = [];
-    emit('resetEquipment');
-};
 
 const loadStateFromStorage = () => {
     try {
@@ -62,7 +50,6 @@ const loadStateFromStorage = () => {
 
 const saveStateToStorage = () => {
     localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
-    localStorage.setItem('selectedMachineIds', JSON.stringify(selectedMachineIds.value));
     activeStore.updateFilterParams({
         machineTypeIds: selectedMachineTypeIds.value,
     });
