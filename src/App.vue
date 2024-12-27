@@ -8,27 +8,27 @@
     </template>
   </adaptiveModal>
   <div class="main-wrapper">
-    <main v-if="isAuth">
+    <!-- <main v-if="isAuth">
       <div class="flex">
         <header>
           <TheHeader />
         </header>
-        <div class="w-full flex flex-col">
+        <div class="w-full">
           <TheInfoTech />
-          <div class="flex flex-1">
+          <div class="flex">
             <TheFilter />
-            <div class="pl-6 container">
+            <div class="pl-6 container"> -->
               <div>
                 <router-view />
               </div>
-            </div>
+            <!-- </div>
           </div>
         </div>
       </div>
     </main>
     <main v-else>
       <TheAuth />
-    </main>
+    </main> -->
   </div>
 </template>
 

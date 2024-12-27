@@ -6,7 +6,13 @@ import {
 const router = createRouter({
   history: createWebHistory(
     import.meta.env.BASE_URL),
-  routes: [{
+  routes: [
+    {
+      path: '/admin-registration',
+      name: '/admin-registration',
+      component: () => import('@/views/registration/AdminRegistration.vue'),
+    },
+    {
       path: '/',
       redirect: '/active'
     },
