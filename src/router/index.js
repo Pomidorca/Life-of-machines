@@ -8,13 +8,13 @@ const router = createRouter({
     import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/active'
+    },
+    {
       path: '/admin-registration',
       name: '/admin-registration',
       component: () => import('@/views/registration/AdminRegistration.vue'),
-    },
-    {
-      path: '/',
-      redirect: '/active'
     },
     {
       path: '/active',
