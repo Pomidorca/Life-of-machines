@@ -7,6 +7,7 @@
       <img class="adaptive-img" src="/img/Auth/adaptive.png">
     </template>
   </adaptiveModal>
+  <!-- <user/> -->
   <div class="main-wrapper">
     <main v-if="isAuth">
       <div class="flex">
@@ -41,6 +42,7 @@ import adaptiveModal from '@/components/ModalTemplate.vue';
 import { useAuthStore } from '@/store/auth';
 import { computed, onMounted } from 'vue';
 
+import user from '@/views/registration/AdminUserRegistration.vue'
 const authStore = useAuthStore();
 onMounted(() => {
   authStore.loadTokensFromSessionStorage();

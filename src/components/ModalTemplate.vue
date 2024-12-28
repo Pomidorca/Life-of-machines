@@ -1,6 +1,6 @@
 <template>
     <div class="modal-backdrop">
-        <dialog open class="modal-body">
+        <div open class="modal-body">
             <header class="modal-header">
                 <slot name="header"></slot>
             </header>
@@ -10,7 +10,7 @@
             <footer class="modal-footer">
                 <slot name="footer"></slot>
             </footer>
-        </dialog>
+        </div>
     </div>
 </template>
 

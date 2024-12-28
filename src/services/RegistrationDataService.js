@@ -14,5 +14,15 @@ export default {
     // регистрация новой компании
     registerOrganization (organizationData) {
         return http.post('/administration/registration/organizations', organizationData)
+    },
+
+    // регистрация пользователя администратором
+    registerUser (userData) {
+        return http.post('/administration/registration/users', userData)
+    },
+
+    // получение ролей: пользователь и оператор
+    getRoles (roles) {
+        return http.get('/administration/roles', roles)
     }
 }

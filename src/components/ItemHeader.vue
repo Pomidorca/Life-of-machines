@@ -1,7 +1,7 @@
 <template>
   <div v-for="item in $store.state.header" :key="item.id">
     <router-link @click.prevent="handleClick(item)" :to="item.route"
-      class="link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
+      class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
       <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6"
         :class="{ 'active-img': isActive(item) }" />
       <span v-if="showMenu" class="duration-300">{{ item.title }}</span>

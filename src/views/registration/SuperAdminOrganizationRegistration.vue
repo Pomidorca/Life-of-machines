@@ -1,10 +1,10 @@
 <template>
-    <newOrganization class="new-organization-modal">
+    <newOrganization class="admin-add-new-modal">
         <template #header>
-            <h2 class="organization-registration-form-title"> Регистрация новой организации </h2>
+            <h2 class="modal-registration-form-title"> Регистрация новой организации </h2>
         </template>
         <template #main>
-            <section class="organization-registration-form">
+            <section class="modal-registration-form">
                 <label class="text-lg text-[#001233] flex flex-col text-[color: white]"> Наименование организации
                     <input class="mt-2 px-6 py-4 text-base text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                         type="text" placeholder="Введите наименование организации..." v-model="organizationData.name">
@@ -22,10 +22,10 @@
         <template #footer>
             <section class="buttons-container">
                 <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4 
-                    organization-registration-form-button"
+                    modal-registration-form-button"
                     @click.prevent="registerOrganization"> Зарегистрировать </button>
                 <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4
-                    organization-registration-form-button"
+                    modal-registration-form-button"
                     @click.prevent="router.go(-1)"> Закрыть </button>
             </section>
         </template>

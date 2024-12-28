@@ -62,9 +62,14 @@ const router = createRouter({
       component: () => import('@/views/NPVView.vue')
     },
     {
-      path: '/new-organization',
+      path: '/administration/new-organization',
       name: 'new-organization',
-      component: () => import('@/views/registration/NewOrganizationRegistration.vue')
+      component: () => import('@/views/registration/SuperAdminOrganizationRegistration.vue')
+    },
+    {
+      path: '/administration/new-user',
+      name: 'new-user',
+      component: () => import('@/views/registration/AdminUserRegistration.vue')
     }
   ]
 })

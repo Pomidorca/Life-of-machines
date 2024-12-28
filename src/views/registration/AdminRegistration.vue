@@ -31,7 +31,7 @@
                     <label class="text-lg text-[#001233] flex flex-col">Email 
                         <input
                             class="mt-2 px-6 py-4 text-base text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
-                            type="email" placeholder="root@server.local" v-model="adminData.email">
+                            type="email" placeholder="example@gmail.com" v-model="adminData.email">
                     </label>
                     <label class="text-lg text-[#001233] flex flex-col"> Пароль 
                         <input
