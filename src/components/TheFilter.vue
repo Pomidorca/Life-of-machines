@@ -49,12 +49,14 @@ import { ref, onMounted } from 'vue';
 import Equipment from './Equipment.vue';
 import { useActiveStore } from '@/store/active.js';
 import { useMachineStore } from '@/store/machine.js';
+import { useKFVStore } from '@/store/kfv';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 const activeStore = useActiveStore();
 const machineStore = useMachineStore();
+const kfvStore = useKFVStore();
 const startDate = ref(null);
 const endDate = ref(null);
 const toggle = ref('Год');
@@ -120,6 +122,7 @@ const updateYearRange = () => {
     }
 
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
+    kfvStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     saveStateToStorage();
     updateUrl();
 };

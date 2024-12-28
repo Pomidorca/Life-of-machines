@@ -56,6 +56,7 @@ import {
 } from 'vue-chartjs';
 import { computed, onMounted } from "vue";
 import { useActiveStore } from '@/store/active';
+import { useKFVStore } from '@/store/kfv';
 import TableForSTR from '@/components/TableForSTR.vue';
 import { LineOptions } from '@/components/Charts/Active/index.js';
 import { changeStructureOptions } from '@/components/Charts/Active/index.js';
@@ -82,6 +83,7 @@ const props = defineProps({
   }
 })
 const activeStore = useActiveStore();
+const kfvStore = useKFVStore();
 
 const loading = computed(() => activeStore.loading);
 const error = computed(() => activeStore.error);
@@ -95,5 +97,6 @@ const barTurnedTwoData = computed(() => activeStore.barTurnedTwoDate);
 
 onMounted(async () => {
   await activeStore.fetchData();
+  await kfvStore.fetchKFV();
 });
 </script>
