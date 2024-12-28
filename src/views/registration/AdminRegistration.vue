@@ -60,11 +60,8 @@
 </template>
 
 <script setup>
-import { useRegistrationStore } from '@/store/registration';
 import { ref } from 'vue';
-
-const registrationStore = useRegistrationStore();
-const availableOrganizations = ref([])
+import RegistrationDataService from '@/services/RegistrationDataService';
 
 const adminData = ref({
     email: '',
@@ -74,9 +71,10 @@ const adminData = ref({
     lastName: '',
     middleName: ''
 })
+const availableOrganizations = ref([])
 
 const getOrganizations = () => {
-    registrationStore.getOrganizations()
+    RegistrationDataService.getOrganizations()
     .then((response) => {
         availableOrganizations.value = response.data
     })
@@ -88,8 +86,7 @@ const getOrganizations = () => {
 getOrganizations();
 
 const registerAdmin = () => {
-    console.log(adminData.value)
-    return registrationStore.registerAdmin(adminData.value)
+    return RegistrationDataService.postRegisterAdmin(adminData.value)
 }
 </script>
 

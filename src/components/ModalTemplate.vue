@@ -22,9 +22,9 @@
 .modal-backdrop {
     width: 100vw;
     height: 100vh;
+    overflow-y: hidden;
     z-index: 5000;
     position: fixed;
-    border: none;
     left: 0;
     top: 0;
     align-content: center;
@@ -35,9 +35,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border: none;
     max-width: 80vw;
     width: 45vmax;
-    max-height: 30vmax;
+    max-height: 30vmin;
     height: auto;
     z-index: 5001;
     position: relative;

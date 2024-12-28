@@ -61,7 +61,11 @@ const router = createRouter({
       name: 'NPV',
       component: () => import('@/views/NPVView.vue')
     },
-
+    {
+      path: '/new-organization',
+      name: 'new-organization',
+      component: () => import('@/views/registration/NewOrganizationRegistration.vue')
+    }
   ]
 })
 

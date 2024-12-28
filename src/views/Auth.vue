@@ -58,7 +58,6 @@ const auth = async () => {
         await authStore.login({ username: username.value, password: password.value });
     } catch (error) {
         console.error('Ошибка авторизации:', error);
-
     }
 }
 

@@ -60,7 +60,14 @@ const store = createStore({
                     img: 'img/header/npv.svg',
                     imgActive: 'img/header/npv_active.svg',
                     route: '/NPV'
-                }
+                },
+                {
+                    id: 8,
+                    title: 'Новая организация',
+                    img: 'img/header/organizations.svg',
+                    imgActive: 'img/header/organizations_active.svg',
+                    route: '/new-organization'
+                },
             ],
             techniques: [{
                     id: 1,
@@ -112,13 +119,12 @@ const store = createStore({
                 },
                 {
                     id: 10,
-                    image: 'img/tech/6.png',
+                    image: 'img/',
                     title: 'Погрузчики',
                     total: '10',
                     repair: '0',
                     machineClassIds: 10
-                }
-
+                },
             ],
             selectedTechnique: null,
         }
