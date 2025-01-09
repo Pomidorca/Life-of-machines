@@ -47,8 +47,11 @@ import AdminRegistration from './views/registration/AdminRegistration.vue';
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+const registrationRules = computed(() => route.query.req);
 
 onMounted(() => {
+  console.log(registrationRules.value)
+  checkAdmin();
   authStore.loadTokensFromSessionStorage();
 })
 
@@ -57,19 +60,16 @@ const isAuth = computed(() => {
 })
 
 const checkAdmin = () => {
-  const registrationRules = ref(route.query.req);
-  router.push({ query: { ...route.query, req: registrationRules.value } });
-  
-  console.log(registrationRules)
-  const newReq = registrationRules !== 'admin' ? 'user' : 'admin';
-  router.push({ query: { ...route.query, req: newReq } });
-  // console.log(registrationRules)
 
-  return (registrationRules === 'admin') ? AdminRegistration : TheAuth
+  console.log(registrationRules.value)
+  if (registrationRules.value){
+    const newReq = registrationRules.value !== 'admin' ? 'user' : 'admin';
+
+    router.push({ query: { ...route.query, req: newReq } });
+    console.log(registrationRules.value)
+  }
+
+  return TheAuth
 }
 
-watch(() => route.query.req, (newQuery) => {
-    // console.log(newQuery)
-    checkAdmin(); // Вызываем функцию проверки
-});
 </script>
