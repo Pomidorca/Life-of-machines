@@ -20,14 +20,17 @@
             </section>
         </template>
         <template #footer>
-            <section class="buttons-container">
+            <div class="buttons-container">
+                <Transition>
+                    <span v-if="emptyFields" class="text-[#960018] m-auto font-semibold"> Заполните все поля! </span>
+                </Transition>
                 <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4 
                     modal-registration-form-button"
                     @click.prevent="registerOrganization"> Зарегистрировать </button>
                 <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4
                     modal-registration-form-button"
                     @click.prevent="router.go(-1)"> Закрыть </button>
-            </section>
+            </div>
         </template>
     </newOrganization>
 </template>
@@ -43,9 +46,31 @@ const organizationData = ref({
     department: '',
     notes: ''
 })
+const emptyFields = ref(false)
+
+const checkAllFields = () => {
+    for (let key in organizationData.value) {
+        const value = organizationData.value[key];
+        if (value === null || value === undefined || value === '' || value === 0) {
+            return false;
+        }
+    }
+    return true;
+};
 
 const registerOrganization = () => {
-    return RegistrationDataService.registerOrganization(organizationData.value)
+    if (checkAllFields()) {
+        setTimeout(() => {
+            router.go(-1);
+        }, 200)
+        return RegistrationDataService.registerOrganization(organizationData.value)
+    }
+    else {
+        emptyFields.value = true
+        setTimeout(() => {
+            emptyFields.value = false
+        }, 2000)
+    }
 }
 </script>
 

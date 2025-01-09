@@ -3,7 +3,7 @@
     <div class="flex flex-col mx-auto text-center px-8 py-10 justify-between" :class="{ 'px-2': !showMenu }">
       <div>
         <div class="flex justify-between px-2">
-          <h1 class="text-2xl font-medium leading-5 text-white" v-if="showMenu">СППР</h1>
+          <h1 class="text-2xl font-medium leading-5 text-white" v-if="showMenu"> СППР </h1>
           <button @click="toggleMenu"><img class="w-6 h-6" src="/img/header/burger.svg" alt="burger"></button>
         </div>
         <div class="menu-container transition-width duration-300 ease-in-out mt-8"

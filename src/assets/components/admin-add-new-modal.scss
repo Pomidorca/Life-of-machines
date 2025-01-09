@@ -6,6 +6,16 @@
         transition: all 0.4s;
     }
 
+    .v-enter-active,
+    .v-leave-active {
+        transition: opacity 0.5s ease;
+    }
+
+    .v-enter-from,
+    .v-leave-to {
+        opacity: 0;
+    }
+
     .modal-body {
         max-height: inherit;
         background-color: rgba(59, 131, 246, 0.918);
@@ -20,7 +30,7 @@
 
         .modal-registration-form {
             display: grid;
-            align-items: center;
+            align-items: end;
             grid-template-columns: repeat(auto-fit, minmax(min(40%, 200px), 1fr)); 
             gap: clamp(1rem, 2.3vw, 2.3rem); 
             max-height: 70dvh;
@@ -30,7 +40,6 @@
                 flex-direction: column;
                 max-height: 17rem;
                 gap: 1rem;
-                overflow-y: scroll;
             }
 
             label { color: #fff; }

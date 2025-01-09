@@ -7,7 +7,6 @@
       <img class="adaptive-img" src="/img/Auth/adaptive.png">
     </template>
   </adaptiveModal>
-  <!-- <user/> -->
   <div class="main-wrapper">
     <main v-if="isAuth">
       <div class="flex">
@@ -28,7 +27,8 @@
       </div>
     </main>
     <main v-else>
-      <TheAuth />
+      <!-- <TheAuth /> -->
+      <component :is="checkAdmin()" />
     </main>
   </div>
 </template>
@@ -40,10 +40,14 @@ import TheInfoTech from '@/components/TheInfoTech.vue';
 import TheAuth from '@/views/Auth.vue';
 import adaptiveModal from '@/components/ModalTemplate.vue';
 import { useAuthStore } from '@/store/auth';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import AdminRegistration from './views/registration/AdminRegistration.vue';
 
-import user from '@/views/registration/AdminUserRegistration.vue'
+const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
+
 onMounted(() => {
   authStore.loadTokensFromSessionStorage();
 })
@@ -51,4 +55,21 @@ onMounted(() => {
 const isAuth = computed(() => {
   return authStore.accessToken !== null;
 })
+
+const checkAdmin = () => {
+  const registrationRules = ref(route.query.req);
+  router.push({ query: { ...route.query, req: registrationRules.value } });
+  
+  console.log(registrationRules)
+  const newReq = registrationRules !== 'admin' ? 'user' : 'admin';
+  router.push({ query: { ...route.query, req: newReq } });
+  // console.log(registrationRules)
+
+  return (registrationRules === 'admin') ? AdminRegistration : TheAuth
+}
+
+watch(() => route.query.req, (newQuery) => {
+    // console.log(newQuery)
+    checkAdmin(); // Вызываем функцию проверки
+});
 </script>

@@ -12,8 +12,8 @@ const router = createRouter({
       redirect: '/active'
     },
     {
-      path: '/admin-registration',
-      name: '/admin-registration',
+      path: '/administration/registration',
+      name: '/administration/registration',
       component: () => import('@/views/registration/AdminRegistration.vue'),
     },
     {

@@ -24,5 +24,10 @@ export default {
     // получение ролей: пользователь и оператор
     getRoles (roles) {
         return http.get('/administration/roles', roles)
+    },
+
+    // получение всех ролей
+    getUserRole (userRole) {
+        return http.get('/administration/users', userRole)
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="modal-backdrop">
-        <div open class="modal-body">
+        <div class="modal-body">
             <header class="modal-header">
                 <slot name="header"></slot>
             </header>

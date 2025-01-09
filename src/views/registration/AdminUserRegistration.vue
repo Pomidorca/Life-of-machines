@@ -37,14 +37,17 @@
             </div>
         </template>
         <template #footer>
-            <section class="buttons-container">
+            <div class="buttons-container">
+                <Transition>
+                    <span v-if="emptyFields" class="text-[#960018] m-auto font-semibold"> Заполните все поля! </span>
+                </Transition>
                 <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4 
                     organization-registration-form-button"
                     @click.prevent="registerUser"> Зарегистрировать </button>
                 <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4
                     organization-registration-form-button"
                     @click.prevent="router.go(-1)"> Закрыть </button>
-            </section>
+            </div>
         </template>
     </newUser>
 </template>
@@ -65,12 +68,12 @@ const userData = ref({
 })
 
 const availableRoles = ref([])
+const emptyFields = ref(false)
 
 const getRoles = () => {
     RegistrationDataService.getRoles()
     .then((response) => {
         availableRoles.value = response.data
-        console.log(availableRoles.value)
     })
     .catch((error) => {
         console.log("Проблема с получением ролей: " + error)
@@ -79,9 +82,29 @@ const getRoles = () => {
 
 getRoles();
 
+const checkAllFields = () => {
+    for (let key in userData.value) {
+        const value = userData.value[key];
+        if (value === null || value === undefined || value === '' || value === 0) {
+            return false;
+        }
+    }
+    return true;
+};
+
 const registerUser = () => {
-    console.log(userData.value)
-    return RegistrationDataService.registerUser(userData.value);
+    if (checkAllFields()) {
+        setTimeout(() => {
+            router.go(-1);
+        }, 200)
+        return RegistrationDataService.registerUser(userData.value);
+    }
+    else {
+        emptyFields.value = true
+        setTimeout(() => {
+            emptyFields.value = false
+        }, 2000)
+    }
 }
 </script>
 
