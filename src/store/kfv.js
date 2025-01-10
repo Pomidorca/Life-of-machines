@@ -48,7 +48,7 @@ export const useKFVStore = defineStore("KFV", {
             } = this.filterParams;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds.join(',')}`, {
+                const response = await fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -81,33 +81,29 @@ export const useKFVStore = defineStore("KFV", {
 })
 
 function changesStructure(data) {
-    const dataKeys = Object.keys(data);
-    const labels = ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'];
-
-    if (!data || labels.length === 0) {
-        console.warn("Данные от API пустые или неверного формата.");
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        console.error("Ошибка: Некорректные данные получены от API:", data);
         return {
             labels: [],
             datasets: []
         };
     }
-
-
+    const labels = data.map(item => item.year);
     const datasets = [{
             label: "Время в работе",
-            data: dataKeys.map(key => data[key]?.fact?.worktime_f || 0),
+            data: data.map((item) => item.fact.worktime_f),
             backgroundColor: "#497daa",
             fill: true,
         },
         {
             label: 'План. простои',
-            data: dataKeys.map(key => data[key]?.fact?.plannedOaTD_f + data[key]?.fact?.plannedRepair_f || 0),
+            data: data.map(item => item.fact.plannedOaTD_f + item.fact.plannedRepair_f),
             backgroundColor: '#848484',
             fill: true,
         },
         {
             label: 'Неплан.простои',
-            data: dataKeys.map(key => data[key]?.fact?.unplannedOaTD_f + data[key]?.fact?.unplannedRepair_f || 0),
+            data: data.map(item => item.fact.unplannedOaTD_f + item.fact.unplannedRepair_f),
             backgroundColor: '#325aa3',
             fill: true,
         }
