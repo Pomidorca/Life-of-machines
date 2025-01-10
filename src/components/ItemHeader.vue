@@ -1,7 +1,7 @@
 <template>
   <div v-for="item in menu" :key="item.id">
     <router-link @click.prevent="handleClick(item)" :to="item.route"
-      class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
+    class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
       <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6"
         :class="{ 'active-img': isActive(item) }" />
       <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
@@ -37,12 +37,15 @@ function isActive(item) {
 const filterMenuByUserRole = (userRoleID) => {
   menu.value = store.state.header
   if (userRoleID === 1) {
-    menu.value = menu.value.filter(link => link.id !== 9 && link.id !== 10)
+    menu.value = menu.value.filter(link => link.id !== 9)
   }
   else if (userRoleID === 2 ) {
     menu.value = menu.value.filter(link => link.id !== 8)
   }
-  else menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9 && link.id !== 10)
+  else if (userRoleID === 3) {
+    menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9)
+  }
+  else menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9)
 }
 
 onMounted(() => {

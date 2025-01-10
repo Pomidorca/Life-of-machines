@@ -1,21 +1,24 @@
 <template>
     <div class="fixed left-0 top-0 w-screen h-screen overflow-hidden z-5000 bg-white/50 backdrop-blur-3xl">
-        <div class="flex overflow-y-hidden">
-            <div class="w-[50%] h-[100vh] pt-16"
-                style="background-image: url(/img/Auth/1.png); background-size: cover; background-repeat: no-repeat;">
-                <div class="px-10 max-h-[20rem]">
-                    <h1 class="text-[4.5vmin] text-white font-semibold"> Начните работать <br> эффективнее и быстрее! </h1>
-                    <p class="mt-5 text-[130%] text-white"> 
-                         Зарегистрируйтесь, чтобы получить доступ к аналитике, <br> графикам и инструментам мониторинга для оптимизации
-                         <br> работы строительной техники.
-                    </p>
+        <div v-if="!pageIsLoading" class="flex overflow-y-hidden">
+            <div class="bg-[#0554f2] w-[50%] h-[100vh]">
+                <div class="w-[100%] h-[100vh] pt-[1rem]"
+                    style="background-image: url(/img/Auth/1.png); background-size: cover; background-repeat: no-repeat;
+                    background-position: 1% 5rem;">
+                    <div class="px-10 max-h-[20rem] pt-[10%]">
+                        <h1 class="text-[4.5vmin] text-white font-semibold"> Начните работать <br> эффективнее и быстрее! </h1>
+                        <p class="mt-5 text-[130%] text-white"> 
+                            Зарегистрируйтесь, чтобы получить доступ к аналитике, <br> графикам и инструментам мониторинга для оптимизации
+                            <br> работы строительной техники.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <form class="w-auto m-auto flex flex-col justify-center items-baseline">
+            <form class="w-[30vw] m-auto flex flex-col justify-center">
                 <header class="registration-form-header">
                     <h2 class="text-[#001233] font-semibold text-3xl"> Регистрация </h2>
                 </header>
-                <main class="flex flex-col w-full max-w-[424px]">
+                <main class="flex flex-col w-full">
                     <div class="flex flex-col gap-2.5 mt-6">
                         <label class="text-lg text-[#001233] flex flex-col"> Имя
                             <input
@@ -58,14 +61,15 @@
                 <footer class="flex  flex-row gap-3 items-center">
                     <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4"
                         @click.prevent="registerAdmin"> Зарегистрироваться </button>
-                    <button class="py-4 w-full bg-[#0554F2] text-white text-xl leading-6 font-semibold rounded-3xl p-4"
-                        @click.prevent="router.go(-1)"> Назад </button>
                 </footer>
                 <Transition>
                     <span v-if="emptyFields" class="text-[#960018] m-auto font-semibold"> Заполните все поля! </span>
                 </Transition>
             </form>
         </div>
+        <div v-else class="flex items-center bg-[#fff] w-[100%] h-[100vh]">
+            <img src="/img/registration/loading.gif" class="max-w-[3.6rem] m-auto">
+        </div>  
     </div>
 </template>
 
@@ -84,6 +88,7 @@ const adminData = ref({
 })
 const availableOrganizations = ref([])
 const emptyFields = ref(false)
+const pageIsLoading = ref(false)
 
 const getOrganizations = () => {
     RegistrationDataService.getOrganizations()
@@ -109,11 +114,19 @@ const checkAllFields = () => {
 
 const registerAdmin = () => {
     if (checkAllFields()) {
-        setTimeout(() => {
-            router.go(-1);
-        }, 200)
-        return RegistrationDataService.postRegisterAdmin(adminData.value)
-    } else {
+        pageIsLoading.value = true
+        RegistrationDataService.postRegisterAdmin(adminData.value)
+            .catch ((error) => {
+                console.log('Ошибка: ' + error);
+            })
+            .finally (() => {
+                setTimeout(() => {
+                    router.push('/');
+                    pageIsLoading.value = false
+                }, 2000)
+            })
+    }
+    else {
         emptyFields.value = true
         setTimeout(() => {
             emptyFields.value = false
@@ -122,14 +135,4 @@ const registerAdmin = () => {
 }
 </script>
 
-<style scoped>
-.v-enter-active,
-.v-leave-active {
-    transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-    opacity: 0;
-}
-</style>
+<style scoped></style>

@@ -72,16 +72,9 @@ const store = createStore({
                     id: 9,
                     title: 'Новый пользователь',
                     img: 'img/header/admin_add_user.svg',
-                    imgActive: 'img/header/uadmin_add_user_active.svg',
-                    route: '/administration/new-user'
-                },
-                {
-                    id: 10,
-                    title: 'Зарегистрироваться',
-                    img: 'img/header/admin_registration.svg',
-                    imgActive: 'img/header/admin_registration_active.svg',
-                    route: '/administration/registration'
-                },
+                    imgActive: 'img/header/admin_add_user_active.svg',
+                    route: '/administration/new-user',
+                }
             ],
             techniques: [{
                     id: 1,

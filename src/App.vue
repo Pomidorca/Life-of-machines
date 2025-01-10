@@ -7,7 +7,7 @@
       <img class="adaptive-img" src="/img/Auth/adaptive.png">
     </template>
   </adaptiveModal>
-  <div class="main-wrapper">
+  <div class="main-wrapper max-w-[1720px]">
     <main v-if="isAuth">
       <div class="flex">
         <header>
@@ -27,7 +27,6 @@
       </div>
     </main>
     <main v-else>
-      <!-- <TheAuth /> -->
       <component :is="checkAdmin()" />
     </main>
   </div>
@@ -50,7 +49,6 @@ const authStore = useAuthStore();
 const registrationRules = computed(() => route.query.req);
 
 onMounted(() => {
-  console.log(registrationRules.value)
   checkAdmin();
   authStore.loadTokensFromSessionStorage();
 })
@@ -60,16 +58,11 @@ const isAuth = computed(() => {
 })
 
 const checkAdmin = () => {
-
-  console.log(registrationRules.value)
   if (registrationRules.value){
     const newReq = registrationRules.value !== 'admin' ? 'user' : 'admin';
-
     router.push({ query: { ...route.query, req: newReq } });
-    console.log(registrationRules.value)
   }
 
-  return TheAuth
+  return registrationRules.value === 'admin' ? AdminRegistration : TheAuth
 }
-
 </script>
