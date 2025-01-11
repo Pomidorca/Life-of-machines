@@ -15,7 +15,7 @@
                 </button>
             </div>
             <div v-if="machineType.showDetails">
-                <div class="flex mb-3 ml-6 gap-x-2" v-for="machine in machineType.machines" :key="machine.id">
+                <div class="flex mb-3 ml-3 gap-x-2" v-for="machine in machineType.machines" :key="machine.id">
                     <input type="checkbox" :id="machine.id" :value="machine.id" v-model="selectedMachineTypeIds">
                     <p class="text-[#979DAC]">
                         {{ machineType.name }} - {{ machine.inventoryNumber }}
@@ -28,7 +28,7 @@
 
 <script setup>
 import { useMachineStore } from '@/store/machine';
-import { onMounted, ref, watch, computed } from 'vue';
+import { onMounted, watch, computed } from 'vue';
 import { useActiveStore } from '@/store/active';
 
 const machineStore = useMachineStore();
