@@ -28,11 +28,13 @@
 
 <script setup>
 import { useMachineStore } from '@/store/machine';
-import { onMounted, ref, watch, computed } from 'vue';
+import { onMounted, watch, computed } from 'vue';
 import { useActiveStore } from '@/store/active';
+import { useKFVStore } from '@/store/kfv';
 
 const machineStore = useMachineStore();
 const activeStore = useActiveStore();
+const kfvStore = useKFVStore();
 
 const selectedMachineTypeIds = computed({
     get() {
@@ -48,6 +50,9 @@ const selectedMachineTypeIds = computed({
 const saveStateToStorage = () => {
     localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
     activeStore.updateFilterParams({
+        machineTypeIds: selectedMachineTypeIds.value,
+    });
+    kfvStore.updateFilterParams({
         machineTypeIds: selectedMachineTypeIds.value,
     });
 };

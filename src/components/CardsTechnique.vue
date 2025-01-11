@@ -22,10 +22,12 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useActiveStore } from "@/store/active";
 import { useMachineStore } from "@/store/machine";
+import { useKFVStore } from "@/store/kfv";
 
 const store = useStore();
 const techniques = computed(() => store.state.techniques);
 const machineStore = useMachineStore();
+const kfvStore = useKFVStore();
 const activeStore = useActiveStore();
 const selectedTechniqueId = ref(null);
 
@@ -49,6 +51,7 @@ const selectTechnique = (techniqueId) => {
   if (!techniqueId) return;
   selectedTechniqueId.value = techniqueId;
   activeStore.updateFilterParams({ machineClassIds: techniqueId });
+  kfvStore.updateFilterParams({ machineClassIds: techniqueId });
   saveToLocalStorage();
   activeStore.fetchData();
 

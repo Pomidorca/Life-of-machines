@@ -24,10 +24,10 @@ export const useActiveStore = defineStore('active', {
     state: () => ({
         loading: false,
         error: null,
-        lineDate: ref({
+        lineDate: {
             labels: [],
             datasets: []
-        }),
+        },
         changeStructureDate: {
             labels: [],
             datasets: []
@@ -226,6 +226,7 @@ function transformchangeStructuredate(data) {
         },
     ];
 
+
     return {
         labels,
         datasets
@@ -251,7 +252,6 @@ function transformbarTurnedTwoDate(data) {
     ];
 
 
-
     return {
         labels,
         datasets
@@ -275,6 +275,7 @@ function transformbarTurnedDate(data) {
             borderWidth: 1
         }
     ];
+
 
 
     return {
