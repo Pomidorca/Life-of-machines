@@ -57,6 +57,7 @@ import {
     Filler,
     RadialLinearScale,
 } from 'chart.js'
+import { useCTFChartsStore } from "@/store/cft.js";
 import {
     Line,
     Radar,
@@ -93,8 +94,20 @@ export default {
         default: 'GeneralInformation'
     },
     data() {
-        return charts
+      return {
+        ...charts
+      };
+    },
+    mounted() {
+      this.updateChartData()
+    },
+    methods: {
+      updateChartData() {
+
+        const store = useCTFChartsStore();
+
+        store.updateChartWorkTimeByServiceLife();
+      }
     }
 }
 </script>
-<style></style>

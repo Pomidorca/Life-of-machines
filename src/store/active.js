@@ -122,7 +122,6 @@ export const useActiveStore = defineStore('active', {
                 ]);
 
                 const data = await Promise.all(responses.map(res => res.json()));
-                console.log('Все данные:', data);
 
 
                 this.lineDate = transformLinedate(data[0]);
@@ -188,10 +187,6 @@ function transformLinedate(data) {
         },
     ];
 
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
 
     return {
         labels,
@@ -231,11 +226,6 @@ function transformchangeStructuredate(data) {
         },
     ];
 
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
-
     return {
         labels,
         datasets
@@ -260,10 +250,7 @@ function transformbarTurnedTwoDate(data) {
 
     ];
 
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
+
 
     return {
         labels,
@@ -289,11 +276,6 @@ function transformbarTurnedDate(data) {
         }
     ];
 
-
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
 
     return {
         labels,
