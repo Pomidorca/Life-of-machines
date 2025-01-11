@@ -34,7 +34,6 @@
 
         <div v-else-if="mode === 'analysis'">
 
-          {{ ChangeOperatingTime }}
             <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
@@ -60,6 +59,7 @@ import {
     Filler,
     RadialLinearScale,
 } from 'chart.js'
+import { useCTFChartsStore } from "@/store/cft.js";
 import {
     Line,
     Radar,
@@ -97,7 +97,15 @@ export default {
     },
     data() {
         return charts
+    },
+  mounted() {
+    this.updateChartData()
+  },
+  methods: {
+    updateChartData() {
+      useCTFChartsStore.updateChartWorkTimeByServiceLife(123)
     }
+  }
 }
 </script>
 <style></style>

@@ -42,13 +42,16 @@ import { useAuthStore } from '@/store/auth';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import AdminRegistration from './views/registration/AdminRegistration.vue';
+// import {useCTFChartsStore} from "@/store/cft.js";
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+// const ctfStore = useCTFChartsStore()
 const registrationRules = computed(() => route.query.req);
 
 onMounted(() => {
+
   checkAdmin();
   authStore.loadTokensFromSessionStorage();
 })
