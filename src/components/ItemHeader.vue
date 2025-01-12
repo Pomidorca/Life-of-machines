@@ -42,9 +42,6 @@ const filterMenuByUserRole = (userRoleID) => {
   else if (userRoleID === 2 ) {
     menu.value = menu.value.filter(link => link.id !== 8)
   }
-  else if (userRoleID === 3) {
-    menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9)
-  }
   else menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9)
 }
 
