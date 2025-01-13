@@ -19,6 +19,10 @@ export const useKFVStore = defineStore("KFV", {
                 labels: [],
                 datasets: []
             },
+            structureKFV: {
+                labels: [],
+                datasets: []
+            },
             filterParams: ref({
                 yearStart: 2000,
                 yearEnd: 2024,
@@ -33,40 +37,46 @@ export const useKFVStore = defineStore("KFV", {
             this.error = null;
             const authStore = useAuthStore();
             const token = authStore.accessToken;
-
+        
             if (!token) {
-                this.error = "Токен не найден!";
+                this.error = "Token not found!";
                 this.loading = false;
                 return;
             }
-
-            const {
-                yearStart,
-                yearEnd,
-                machineClassIds,
-                machineTypeIds
-            } = this.filterParams;
-
+        
+            const { yearStart, yearEnd } = this.filterParams; 
+        
             try {
-                const response = await fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    const text = await response.text();
-                    throw new Error(`HTTP error ${response.status}: ${text}`);
+                const responses = await Promise.all([
+                    fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }),
+                    fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
+                    })
+                ]);
+        
+                for (const response of responses) {
+                    if (!response.ok) {
+                        const text = await response.text();
+                        throw new Error(`HTTP error ${response.status}: ${text}`);
+                    }
                 }
-
-                const data = await response.json();
-
+        
+                const data = await Promise.all(responses.map(res => res.json()));
+        
                 console.log("Полученные данные", data);
+        
+                this.changesStructureKFV = changesStructure(data[0]);
+                this.structureKFV = StructureKFV(data[1]);
 
-                this.changesStructureKFV = changesStructure(data);
-
+        
             } catch (error) {
-                this.error = `Ошибка при загрузке данных ${error.message}`;
+                this.error = `Error loading data: ${error.message}`;
             } finally {
                 this.loading = false;
             }
@@ -119,3 +129,56 @@ function changesStructure(data) {
         datasets
     };
 }
+
+function StructureKFV(data) {
+    if (!data || !data.fact) { 
+        console.error("Ошибка: Некорректные данные получены от API:", data);
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
+
+   const labels = ['Время в работе', 'Плановые простои', 'Неплановые простои', 'Прочее'];
+   const datasets = [
+        {
+            label: 'calc',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            pointBackgroundColor: 'rgba(255,99,132,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(255,99,132,1)',
+            data: [
+                data.calculated.worktime_c, 
+                data.calculated.plannedRepair_c + data.calculated.unplannedRepair_c, 
+                data.calculated.plannedOaTD_c + data.calculated.unplannedOaTD_c
+            ]
+        },
+        {
+            label: 'fact',
+            backgroundColor: 'rgba(179,181,198,0.2)',
+            borderColor: 'rgba(179,181,198,1)',
+            pointBackgroundColor: 'rgba(179,181,198,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(179,181,198,1)',
+            data: [
+                data.fact.worktime_f, 
+                data.fact.plannedRepair_f + data.fact.unplannedRepair_f, 
+                data.fact.plannedOaTD_f + data.fact.unplannedOaTD_f
+            ]
+        },
+    ]
+
+    console.log("Проверка datasets:", datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data
+    })));
+
+    return {
+        labels,
+        datasets
+    };
+};
+

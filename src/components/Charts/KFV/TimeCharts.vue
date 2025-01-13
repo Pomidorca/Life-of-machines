@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
-                    <Radar :options="StructureKFVOptions" :data="StructureKFV" />
+                    <Radar :options="StructureKFVOptions" :data="structureKFV" />
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@ import {
 } from 'vue-chartjs'
 import { useKFVStore } from '@/store/kfv';
 import { computed, onMounted } from 'vue';
-import { ChangesStructureKFVOptions, StructureKFVOptions, StructureKFV, ChangeOperatingTimeOptions, detailedStructureCfvOne, detailedStructureCfvTwo, detailedStructureCfvThree, detailedStructureCfvOneOptions, detailedStructureCfvTwoOptions, detailedStructureCfvThreeOptions, ChangeOperatingTime } from '@/components/Charts/KFV/index.js';
+import { ChangesStructureKFVOptions, StructureKFVOptions, ChangeOperatingTimeOptions, detailedStructureCfvOne, detailedStructureCfvTwo, detailedStructureCfvThree, detailedStructureCfvOneOptions, detailedStructureCfvTwoOptions, detailedStructureCfvThreeOptions, ChangeOperatingTime } from '@/components/Charts/KFV/index.js';
 import * as charts from '@/components/Charts/KFV/index.js';
 
 ChartJS.register(
@@ -96,6 +96,7 @@ const loading = computed(() => KFVStore.loading);
 const error = computed(() => KFVStore.error);
 
 const changesStructureKFV = computed(() => KFVStore.changesStructureKFV);
+const structureKFV = computed(() => KFVStore.structureKFV);
 
 onMounted(async () => {
     await KFVStore.fetchKFV();
