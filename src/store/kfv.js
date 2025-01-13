@@ -7,6 +7,9 @@ import {
 import {
     ref
 } from "vue";
+import CTFDataService from "@/services/CTFDataService.js";
+import {ChangeOperatingTime, ChangesStructureKFV} from "@/components/Charts/KFV/index.js";
+import {log10} from "chart.js/helpers";
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL
@@ -24,7 +27,9 @@ export const useKFVStore = defineStore("KFV", {
                 yearEnd: 2024,
                 machineClassIds: 1,
                 machineTypeIds: [],
-            })
+            }),
+            initialChangeOperatingTime: ChangeOperatingTime,
+            initialChangesStructureKFV: ChangesStructureKFV
         }
     },
     actions: {
@@ -48,7 +53,38 @@ export const useKFVStore = defineStore("KFV", {
             } = this.filterParams;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds.join(',')}`, {
+
+                await CTFDataService.getWorkTimeByServiceLife(yearStart, yearEnd)
+                    .then((response) => {
+                        // throw  new Error('Попа единорога ')
+
+                        const data = response.data
+
+                        const labels = []
+
+                        const datasetsBlue = []
+
+                        const datasetsRed = []
+
+                        data.map((item, index) => {
+
+                            labels.push(item.serviceLife)
+
+                            datasetsRed.push(item.worktime)
+
+                            datasetsBlue.push(item.worktimeAverage)
+                        })
+
+                        this.initialChangeOperatingTime.labels = labels;
+                        this.initialChangeOperatingTime.datasets[0].data = datasetsBlue;
+                        this.initialChangeOperatingTime.datasets[1].data = datasetsRed;
+
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
+                const response = await fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -61,9 +97,18 @@ export const useKFVStore = defineStore("KFV", {
 
                 const data = await response.json();
 
-                console.log("Полученные данные", data);
+                console.log("Полученные данные! лох", data);
 
-                this.changesStructureKFV = changesStructure(data);
+                // this.initialChangesStructureKFV.datasets[0].data = data.fact.worktime_f
+                // this.initialChangesStructureKFV.datasets[1].data = data.fact.plannedRepair_f
+                // this.initialChangesStructureKFV.datasets[2].data = data.fact.unplannedRepair_f
+
+                console.log(this.initialChangesStructureKFV.datasets)
+
+                changesStructure(data);
+
+
+
 
             } catch (error) {
                 this.error = `Ошибка при загрузке данных ${error.message}`;
@@ -81,10 +126,8 @@ export const useKFVStore = defineStore("KFV", {
 })
 
 function changesStructure(data) {
-    const dataKeys = Object.keys(data);
-    const labels = ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'];
 
-    if (!data || labels.length === 0) {
+    if (!data || data.length === 0) {
         console.warn("Данные от API пустые или неверного формата.");
         return {
             labels: [],
@@ -92,34 +135,29 @@ function changesStructure(data) {
         };
     }
 
-
     const datasets = [{
             label: "Время в работе",
-            data: dataKeys.map(key => data[key]?.fact?.worktime_f || 0),
+            data: data.map((item) => item.fact.worktime_f),
             backgroundColor: "#497daa",
             fill: true,
         },
         {
             label: 'План. простои',
-            data: dataKeys.map(key => data[key]?.fact?.plannedOaTD_f + data[key]?.fact?.plannedRepair_f || 0),
+            data: data.map(item => item.fact.plannedOaTD_f + item.fact.plannedRepair_f),
             backgroundColor: '#848484',
             fill: true,
         },
         {
             label: 'Неплан.простои',
-            data: dataKeys.map(key => data[key]?.fact?.unplannedOaTD_f + data[key]?.fact?.unplannedRepair_f || 0),
+            data: data.map(item => item.fact.unplannedOaTD_f + item.fact.unplannedRepair_f),
             backgroundColor: '#325aa3',
             fill: true,
         }
     ];
 
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
+    console.log("Проверка datasets:", datasets);
 
     return {
-        labels,
         datasets
     };
 }
