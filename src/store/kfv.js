@@ -22,6 +22,10 @@ export const useKFVStore = defineStore("KFV", {
                 labels: [],
                 datasets: []
             },
+            structureKFV: {
+                labels: [],
+                datasets: []
+            },
             filterParams: ref({
                 yearStart: 2000,
                 yearEnd: 2024,
@@ -45,15 +49,9 @@ export const useKFVStore = defineStore("KFV", {
                 return;
             }
 
-            const {
-                yearStart,
-                yearEnd,
-                machineClassIds,
-                machineTypeIds
-            } = this.filterParams;
+            const { yearStart, yearEnd } = this.filterParams;
 
             try {
-
                 await CTFDataService.getWorkTimeByServiceLife(yearStart, yearEnd)
                     .then((response) => {
                         // throw  new Error('Попа единорога ')
@@ -84,31 +82,32 @@ export const useKFVStore = defineStore("KFV", {
                         console.log(e)
                     })
 
-                const response = await fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const responses = await Promise.all([
+                    fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }),
+                    fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
+                    })
+                ]);
 
-                if (!response.ok) {
-                    const text = await response.text();
-                    throw new Error(`HTTP error ${response.status}: ${text}`);
+                for (const response of responses) {
+                    if (!response.ok) {
+                        const text = await response.text();
+                        throw new Error(`HTTP error ${response.status}: ${text}`);
+                    }
                 }
 
-                const data = await response.json();
+                const data = await Promise.all(responses.map(res => res.json()));
 
-                console.log("Полученные данные! лох", data);
+                console.log("Полученные данные", data);
 
-                // this.initialChangesStructureKFV.datasets[0].data = data.fact.worktime_f
-                // this.initialChangesStructureKFV.datasets[1].data = data.fact.plannedRepair_f
-                // this.initialChangesStructureKFV.datasets[2].data = data.fact.unplannedRepair_f
-
-                console.log(this.initialChangesStructureKFV.datasets)
-
-                changesStructure(data);
-
-
-
+                this.changesStructureKFV = changesStructure(data[0]);
+                this.structureKFV = StructureKFV(data[1]);
 
             } catch (error) {
                 this.error = `Ошибка при загрузке данных ${error.message}`;
@@ -126,15 +125,14 @@ export const useKFVStore = defineStore("KFV", {
 })
 
 function changesStructure(data) {
-
-    if (!data || data.length === 0) {
-        console.warn("Данные от API пустые или неверного формата.");
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        console.error("Ошибка: Некорректные данные получены от API:", data);
         return {
             labels: [],
             datasets: []
         };
     }
-
+    const labels = data.map(item => item.year);
     const datasets = [{
             label: "Время в работе",
             data: data.map((item) => item.fact.worktime_f),
@@ -155,9 +153,10 @@ function changesStructure(data) {
         }
     ];
 
-    console.log("Проверка datasets:", datasets);
+
 
     return {
+        labels,
         datasets
     };
 }
