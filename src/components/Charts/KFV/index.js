@@ -1,37 +1,31 @@
-export const ChangesStructureKFV = {
-    labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
-    datasets: [{
-            label: 'Время в работе',
-            data: [4014, 4542, 3762, 3097, 3778, 3419, 2942, 1774, 1118, 1464, 2368],
-            backgroundColor: '#497daa',
-            fill: true,
-        },
-        {
-            label: 'План. простои',
-            data: [2528, 2032, 1622, 1450, 1986, 2348, 1655, 958, 696, 936, 1296],
-            backgroundColor: '#848484',
-            fill: true,
-        },
-        {
-            label: 'Неплан.простои',
-            data: [1683, 933, 3230, 4142, 2726, 2701, 3871, 2240, 1485, 1304, 1453],
-            backgroundColor: '#325aa3',
-            fill: true,
-        },
-        {
-            label: 'Прочие простои',
-            data: [535, 1253, 146, 71, 294, 292, 292, 1193, 551, 303, 806],
-            backgroundColor: '#1c4d73',
-            fill: true,
-        },
-        {
-            label: 'Кио',
-            data: [0.46, 0.52, 0.43, 0.35, 0.43, 0.39, 0.34, 0.20, 0.13, 0.17, 0.27],
-            backgroundColor: '#c10016',
-            fill: false,
-        },
-    ],
-};
+// export const ChangesStructureKFV = {
+//     labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+//     datasets: [{
+//             label: 'Время в работе',
+//             data: [4014, 4542, 3762, 3097, 3778, 3419, 2942, 1774, 1118, 1464, 2368],
+//             backgroundColor: '#497daa',
+//             fill: true,
+//         },
+//         {
+//             label: 'План. простои',
+//             data: [2528, 2032, 1622, 1450, 1986, 2348, 1655, 958, 696, 936, 1296],
+//             backgroundColor: '#848484',
+//             fill: true,
+//         },
+//         {
+//             label: 'Неплан.простои',
+//             data: [1683, 933, 3230, 4142, 2726, 2701, 3871, 2240, 1485, 1304, 1453],
+//             backgroundColor: '#325aa3',
+//             fill: true,
+//         },
+//         {
+//             label: 'Кио',
+//             data: [0.46, 0.52, 0.43, 0.35, 0.43, 0.39, 0.34, 0.20, 0.13, 0.17, 0.27],
+//             backgroundColor: '#c10016',
+//             fill: false,
+//         },
+//     ],
+// };
 
 export const ChangesStructureKFVOptions = {
     responsive: true,
@@ -61,30 +55,30 @@ export const ChangesStructureKFVOptions = {
     },
 };
 
-export const StructureKFV = {
-    labels: ['Время в работе', 'Плановые простои', 'Неплановые простои', 'Прочее'],
-    datasets: [{
-            label: '',
-            backgroundColor: 'rgba(179,181,198,0.2)',
-            borderColor: 'rgba(179,181,198,1)',
-            pointBackgroundColor: 'rgba(179,181,198,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(179,181,198,1)',
-            data: [65, 59, 90, 81, 56, 55, 40]
-        },
-        {
-            label: '',
-            backgroundColor: 'rgba(255,99,132,0.2)',
-            borderColor: 'rgba(255,99,132,1)',
-            pointBackgroundColor: 'rgba(255,99,132,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(255,99,132,1)',
-            data: [28, 48, 40, 19, 96, 27, 100]
-        }
-    ]
-};
+// export const StructureKFV = {
+//     labels: ['Время в работе', 'Плановые простои', 'Неплановые простои', 'Прочее'],
+//     datasets: [{
+//             label: '',
+//             backgroundColor: 'rgba(179,181,198,0.2)',
+//             borderColor: 'rgba(179,181,198,1)',
+//             pointBackgroundColor: 'rgba(179,181,198,1)',
+//             pointBorderColor: '#fff',
+//             pointHoverBackgroundColor: '#fff',
+//             pointHoverBorderColor: 'rgba(179,181,198,1)',
+//             data: [65, 59, 90, 81, 56, 55, 40]
+//         },
+//         {
+//             label: '',
+//             backgroundColor: 'rgba(255,99,132,0.2)',
+//             borderColor: 'rgba(255,99,132,1)',
+//             pointBackgroundColor: 'rgba(255,99,132,1)',
+//             pointBorderColor: '#fff',
+//             pointHoverBackgroundColor: '#fff',
+//             pointHoverBorderColor: 'rgba(255,99,132,1)',
+//             data: [28, 48, 40, 19, 96, 27, 100]
+//         }
+//     ]
+// };
 
 export const StructureKFVOptions = {
     responsive: true,
