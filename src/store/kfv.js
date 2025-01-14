@@ -160,3 +160,52 @@ function changesStructure(data) {
         datasets
     };
 }
+
+function StructureKFV(data) {
+    if (!data || !data.fact) {
+        console.error("Ошибка: Некорректные данные получены от API:", data);
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
+    const labels = ['Время в работе', 'Плановые простои', 'Неплановые простои', 'Прочее'];
+    const datasets = [
+        {
+            label: 'calc',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            pointBackgroundColor: 'rgba(255,99,132,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(255,99,132,1)',
+            data: [
+                data.calculated.worktime_c,
+                data.calculated.plannedRepair_c + data.calculated.unplannedRepair_c,
+                data.calculated.plannedOaTD_c + data.calculated.unplannedOaTD_c
+            ]
+        },
+        {
+            label: 'fact',
+            backgroundColor: 'rgba(179,181,198,0.2)',
+            borderColor: 'rgba(179,181,198,1)',
+            pointBackgroundColor: 'rgba(179,181,198,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(179,181,198,1)',
+            data: [
+                data.fact.worktime_f,
+                data.fact.plannedRepair_f + data.fact.unplannedRepair_f,
+                data.fact.plannedOaTD_f + data.fact.unplannedOaTD_f
+            ]
+        },
+    ]
+    console.log("Проверка datasets:", datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data
+    })));
+    return {
+        labels,
+        datasets
+    };
+};
