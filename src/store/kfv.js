@@ -44,16 +44,16 @@ export const useKFVStore = defineStore("KFV", {
                 return;
             }
         
-            const { yearStart, yearEnd } = this.filterParams; 
+            const { yearStart, yearEnd, machineClassIds, machineTypeIds } = this.filterParams; 
         
             try {
                 const responses = await Promise.all([
-                    fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
+                    fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     }),
-                    fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}`, {
+                    fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         }
@@ -139,7 +139,7 @@ function StructureKFV(data) {
         };
     }
 
-   const labels = ['Время в работе', 'Плановые простои', 'Неплановые простои', 'Прочее'];
+   const labels = ['Время в работе', 'Плановые простои', 'Неплановые простои'];
    const datasets = [
         {
             label: 'calc',

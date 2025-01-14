@@ -1,9 +1,10 @@
 <template>
   <div v-for="item in menu" :key="item.id">
     <router-link @click.prevent="handleClick(item)" :to="item.route"
-    class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
-      <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6"
-        :class="{ 'active-img': isActive(item) }" />
+      class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium"
+      :class="{ 'active': isActive(item) }">
+      <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6" :class="{ 'active-img': isActive(item) }"
+        loading="lazy" />
       <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
     </router-link>
   </div>
@@ -39,20 +40,20 @@ const filterMenuByUserRole = (userRoleID) => {
   if (userRoleID === 1) {
     menu.value = menu.value.filter(link => link.id !== 9)
   }
-  else if (userRoleID === 2 ) {
+  else if (userRoleID === 2) {
     menu.value = menu.value.filter(link => link.id !== 8)
   }
   else menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9)
 }
 
 onMounted(() => {
-    RegistrationDataService.getUserRole()
+  RegistrationDataService.getUserRole()
     .then((response) => {
       userRoleID.value = response.data.role.id
       filterMenuByUserRole(userRoleID.value)
     })
     .catch((error) => {
-        console.log("Проблема с получением роли пользователя: " + error)
+      console.log("Проблема с получением роли пользователя: " + error)
     })
 })
 </script>

@@ -7,15 +7,15 @@
       <img class="adaptive-img" src="/img/Auth/adaptive.png">
     </template>
   </adaptiveModal>
-  <div class="main-wrapper max-w-[1720px]">
+  <div class="main-wrapper">
     <main v-if="isAuth">
       <div class="flex">
         <header>
           <TheHeader />
         </header>
-        <div class="w-full">
+        <div class="w-full flex flex-col">
           <TheInfoTech />
-          <div class="flex">
+          <div class="flex flex-1">
             <TheFilter />
             <div class="pl-6 container">
               <div>
@@ -27,7 +27,7 @@
       </div>
     </main>
     <main v-else>
-      <component :is="checkAdmin()" />
+      <TheAuth />
     </main>
   </div>
 </template>
@@ -39,30 +39,14 @@ import TheInfoTech from '@/components/TheInfoTech.vue';
 import TheAuth from '@/views/Auth.vue';
 import adaptiveModal from '@/components/ModalTemplate.vue';
 import { useAuthStore } from '@/store/auth';
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import AdminRegistration from './views/registration/AdminRegistration.vue';
+import { computed, onMounted } from 'vue';
 
-const router = useRouter();
-const route = useRoute();
 const authStore = useAuthStore();
-const registrationRules = computed(() => route.query.req);
-
 onMounted(() => {
-  checkAdmin();
   authStore.loadTokensFromSessionStorage();
 })
 
 const isAuth = computed(() => {
   return authStore.accessToken !== null;
 })
-
-const checkAdmin = () => {
-  if (registrationRules.value){
-    const newReq = registrationRules.value !== 'admin' ? 'user' : 'admin';
-    router.push({ query: { ...route.query, req: newReq } });
-  }
-
-  return registrationRules.value === 'admin' ? AdminRegistration : TheAuth
-}
 </script>

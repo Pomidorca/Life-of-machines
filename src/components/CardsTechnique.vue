@@ -4,7 +4,8 @@
       @click="fetchTechniques(technique.machineClassIds), selectTechnique(technique.machineClassIds)"
       :class="{ 'selected-technique': selectedTechniqueId === technique.id }">
       <div class="flex flex-col items-center gap-y-0.5">
-        <img class="w-[64px] h-[64px] bg-cover bg-center bg-no-repeat rounded-md" :src="technique.image" alt="tech">
+        <img class="w-[64px] h-[64px] bg-cover bg-center bg-no-repeat rounded-md" :src="technique.image" alt="tech"
+          loading="lazy">
         <p class="text-[#001233] text-xs font-normal">{{ technique.title }}</p>
       </div>
       <div class="flex flex-col gap-y-2">

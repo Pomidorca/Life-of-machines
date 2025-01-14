@@ -9,7 +9,7 @@
 
         <div class="mt-5">
             <div class="flex flex-col mt-3 gap-y-3">
-                <div class="flex justify-between">
+                <!-- <div class="flex justify-between">
                     <button
                         class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
                         @click="handleClick('Мес.')"
@@ -20,7 +20,7 @@
                     <button
                         class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
                         @click="handleClick('Год')" :class="{ 'bg-[#0554F2] text-white': toggle == 'Год' }">Год</button>
-                </div>
+                </div> -->
                 <div class="flex gap-x-3">
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">От</p>

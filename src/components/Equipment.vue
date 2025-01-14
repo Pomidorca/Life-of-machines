@@ -10,8 +10,8 @@
                     <p class="text-[#979DAC]">{{ machineType.name }}</p>
                 </div>
                 <button @click="handleClick(machineType)">
-                    <img v-if="!machineType.showDetails" src="/img/filter/Caret_Down_SM.svg" alt="">
-                    <img v-if="machineType.showDetails" src="/img/filter/Caret_Up_SM.svg" alt="">
+                    <img v-if="!machineType.showDetails" src="/img/filter/Caret_Down_SM.svg" loading="lazy">
+                    <img v-if="machineType.showDetails" src="/img/filter/Caret_Up_SM.svg" loading="lazy">
                 </button>
             </div>
             <div v-if="machineType.showDetails">

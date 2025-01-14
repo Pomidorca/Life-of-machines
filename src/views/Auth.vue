@@ -11,12 +11,12 @@
             <div class="flex flex-col w-full max-w-[424px]">
                 <h2 class="text-[#001233] font-semibold text-4xl"> Вход </h2>
                 <div class="flex flex-col gap-y-6 mt-8">
-                    <div class="flex flex-col">
+                    <!-- <div class="flex flex-col">
                         <label class="text-lg text-[#001233]">Имя</label>
                         <input
                             class="mt-2 px-6 py-4 text-xl text-[#979DAC] rounded-[32px] border-[#979DAC] border leading-6"
                             type="text" placeholder="имя">
-                    </div>
+                    </div> -->
                     <div class="flex flex-col">
                         <label class="text-lg text-[#001233]">Email</label>
                         <input
