@@ -1,5 +1,6 @@
 <template>
     <div class="container min-h-[100%]">
+
         <div v-if="mode === 'GeneralInformation'">
             <div class="grid grid-cols-2 gap-6">
 
@@ -32,6 +33,8 @@
         </div>
 
         <div v-else-if="mode === 'analysis'">
+
+          {{ ChangeOperatingTime }}
             <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>

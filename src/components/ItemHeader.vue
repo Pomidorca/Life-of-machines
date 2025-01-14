@@ -1,7 +1,7 @@
 <template>
-  <div v-for="item in $store.state.header" :key="item.id">
+  <div v-for="item in menu" :key="item.id">
     <router-link @click.prevent="handleClick(item)" :to="item.route"
-      class="link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
+    class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium" :class="{ 'active': isActive(item) }">
       <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6"
         :class="{ 'active-img': isActive(item) }" />
       <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
@@ -10,7 +10,9 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
+import store from '@/store/store';
+import RegistrationDataService from '@/services/RegistrationDataService';
 
 defineProps({
   showMenu: {
@@ -21,6 +23,8 @@ defineProps({
 
 const emit = defineEmits(['toggleMenu']);
 const state = reactive({ activeItem: null });
+const userRoleID = ref(0);
+const menu = ref([])
 
 function handleClick(item) {
   state.activeItem = item;
@@ -29,6 +33,28 @@ function handleClick(item) {
 function isActive(item) {
   return state.activeItem?.id === item.id;
 }
+
+const filterMenuByUserRole = (userRoleID) => {
+  menu.value = store.state.header
+  if (userRoleID === 1) {
+    menu.value = menu.value.filter(link => link.id !== 9)
+  }
+  else if (userRoleID === 2 ) {
+    menu.value = menu.value.filter(link => link.id !== 8)
+  }
+  else menu.value = menu.value.filter(link => link.id !== 8 && link.id !== 9)
+}
+
+onMounted(() => {
+    RegistrationDataService.getUserRole()
+    .then((response) => {
+      userRoleID.value = response.data.role.id
+      filterMenuByUserRole(userRoleID.value)
+    })
+    .catch((error) => {
+        console.log("Проблема с получением роли пользователя: " + error)
+    })
+})
 </script>
 
 <style scoped>

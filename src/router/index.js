@@ -6,9 +6,15 @@ import {
 const router = createRouter({
   history: createWebHistory(
     import.meta.env.BASE_URL),
-  routes: [{
+  routes: [
+    {
       path: '/',
       redirect: '/active'
+    },
+    {
+      path: '/administration/registration',
+      name: '/administration/registration',
+      component: () => import('@/views/registration/AdminRegistration.vue'),
     },
     {
       path: '/active',
@@ -55,7 +61,16 @@ const router = createRouter({
       name: 'NPV',
       component: () => import('@/views/NPVView.vue')
     },
-
+    {
+      path: '/administration/new-organization',
+      name: 'new-organization',
+      component: () => import('@/views/registration/SuperAdminOrganizationRegistration.vue')
+    },
+    {
+      path: '/administration/new-user',
+      name: 'new-user',
+      component: () => import('@/views/registration/AdminUserRegistration.vue')
+    }
   ]
 })
 

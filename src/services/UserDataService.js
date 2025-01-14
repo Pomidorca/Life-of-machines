@@ -4,5 +4,4 @@ export default {
     postLogin(body) {
         return http.post('/auth/login', body);
     }
-
 }
