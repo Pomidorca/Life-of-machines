@@ -7,6 +7,8 @@ import {
 import {
     ref
 } from "vue";
+import CTFDataService from "@/services/CTFDataService.js";
+import { ChangeOperatingTime } from "@/components/Charts/KFV/index.js";
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL
@@ -28,7 +30,8 @@ export const useKFVStore = defineStore("KFV", {
                 yearEnd: 2024,
                 machineClassIds: 1,
                 machineTypeIds: [],
-            })
+            }),
+            initialChangeOperatingTime: ChangeOperatingTime
         }
     },
     actions: {
@@ -47,6 +50,36 @@ export const useKFVStore = defineStore("KFV", {
             const { yearStart, yearEnd, machineClassIds, machineTypeIds } = this.filterParams; 
         
             try {
+                await CTFDataService.getWorkTimeByServiceLife(yearStart, yearEnd)
+                    .then((response) => {
+                        // throw  new Error('Попа единорога ')
+
+                        const data = response.data
+
+                        const labels = []
+
+                        const datasetsBlue = []
+
+                        const datasetsRed = []
+
+                        data.map((item, index) => {
+
+                            labels.push(item.serviceLife)
+
+                            datasetsRed.push(item.worktime)
+
+                            datasetsBlue.push(item.worktimeAverage)
+                        })
+
+                        this.initialChangeOperatingTime.labels = labels;
+                        this.initialChangeOperatingTime.datasets[0].data = datasetsBlue;
+                        this.initialChangeOperatingTime.datasets[1].data = datasetsRed;
+
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
                 const responses = await Promise.all([
                     fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
                         headers: {
