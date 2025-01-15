@@ -13,9 +13,9 @@
         <header>
           <TheHeader />
         </header>
-        <div class="w-full flex flex-col">
+        <div class="w-full">
           <TheInfoTech />
-          <div class="flex flex-1">
+          <div class="flex">
             <TheFilter />
             <div class="pl-6 container">
               <div>
@@ -27,7 +27,7 @@
       </div>
     </main>
     <main v-else>
-      <TheAuth />
+      <component :is="checkAdmin()" />
     </main>
   </div>
 </template>
@@ -39,14 +39,30 @@ import TheInfoTech from '@/components/TheInfoTech.vue';
 import TheAuth from '@/views/Auth.vue';
 import adaptiveModal from '@/components/ModalTemplate.vue';
 import { useAuthStore } from '@/store/auth';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import AdminRegistration from './views/registration/AdminRegistration.vue';
 
+const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
+const registrationRules = computed(() => route.query.req);
+
 onMounted(() => {
+  checkAdmin();
   authStore.loadTokensFromSessionStorage();
 })
 
 const isAuth = computed(() => {
   return authStore.accessToken !== null;
 })
+
+const checkAdmin = () => {
+  if (registrationRules.value){
+    const newReq = registrationRules.value !== 'admin' ? 'user' : 'admin';
+    router.push({ query: { ...route.query, req: newReq } });
+  }
+
+  return registrationRules.value === 'admin' ? AdminRegistration : TheAuth
+}
 </script>
