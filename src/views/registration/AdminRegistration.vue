@@ -2,10 +2,9 @@
     <div class="fixed left-0 top-0 w-screen h-screen overflow-hidden z-5000 bg-white/50 backdrop-blur-3xl">
         <div v-if="!pageIsLoading" class="flex overflow-y-hidden">
             <div class="bg-[#0554f2] w-[50%] h-[100vh]">
-                <div class="w-[100%] h-[100vh] pt-[1rem]" style="background-image: url(/img/Auth/1.png); background-size: auto; background-repeat: no-repeat;
-                    background-position: right;">
+                <div class="w-[100%] h-[100vh] pt-[1rem]" style="background-image: url(/img/Auth/1.png); background-size: cover; background-repeat: no-repeat;">
                     <div class="px-10 max-h-[20rem] mt-[36px]">
-                        <h1 class="text-[4.5vmin] text-white font-semibold leading-10"> Начните Работать <br>
+                        <h1 class="text-[4.5vmin] text-white font-semibold leading-[3rem]"> Начните Работать <br>
                             Эффективнее И
                             Быстрее! </h1>
                         <p class="mt-5 text-[130%] text-white">

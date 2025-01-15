@@ -39,7 +39,7 @@ import TheInfoTech from '@/components/TheInfoTech.vue';
 import TheAuth from '@/views/Auth.vue';
 import adaptiveModal from '@/components/ModalTemplate.vue';
 import { useAuthStore } from '@/store/auth';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import AdminRegistration from './views/registration/AdminRegistration.vue';
 
