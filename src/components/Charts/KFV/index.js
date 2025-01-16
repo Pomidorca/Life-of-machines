@@ -29,7 +29,7 @@
 
 export const ChangesStructureKFVOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     height: 300,
     plugins: {
         title: {
@@ -181,7 +181,7 @@ export const ChangeOperatingTime = {
 
 export const ChangeOperatingTimeOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     height: 300,
     plugins: {
         title: {

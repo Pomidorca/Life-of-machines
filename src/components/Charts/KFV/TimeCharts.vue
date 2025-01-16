@@ -4,13 +4,13 @@
         <div v-if="mode === 'GeneralInformation'">
             <div v-if="loading">Загрузка...</div>
             <div v-else-if="error">Ошибка: {{ error }}</div>
-            <div v-else class="grid grid-cols-2 gap-6">
+            <div v-else class="grid grid-cols-2 gap-6 items-start">
 
-                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-[400px]">
                     <Line :options="ChangesStructureKFVOptions" :data="changesStructureKFV" />
                 </div>
 
-                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-[400px]">
                     <Radar :options="StructureKFVOptions" :data="structureKFV" />
                 </div>
             </div>
@@ -35,7 +35,7 @@
         </div>
 
         <div v-else-if="mode === 'analysis'">
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-[550px]">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
         </div>
