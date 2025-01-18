@@ -2,18 +2,19 @@
   <div v-for="item in menu" :key="item.id">
     <router-link @click.prevent="handleClick(item)" :to="item.route"
       class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium"
-      :class="{ 'active': isActive(item) }">
-      <img :src="isActive(item) ? item.imgActive : item.img" class="w-6 h-6" :class="{ 'active-img': isActive(item) }"
-        loading="lazy" />
+      :class="{ 'active': item.route === route.path }">
+      <img :src="item.route === route.path ? item.imgActive : item.img" class="w-6 h-6"
+        :class="{ 'active-img': isActive(item) }" loading="lazy" />
       <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
     </router-link>
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import store from '@/store/store';
 import RegistrationDataService from '@/services/RegistrationDataService';
+import { useRoute } from 'vue-router';
 
 defineProps({
   showMenu: {
@@ -26,10 +27,8 @@ const emit = defineEmits(['toggleMenu']);
 const state = reactive({ activeItem: null });
 const userRoleID = ref(0);
 const menu = ref([])
+const route = useRoute();
 
-function handleClick(item) {
-  state.activeItem = item;
-}
 
 function isActive(item) {
   return state.activeItem?.id === item.id;
@@ -73,6 +72,5 @@ onMounted(() => {
 .active {
   background-color: white;
   color: #0554F2;
-  transition: all 0.3s ease;
 }
 </style>

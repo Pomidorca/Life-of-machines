@@ -22,11 +22,6 @@ const router = createRouter({
       component: () => import('@/views/ActiveView.vue'),
     },
     {
-      path: '/:pageName',
-      component: () => import(`@/views/${pageName}View.vue`),
-      props: true
-    },
-    {
       path: '/time',
       name: 'time',
       component: () => import('@/views/TimeView.vue')
@@ -70,7 +65,7 @@ const router = createRouter({
       path: '/administration/new-user',
       name: 'new-user',
       component: () => import('@/views/registration/AdminUserRegistration.vue')
-    }
+    },
   ]
 })
 

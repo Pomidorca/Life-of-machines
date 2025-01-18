@@ -21,16 +21,17 @@
                         class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
                         @click="handleClick('Год')" :class="{ 'bg-[#0554F2] text-white': toggle == 'Год' }">Год</button>
                 </div> -->
+                <span v-if="isError" class="text-red-500">Ошибка: "От" не может быть позже "До"</span>
                 <div class="flex gap-x-3">
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">От</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="startDate" @change="updateYearRange"
-                            max="2040-01-01" min="1900-01-01">
+                        <input class="mt-2 bg-[#F2F2F2]" type="date" :disabled="isError" v-model="startDate"
+                            @change="updateYearRange" max="2040-01-01" min="1900-01-01" />
                     </div>
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">До</p>
-                        <input class='mt-2 bg-[#F2F2F2]' type="date" v-model="endDate" @change="updateYearRange"
-                            max="2040-01-01" min="1900-01-01">
+                        <input class="mt-2 bg-[#F2F2F2]" type="date" :disabled="isError" v-model="endDate"
+                            @change="updateYearRange" max="2040-01-01" min="1900-01-01" />
                     </div>
                 </div>
                 <div class="flex justify-between gap-x-3">
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Equipment from './Equipment.vue';
 import { useActiveStore } from '@/store/active.js';
 import { useMachineStore } from '@/store/machine.js';
@@ -57,10 +58,13 @@ const router = useRouter();
 const activeStore = useActiveStore();
 const machineStore = useMachineStore();
 const kfvStore = useKFVStore();
-const startDate = ref(null);
-const endDate = ref(null);
+const startDate = ref(new Date(defaultStartYear, 0, 1));
+const endDate = ref(new Date(defaultEndYear, 11, 31));
 const toggle = ref('Год');
 const selectedMachineTypeIds = ref([]);
+const defaultStartYear = 2000;
+const defaultEndYear = 2025;
+const isError = ref(false)
 
 const loadStateFromStorage = () => {
     const storedState = localStorage.getItem('filterDate');
@@ -76,6 +80,10 @@ const loadStateFromStorage = () => {
         } catch (error) {
             console.error("Ошибка при загрузке состояния из localStorage:", error);
         }
+    }
+    if (!startDate.value || !endDate.value) {
+        startDate.value = new Date(defaultStartYear, 0, 1);
+        endDate.value = new Date(defaultEndYear, 11, 31);
     }
 };
 
@@ -93,9 +101,14 @@ const resetButton = () => {
     selectedMachineTypeIds.value = [];
     activeStore.updateFilterParams({ machineTypeIds: [] });
     localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
-    machineStore.resetMachineTypes()
+    machineStore.resetMachineTypes();
 
-}
+    startDate.value = new Date(defaultStartYear, 0, 1);
+    endDate.value = new Date(defaultEndYear, 11, 31);
+
+    updateYearRange();
+    saveStateToStorage();
+};
 
 const updateUrl = () => {
     const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
@@ -108,7 +121,7 @@ const updateUrl = () => {
         timeRange: timeRange,
     };
 
-    router.push({ path: route.path, query: newQuery });
+    router.replace({ path: route.path, query: newQuery });
 }
 
 
@@ -118,7 +131,10 @@ const updateYearRange = () => {
 
     if (startYear > endYear) {
         console.error("Ошибка: 'Начало' не может быть позже 'Конца'.");
+        isError.value = true
         return;
+    } else {
+        isError.value = false
     }
 
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
@@ -129,12 +145,6 @@ const updateYearRange = () => {
 
 onMounted(() => {
     loadStateFromStorage();
-    if (!startDate.value || !endDate.value) {
-        resetButton()
-    } else {
-        updateYearRange()
-    }
-    updateUrl();
+    updateYearRange();
 });
-
 </script>
