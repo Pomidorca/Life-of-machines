@@ -20,8 +20,6 @@ export default {
             params.breakdownType = 'year'
         }
 
-        console.log(params)
-
         return http.get(`/tep/fulfilmentOfCoalMiningAndStrippingVolumes/`, {
             params,
             paramsSerializer: {

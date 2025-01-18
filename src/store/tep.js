@@ -25,7 +25,7 @@ export const useTEPStore = defineStore("TEP", {
     actions: {
 
         async fetchTEP(toggle) {
-            console.log('enter fetchTEP function:', this.filterParams)
+
             this.loading = true;
             this.error = null;
             const authStore = useAuthStore();
@@ -61,7 +61,6 @@ export const useTEPStore = defineStore("TEP", {
 
                 TEPDataService.getVolumeFulfillmentExtraction( dateStart, dateEnd, breakdownType, machineTypeIds)
                     .then((response) => {
-                        console.log('Запрос', response.data)
 
                         const data = response.data
 
@@ -91,8 +90,6 @@ export const useTEPStore = defineStore("TEP", {
                         this.initialCarryingOutVolumes.datasets[1].data = volumeStripping
 
                         this.initialCarryingOutVolumes.datasets[2].data = volumeExtraction
-
-                        console.log(this.initialCarryingOutVolumes)
 
                     })
                     .catch((e) => {
