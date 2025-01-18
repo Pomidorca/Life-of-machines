@@ -95,5 +95,5 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', adjustImagePosition);
 });
 
-const descriptionPage = 'Войдите в систему и продолжайте отслеживать и контролировать работу строительной техники в режиме реального времени.'
+const descriptionPage = 'Войдите в систему и продолжайте контролировать эффективность эксплуатации производственных активов в режиме реального времени.'
 </script>
