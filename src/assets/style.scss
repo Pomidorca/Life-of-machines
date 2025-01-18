@@ -1,5 +1,15 @@
+/*=============== utils ===============*/
+@use '@/assets/utils/styles-forwarded';
+
+/*=============== global ===============*/
+
+@use './global';
+
+/*=============== pages ===============*/
+@use './pages/auth/login';
+
 /*=============== components ===============*/
-@use './components/adaptive-modal.scss';
+@use './components/adaptive-modal';
 
 @tailwind base;
 @tailwind components;

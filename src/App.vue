@@ -7,7 +7,7 @@
       <img class="adaptive-img" src="/img/Auth/adaptive.png">
     </template>
   </adaptiveModal>
-  <div class="main-wrapper">
+  <div class="main-wrapper h-full w-full ">
     <main v-if="isAuth">
       <div class="flex">
         <header>

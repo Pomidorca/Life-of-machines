@@ -50,7 +50,7 @@ export const useKFVStore = defineStore("KFV", {
             const { yearStart, yearEnd, machineClassIds, machineTypeIds } = this.filterParams; 
         
             try {
-                await CTFDataService.getWorkTimeByServiceLife(yearStart, yearEnd)
+                await CTFDataService.getWorkTimeByServiceLife(yearStart, yearEnd, machineClassIds, machineTypeIds)
                     .then((response) => {
                         // throw  new Error('Попа единорога ')
 
@@ -102,8 +102,6 @@ export const useKFVStore = defineStore("KFV", {
         
                 const data = await Promise.all(responses.map(res => res.json()));
         
-                console.log("Полученные данные", data);
-        
                 this.changesStructureKFV = changesStructure(data[0]);
                 this.structureKFV = StructureKFV(data[1]);
 
@@ -152,11 +150,6 @@ function changesStructure(data) {
         }
     ];
 
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
-
     return {
         labels,
         datasets
@@ -203,11 +196,6 @@ function StructureKFV(data) {
             ]
         },
     ]
-
-    console.log("Проверка datasets:", datasets.map(dataset => ({
-        label: dataset.label,
-        data: dataset.data
-    })));
 
     return {
         labels,
