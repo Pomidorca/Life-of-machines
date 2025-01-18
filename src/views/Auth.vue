@@ -77,8 +77,6 @@ const adjustImagePosition = () => {
   const parentHeight = parent.value.clientHeight;
   const imageHeight = authImage.value.clientHeight;
 
-  console.log(parent.value.clientHeight, authImage.value.clientHeight)
-
   if (imageHeight > parentHeight) {
     imageClass.value = 'top-0';
   } else {
