@@ -19,7 +19,9 @@
 
 
         <div v-else-if="mode === 'DynamicStructure'">
-            <div class="grid grid-cols-2 gap-6">
+          <div v-if="loading">Загрузка...</div>
+          <div v-else-if="error">Ошибка: {{ error }}</div>
+            <div v-else class="grid grid-cols-2 gap-6">
                 <div class="flex flex-col gap-y-6">
                     <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
                         <Bar :options="detailedStructureCfvOneOptions" :data="detailedStructureCfvOne" />
@@ -35,7 +37,9 @@
         </div>
 
         <div v-else-if="mode === 'analysis'">
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+          <div v-if="loading">Загрузка...</div>
+          <div v-else-if="error">Ошибка: {{ error }}</div>
+            <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
         </div>

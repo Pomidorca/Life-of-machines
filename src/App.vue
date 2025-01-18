@@ -7,15 +7,15 @@
       <img class="adaptive-img" src="/img/Auth/adaptive.png">
     </template>
   </adaptiveModal>
-  <div class="main-wrapper">
+  <div class="main-wrapper h-full w-full ">
     <main v-if="isAuth">
       <div class="flex">
         <header>
           <TheHeader />
         </header>
-        <div class="w-full">
+        <div class="w-full flex flex-col">
           <TheInfoTech />
-          <div class="flex">
+          <div class="flex flex-1">
             <TheFilter />
             <div class="pl-6 container">
               <div>

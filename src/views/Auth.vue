@@ -1,13 +1,21 @@
 <template>
-    <div class="flex">
-        <div class="bg-[#0554F2] w-[50%] h-[100vh] pt-16"
-            style="background-image: url(/img/Auth/1.png); background-position: right bottom; background-size: auto; background-repeat: no-repeat;">
-            <div class="px-10">
-                <h1 class="text-[40px] text-white font-semibold leading-10"> Рады видеть вас! </h1>
-                <p class="mt-5 text-white text-xl">{{ descriptionPage }}</p>
-            </div>
+    <div class="wrapper-auth h-full w-full flex">
+      <div class="bg-[#0554F2] w-full lg:w-[50%] h-[100vh] pt-16 flex flex-col hidden lg:flex">
+        <div class="px-10">
+          <h1 class=" text-white font-semibold leading-10"> Рады видеть вас! </h1>
+          <p class="mt-5 text-white text-xl">{{ descriptionPage }}</p>
         </div>
-        <div class="flex flex-col justify-center items-center w-[50%]">
+        <div ref="parent" class="flex-1 relative">
+          <img
+              :class="imageClass"
+              ref="authImage"
+              class="absolute right-0"
+              src="/img/Auth/auth.svg"
+              alt=""
+          />
+        </div>
+      </div>
+      <div class="flex flex-col justify-center items-center w-full lg:w-[50%] px-5">
             <div class="flex flex-col w-full max-w-[424px]">
                 <h2 class="text-[#001233] font-semibold text-4xl"> Вход </h2>
                 <div class="flex flex-col gap-y-6 mt-8">
@@ -46,12 +54,15 @@
 
 <script setup>
 import { useAuthStore } from '@/store/auth';
-import { ref } from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 
 const authStore = useAuthStore();
 
 const username = ref('');
 const password = ref('');
+const parent = ref(null);
+const authImage = ref(null);
+const imageClass = ref('bottom-0');
 
 const auth = async () => {
     try {
@@ -61,7 +72,25 @@ const auth = async () => {
     }
 }
 
+const adjustImagePosition = () => {
+  const parentHeight = parent.value.clientHeight;
+  const imageHeight = authImage.value.clientHeight;
+
+  if (imageHeight > parentHeight) {
+    imageClass.value = 'top-0';
+  } else {
+    imageClass.value = 'bottom-0';
+  }
+};
+
+onMounted(() => {
+  adjustImagePosition();
+  window.addEventListener('resize', adjustImagePosition);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', adjustImagePosition); // Удаляем обработчик события
+});
+
 const descriptionPage = 'Войдите в систему и продолжайте отслеживать и контролировать работу строительной техники в режиме реального времени.'
 </script>
-
-<style></style>

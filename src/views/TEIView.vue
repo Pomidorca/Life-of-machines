@@ -26,19 +26,43 @@
       <TheServiceLife />
     </div>
     <div class="">
-      <ChartsView :mode="mode" />
+      <ChartsView :mode="mode" :toggle="toggle"/>
     </div>
   </div>
 </template>
 
 
-<script setup>
+<script>
 import ChartsView from '@/components/Charts/TEI/TEIView.vue';
-import { computed, watch } from 'vue'
-import { useRoute } from 'vue-router';
+import TEPDataService from "@/services/TEPDataService.js";
 
-const route = useRoute();
-const mode = computed(() => route.query.mode || 'GeneralInformation');
-
-watch(mode)
+export default {
+  components: {
+    ChartsView
+  },
+  data() {
+    return {
+      mode: 'GeneralInformation',
+      toggle: 'year'
+    };
+  },
+  created() {
+    this.mode = this.$route.query.mode || 'GeneralInformation';
+    this.toggle = this.$route.query.toggle || 'year';
+  },
+  watch: {
+    '$route.query.mode': {
+      handler(newMode) {
+        this.mode = newMode || 'GeneralInformation';
+      },
+      immediate: true
+    },
+    '$route.query.toggle': {
+      handler(newMode) {
+        this.toggle = newMode || 'year';
+      },
+      immediate: true
+    },
+  }
+}
 </script>

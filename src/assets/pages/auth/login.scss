@@ -1,0 +1,13 @@
+@use '@/assets/utils/styles-forwarded' as *;
+
+.wrapper-auth{
+  h1{
+    @include responsive-font(24, 40)
+  }
+  h2{
+    @include responsive-font(20, 36)
+  }
+  p{
+    @include responsive-font(14, 20)
+  }
+}

@@ -1,4 +1,6 @@
-.adaptive-modal { 
+@use '@/assets/utils/styles-forwarded' as *;
+
+.adaptive-modal {
     background-color: #fff;
     overflow: hidden;
     display: none;
@@ -15,9 +17,8 @@
     }
 
     h2 {
-        font-family: "Roboto", serif;
+        @include responsive-font(20, 40);
         font-weight: 500;
-        font-size: 1.5rem;
         text-align: center;
     }
 }
