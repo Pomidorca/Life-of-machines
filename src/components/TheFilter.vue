@@ -51,12 +51,15 @@ import { useActiveStore } from '@/store/active.js';
 import { useMachineStore } from '@/store/machine.js';
 import { useKFVStore } from '@/store/kfv';
 import { useRoute, useRouter } from 'vue-router';
+import {useTEPStore} from "@/store/tep.js";
+import {log10} from "chart.js/helpers";
 
 const route = useRoute();
 const router = useRouter();
 const activeStore = useActiveStore();
 const machineStore = useMachineStore();
 const kfvStore = useKFVStore();
+const tepStore = useTEPStore();
 const startDate = ref(new Date(defaultStartYear, 0, 1));
 const endDate = ref(new Date(defaultEndYear, 11, 31));
 const toggle = ref('Год');
@@ -64,6 +67,7 @@ const selectedMachineTypeIds = ref([]);
 const defaultStartYear = 2000;
 const defaultEndYear = 2025;
 const isError = ref(false)
+const timeInterval = ref(route.query.toggle)
 
 const loadStateFromStorage = () => {
     const storedState = localStorage.getItem('filterDate');
@@ -135,9 +139,9 @@ const updateYearRange = () => {
     } else {
         isError.value = false
     }
-
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     kfvStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
+    tepStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear }, timeInterval)
     saveStateToStorage();
     updateUrl();
 };
@@ -146,4 +150,12 @@ onMounted(() => {
     loadStateFromStorage();
     updateYearRange();
 });
+
+watch(() => route.query.toggle, (newToggle) => {
+  if (newToggle) {
+    timeInterval.value = newToggle;
+    updateYearRange()
+  }
+});
+
 </script>
