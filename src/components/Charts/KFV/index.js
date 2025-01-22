@@ -182,7 +182,7 @@ export const ChangeOperatingTime = {
 export const ChangeOperatingTimeOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    height: 300,
+    height: 600,
     plugins: {
         title: {
             display: true,

@@ -39,7 +39,7 @@
         <div v-else-if="mode === 'analysis'">
           <div v-if="loading">Загрузка...</div>
           <div v-else-if="error">Ошибка: {{ error }}</div>
-            <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+            <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-full" style="min-height: 400px">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
         </div>

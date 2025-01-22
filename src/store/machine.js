@@ -27,7 +27,7 @@ export const useMachineStore = defineStore('machine', {
                 await MachineClassesDataService.getMashineClasses(filterParams.machineClassId)
                     .then((response) => {
                         const data = response.data;
-                        console.log(data)
+
                         let machineTypes = [];
                         if (machineClassId === 1) {
                             const children = data.children.flatMap(child => child.children || []);
@@ -40,7 +40,7 @@ export const useMachineStore = defineStore('machine', {
                         }
 
                         this.machineTypes = machineTypes;
-                        console.log(this.machineType)
+
                         this.selectedMachineType = machineTypes[0];
                     }).catch((e) => {
                         console.log(e)

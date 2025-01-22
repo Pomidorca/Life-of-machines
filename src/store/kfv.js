@@ -8,7 +8,7 @@ import {
     ref
 } from "vue";
 import CTFDataService from "@/services/CTFDataService.js";
-import { ChangeOperatingTime } from "@/components/Charts/KFV/index.js";
+import {ChangeOperatingTime, ChangeOperatingTimeOptions} from "@/components/Charts/KFV/index.js";
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL
@@ -36,6 +36,7 @@ export const useKFVStore = defineStore("KFV", {
     },
     actions: {
         async fetchKFV() {
+
             this.loading = true;
             this.error = null;
             const authStore = useAuthStore();

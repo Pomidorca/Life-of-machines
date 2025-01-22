@@ -2,7 +2,7 @@ import {
     defineStore
 } from "pinia";
 import {ref} from "vue";
-import {CarryingOutVolumes, DynamicsUnitCosts} from "@/components/Charts/TEI/index.js";
+import {CarryingOutVolumes, DynamicsUnitCosts, DynamicsUnitCostsTwo} from "@/components/Charts/TEI/index.js";
 import {useMachineStore} from "@/store/machine.js";
 import TEPDataService from "@/services/TEPDataService.js";
 import {useAuthStore} from "@/store/auth.js";
@@ -21,7 +21,17 @@ export const useTEPStore = defineStore("TEP", {
                 machineTypeIds: [],
             }),
             initialCarryingOutVolumes: CarryingOutVolumes,
-            initialDynamicsUnitCosts: DynamicsUnitCosts
+            initialDynamicsUnitCosts: DynamicsUnitCosts,
+            initialDynamicsUnitCostsTwo: DynamicsUnitCostsTwo,
+            colors: [
+                { background: 'rgba(255, 99, 132, 1)', border: 'rgba(255, 99, 132, 1)' },
+                { background: 'rgba(54, 162, 235, 1)', border: 'rgba(54, 162, 235, 1)' },
+                { background: 'rgba(255, 206, 86, 1)', border: 'rgba(255, 206, 86, 1)' },
+                { background: 'rgba(75, 192, 192, 1)', border: 'rgba(75, 192, 192, 1)' },
+                { background: 'rgba(153, 102, 255, 1)', border: 'rgba(153, 102, 255, 1)' },
+                { background: 'rgba(255, 159, 64, 1)', border: 'rgba(255, 159, 64, 1)' },
+                { background: 'rgb(99, 255, 64)', border: 'rgb(99, 255, 64, 1)' },
+            ]
         }
     },
     actions: {
@@ -83,6 +93,7 @@ export const useTEPStore = defineStore("TEP", {
                             volumeExtraction.push(item.extraction)
 
                             volumeStripping.push(item.stripping)
+
                         })
 
                         this.initialCarryingOutVolumes.labels = labels
@@ -104,32 +115,145 @@ export const useTEPStore = defineStore("TEP", {
 
                         const data = response.data
 
-                        const labels = []
+                        const elementData = []
 
-                        const coefficient = []
+                        const costTypes = []
 
-                        const volumeExtraction = []
+                        const labelsDynamics = []
 
-                        const volumeStripping = []
+                        const objectDynamicsUnitCosts = {
+                            labels: [],
+                            datasets: []
+                        };
 
                         data.map((item, index) => {
 
-                            labels.push(item.combinedDate)
+                            item.data.map((element) => {
 
-                            coefficient.push(item.coefficient)
+                                if (!labelsDynamics.includes(element.combinedDate)) {
+                                    labelsDynamics.push(element.combinedDate);
+                                }
+                            })
 
-                            volumeExtraction.push(item.extraction)
+                            costTypes.push(item.typeName)
 
-                            volumeStripping.push(item.stripping)
                         })
 
-                        this.initialCarryingOutVolumes.labels = labels
+                        objectDynamicsUnitCosts.labels = labelsDynamics
 
-                        this.initialCarryingOutVolumes.datasets[0].data = coefficient
+                        costTypes.forEach((type, index) => {
+                            const colorIndex = index % this.colors.length;
 
-                        this.initialCarryingOutVolumes.datasets[1].data = volumeStripping
+                            objectDynamicsUnitCosts.datasets.push({
+                                label: type,
+                                data: [],
+                                backgroundColor: this.colors[colorIndex].background,
+                                borderColor: this.colors[colorIndex].border,
+                                borderWidth: 1,
+                                pointRadius: 0,
+                            });
+                        });
 
-                        this.initialCarryingOutVolumes.datasets[2].data = volumeExtraction
+
+                        data.forEach((item, index) => {
+
+                            elementData.length = 0
+
+                            item.data.forEach(element => {
+                                if (!labelsDynamics.includes(element.combinedDate)) {
+                                    labelsDynamics.push(element.combinedDate);
+                                }
+                                elementData.push(element.productivity)
+
+
+                            });
+
+                            objectDynamicsUnitCosts.datasets[index].data = elementData.map(item => {
+                                return item
+                            })
+
+                        });
+
+
+                        if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
+                            this.initialDynamicsUnitCosts.labels = objectDynamicsUnitCosts.labels;
+                            this.initialDynamicsUnitCosts.datasets = objectDynamicsUnitCosts.datasets
+                        }
+
+                    })
+                    .catch((e) => {
+                        console.log('Ошибка на стороне сервера ' + e)
+                        // this.error = 'Статус - ' + e.status
+                    })
+
+                await TEPDataService.getDinamicsUnitCosts( dateStart, dateEnd, breakdownType, machineTypeIds, machineClassIds)
+                    .then((response) => {
+
+                        const labels = []
+
+                        const data = response.data
+
+                        const dataLength = 0
+
+                        const elementData = []
+
+                        const objectDynamicsUnitCosts = {
+                            datasets: []
+                        };
+
+                        data.map((item, index) => {
+
+                            elementData.length = 0
+
+                            item.data.map((element) => {
+
+                                if (!labels.includes(element.combinedDate)) {
+
+                                    labels.push(element.combinedDate)
+
+                                    console.log(labels)
+
+                                }
+
+                                if (index === data.length - 1) {
+
+                                    elementData.push(element.totalCostToProductivityRatio)
+
+                                } else {
+
+                                    elementData.push(element.costToProductivityRatio)
+
+                                }
+
+                            })
+
+                            const colorIndex = index % this.colors.length;
+
+                            objectDynamicsUnitCosts.datasets.push({
+                                label: item.kindName,
+                                data: [],
+                                backgroundColor: this.colors[colorIndex].background,
+                                ...(index === data.length - 1 ? {borderColor: this.colors[colorIndex].border} : {}),
+                                ...(index === data.length - 1 ? {type: 'line'} : {})
+                            });
+
+                            objectDynamicsUnitCosts.datasets[index].data = elementData.map(item => {
+                                return item
+                            })
+
+                        })
+
+                        if (objectDynamicsUnitCosts.datasets.length > 0) {
+                            const lastDataset = objectDynamicsUnitCosts.datasets.pop();
+                            objectDynamicsUnitCosts.datasets.unshift(lastDataset);
+                        }
+
+                        if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
+                            this.initialDynamicsUnitCostsTwo.labels = labels;
+                            this.initialDynamicsUnitCostsTwo.datasets = objectDynamicsUnitCosts.datasets
+                        } else {
+                            throw new Error('Пустой объект')
+                        }
 
                     })
                     .catch((e) => {
