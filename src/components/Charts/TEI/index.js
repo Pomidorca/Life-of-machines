@@ -203,7 +203,7 @@ export const DynamicsUnitCostsTwoOptions = {
 }
 
 export const StructureKFV = {
-    labels: ['ТО', 'ТР', 'Капитальный ремонт', 'Запасные части', 'Топливо', 'Прочее'],
+    labels: [],
     datasets: [{
             label: '',
             backgroundColor: 'rgba(179,181,198,0.2)',

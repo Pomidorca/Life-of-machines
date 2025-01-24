@@ -25,10 +25,16 @@
       <div v-else-if="error">Ошибка: {{ error }}</div>
       <div v-else class="grid grid-cols-2 gap-6">
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10" style="min-height: 400px">
-          <Bar :options="DynamicsUnitCostsTwoOptions" :data="DynamicsUnitCostsTwo" />
+          <Bar ref="chartRef" :options="DynamicsUnitCostsTwoOptions" :data="DynamicsUnitCostsTwo" @click="handleClickChart"/>
         </div>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
-          <Radar :options="StructureKFVOptions" :data="StructureKFV" />
+        <div v-if="loadingChartStructureKFV">Загрузка...</div>
+        <div v-else-if="errorChartStructureKFV">
+          {{ errorChartStructureKFV }}
+        </div>
+        <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+          <div>
+            <Radar :options="StructureKFVOptions" :data="StructureKFV" />
+          </div>
         </div>
       </div>
     </div>
@@ -95,7 +101,7 @@ import {
   DynamicsUnitCostsTwoOptions,
   StructureKFV
 } from '@/components/Charts/TEI/index.js';
-import {StructureKFVOptions} from "@/components/Charts/KFV/index.js";
+import {StructureKFVOptions} from "@/components/Charts/TEI/index.js";
 import {useTEPStore} from "@/store/tep.js";
 
 
@@ -162,6 +168,12 @@ export default {
     },
     error() {
       return this.tepStore.error;
+    },
+    loadingChartStructureKFV() {
+      return this.tepStore.loadingChartStructureKFV
+    },
+    errorChartStructureKFV() {
+      return this.tepStore.errorChartStructureKFV
     }
   },
   components: {
@@ -187,7 +199,33 @@ export default {
     }
   },
   mounted() {
-    this.tepStore.fetchTEP(this.toggle)
+    this.tepStore.fetchTEP(this.toggle).then(() => {
+
+      this.$refs.chartRef.chart.update();
+    });
+  },
+  methods: {
+    handleClickChart(event) {
+      const chart = this.$refs.chartRef.chart;
+
+      const activePoints = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
+
+      if (activePoints.length) {
+        const firstPoint = activePoints[0];
+        const label = chart.data.labels[firstPoint.index];
+
+        const datasetIndex = firstPoint.datasetIndex;
+        this.tepStore.updateChartStructureKFV(label)
+      } else {
+        console.log('No active points found');
+      }
+    },
+
+
+    handleDateClick(label, value) {
+      console.log(`Дата: ${label}, Значение: ${value}`);
+
+    }
   }
 }
 </script>

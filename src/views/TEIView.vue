@@ -15,12 +15,12 @@
             :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: 'DynamicStructure' } }">
             затраты
           </router-link>
-          <router-link
-            class="py-2 px-4 rounded-2xl text-center text-[#979DAC] font-semibold text-xl leading-5 uppercase"
-            :class="{ 'text-[white] bg-[#0554F2]': $route.query.mode === 'analysis' }"
-            :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: 'analysis' } }">
-            анализ
-          </router-link>
+<!--          <router-link-->
+<!--            class="py-2 px-4 rounded-2xl text-center text-[#979DAC] font-semibold text-xl leading-5 uppercase"-->
+<!--            :class="{ 'text-[white] bg-[#0554F2]': $route.query.mode === 'analysis' }"-->
+<!--            :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: 'analysis' } }">-->
+<!--            анализ-->
+<!--          </router-link>-->
         </div>
       </div>
       <TheServiceLife />

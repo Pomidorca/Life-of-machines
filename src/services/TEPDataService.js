@@ -97,4 +97,32 @@ export default {
             }
         });
     },
+    getComparisonOfTargetAndActualUnitCosts(dateStart, dateEnd, machineTypeIds, machineClassIds) {
+
+        const params = {
+            dateStart: dateStart,
+            dateEnd: dateEnd,
+        };
+
+        const arrayMachineClassIds = []
+
+        const arrayMachineTypeIds = []
+
+        if (machineTypeIds) {
+
+            // params.machineTypeIds = machineTypeIds;
+            params.machineTypeIds = [ 237 ]
+        }
+
+        if (machineClassIds) {
+            params.machineClassIds = [arrayMachineClassIds.push(machineClassIds)];
+        }
+
+        return http.get(`/tep/comparisonOfTargetAndActualUnitCosts`, {
+            params,
+            paramsSerializer: {
+                indexes: false
+            }
+        });
+    },
 }
