@@ -202,8 +202,6 @@ export const useTEPStore = defineStore("TEP", {
 
                         const data = response.data
 
-                        console.log(data)
-
                         const elementData = []
 
                         const objectDynamicsUnitCosts = {
@@ -242,7 +240,7 @@ export const useTEPStore = defineStore("TEP", {
                             })
 
                         })
-                        console.log(labels)
+
                         if (objectDynamicsUnitCosts.datasets.length > 0) {
                             const lastDataset = objectDynamicsUnitCosts.datasets.pop();
                             objectDynamicsUnitCosts.datasets.unshift(lastDataset);
@@ -311,15 +309,12 @@ export const useTEPStore = defineStore("TEP", {
                     return;
                 }
 
-                console.log(dateStart, dateEnd)
-
                 const { machineClassIds, machineTypeIds } = this.filterParams;
 
                 await TEPDataService.getComparisonOfTargetAndActualUnitCosts(dateStart, dateEnd, machineTypeIds, machineClassIds)
                     .then((response) => {
 
                         const data = response.data
-                        console.log(data)
 
                         const elementData = []
 
@@ -379,8 +374,6 @@ export const useTEPStore = defineStore("TEP", {
                             })
 
                         });
-
-                        console.log(objectComparisonOfTargetAndActualUnitCosts)
 
                         if (objectComparisonOfTargetAndActualUnitCosts.datasets.length > 0) {
                             const lastDataset = objectComparisonOfTargetAndActualUnitCosts.datasets.pop();
