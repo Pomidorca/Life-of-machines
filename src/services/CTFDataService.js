@@ -12,7 +12,7 @@ export default {
         }
 
         if (machineTypeIds) {
-            params.machineTypeIds = machineTypeIds;
+            params.machineClassIds = Array.isArray(machineTypeIds) ? machineTypeIds.join(',') : machineTypeIds;
         }
 
         return http.get(`/ctf/charts/worktimeByServiceLife`, {
