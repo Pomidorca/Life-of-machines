@@ -4,17 +4,17 @@ export default {
     getVolumeFulfillmentExtraction(dateStart, dateEnd, breakdownType, machineTypeIds, machineClassIds) {
 
         const params = {
-            // dateStart: dateStart,
-            // dateEnd: dateEnd,
-            dateStart: '2010-01-01',
-            dateEnd: '2024-12-01'
+            dateStart: dateStart,
+            dateEnd: dateEnd,
+            // dateStart: '2010-01-01',
+            // dateEnd: '2024-12-01'
         };
 
         const arrayMachineClassIds = []
 
         if (machineTypeIds) {
-            // params.machineTypeIds = machineTypeIds;
-            params.machineTypeIds = [ 26 ];
+            params.machineTypeIds = machineTypeIds;
+            // params.machineTypeIds = [ 26 ];
         }
 
         if (machineClassIds) {
@@ -47,8 +47,8 @@ export default {
         const arrayMachineTypeIds = []
 
         if (machineTypeIds) {
-            // params.machineTypeIds = machineTypeIds;
-            params.machineTypeIds = [ 237 ];
+            params.machineTypeIds = machineTypeIds;
+            // params.machineTypeIds = [ 237 ];
         }
 
         if (machineClassIds) {
@@ -76,8 +76,8 @@ export default {
 
         if (machineTypeIds) {
 
-            // params.machineTypeIds = machineTypeIds;
-            params.machineTypeIds = [ 237 ]
+            params.machineTypeIds = machineTypeIds;
+            // params.machineTypeIds = [ 237 ]
         }
 
         if (breakdownType) {
@@ -110,8 +110,8 @@ export default {
 
         if (machineTypeIds) {
 
-            // params.machineTypeIds = machineTypeIds;
-            params.machineTypeIds = [ 237 ]
+            params.machineTypeIds = machineTypeIds;
+            // params.machineTypeIds = [ 237 ]
         }
 
         if (machineClassIds) {
