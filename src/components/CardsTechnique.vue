@@ -24,12 +24,14 @@ import { useStore } from "vuex";
 import { useActiveStore } from "@/store/active";
 import { useMachineStore } from "@/store/machine";
 import { useKFVStore } from "@/store/kfv";
+import {useTEPStore} from "@/store/tep.js";
 
 const store = useStore();
 const techniques = computed(() => store.state.techniques);
 const machineStore = useMachineStore();
 const kfvStore = useKFVStore();
 const activeStore = useActiveStore();
+const tepStore = useTEPStore();
 const selectedTechniqueId = ref(null);
 
 const loadStateFromLocalStorage = () => {
@@ -53,6 +55,7 @@ const selectTechnique = (techniqueId) => {
   selectedTechniqueId.value = techniqueId;
   activeStore.updateFilterParams({ machineClassIds: techniqueId });
   kfvStore.updateFilterParams({ machineClassIds: techniqueId });
+  tepStore.updateFilterParams({ machineClassIds: techniqueId });
   saveToLocalStorage();
   activeStore.fetchData();
 

@@ -41,7 +41,15 @@ export const CarryingOutVolumesOptions = {
             }
         },
         legend: {
-            position: 'bottom'
+            position: 'bottom',
+            onClick: (evt, legendItem, legend) => {
+
+                console.log(legendItem.datasetIndex)
+
+                legend.chart.toggleDataVisibility(legendItem.datasetIndex)
+                legend.chart.update()
+
+            }
         }
     },
     scales: {
@@ -122,7 +130,10 @@ export const DynamicsUnitCostsOptions = {
     height: 300,
     plugins: {
         legend: {
-            position: 'bottom'
+            position: 'bottom',
+            onClick: (evt, legendItem) => {
+                console.log(legendItem)
+            }
         },
         title: {
             display: true,
@@ -201,6 +212,7 @@ export const DynamicsUnitCostsTwoOptions = {
         },
     },
 }
+
 
 export const StructureKFV = {
     labels: [],

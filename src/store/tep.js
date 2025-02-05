@@ -115,8 +115,13 @@ export const useTEPStore = defineStore("TEP", {
 
                     })
                     .catch((e) => {
-                        console.log('Ошибка на стороне сервера ' + e)
-                        // this.error = 'Статус - ' + e.status
+                        if (e.response && e.response.status === 404) {
+
+                            this.initialCarryingOutVolumes.datasets.forEach(dataset => dataset.data = []);
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + e);
+
+                        }
                     })
 
                 await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd,  machineTypeIds, machineClassIds)
@@ -191,8 +196,13 @@ export const useTEPStore = defineStore("TEP", {
 
                     })
                     .catch((e) => {
-                        console.log('Ошибка на стороне сервера ' + e)
-                        // this.error = 'Статус - ' + e.status
+                        if (e.response && e.response.status === 404) {
+
+                            this.initialDynamicsUnitCosts.datasets.forEach(dataset => dataset.data = []);
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + e);
+                            // Обработка других ошибок
+                        }
                     })
 
                 await TEPDataService.getDinamicsUnitCosts( dateStart, dateEnd, breakdownType, machineTypeIds, machineClassIds)
@@ -255,8 +265,13 @@ export const useTEPStore = defineStore("TEP", {
 
                     })
                     .catch((e) => {
-                        console.log('Ошибка на стороне сервера ' + e)
-                        // this.error = 'Статус - ' + e.status
+                        if (e.response && e.response.status === 404) {
+
+                            this.initialDynamicsUnitCostsTwo.datasets.forEach(dataset => dataset.data = []);
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + e);
+
+                        }
                     })
 
                 await this.updateChartStructureKFV()
@@ -388,10 +403,16 @@ export const useTEPStore = defineStore("TEP", {
                         }
 
                     })
-                    .catch((e) => {
-                        console.log('Ошибка на стороне сервера ' + e)
-                        this.errorChartStructureKFV = 'Ошибка на стороне сервера ' + e
-                        // this.error = 'Статус - ' + e.status
+                    .catch((error) => {
+                        if (error.response && error.response.status === 404) {
+
+                            this.initialStructureKFV.labels = [];
+                            this.initialStructureKFV.datasets.forEach(dataset => dataset.data = []);
+                            this.errorChartStructureKFV = 'Данные не найдены (404)';
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + error);
+                            this.errorChartStructureKFV = 'Ошибка на стороне сервера ' + error;
+                        }
                     })
                     .finally(() => {
                         setTimeout(() => {

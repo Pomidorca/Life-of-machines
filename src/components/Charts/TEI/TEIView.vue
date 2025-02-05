@@ -5,7 +5,7 @@
         <div v-if="loading">Загрузка...</div>
         <div v-else-if="error">Ошибка: {{ error }}</div>
         <div v-else>
-          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mb-5">
             <Bar :options="CarryingOutVolumesOptions" :data="CarryingOutVolumes" />
           </div>
 
@@ -201,11 +201,16 @@ export default {
   mounted() {
     this.tepStore.fetchTEP(this.toggle).then(() => {
 
-      this.$refs.chartRef.chart.update();
+      if (this.$refs.chartRef) {
+
+        this.$refs.chartRef.chart.update();
+
+      }
     });
   },
   methods: {
     handleClickChart(event) {
+
       const chart = this.$refs.chartRef.chart;
 
       const activePoints = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
