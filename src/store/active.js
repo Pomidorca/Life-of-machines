@@ -155,12 +155,14 @@ function transformLinedate(data) {
         };
     }
     const labels = data.map(item => item.year);
-    const datasets = [{
+    const stackedDatasets = [
+        {
             label: 'Основное',
             data: data.map(item => item.main),
             borderColor: '#31608c',
             backgroundColor: '#31608c',
             fill: true,
+            stack: 'stack0'
         },
         {
             label: 'Поддерживающее',
@@ -168,6 +170,7 @@ function transformLinedate(data) {
             borderColor: '#3c6f9f',
             backgroundColor: '#3c6f9f',
             fill: true,
+            stack: 'stack0'
         },
         {
             label: 'Вспомогательное',
@@ -175,22 +178,31 @@ function transformLinedate(data) {
             borderColor: '#7e9abf',
             backgroundColor: '#7e9abf',
             fill: true,
-        },
-        {
-            label: 'Итого',
-            data: data.map(item => item.main + item.support + item.auxiliary),
-            borderColor: '#0554F2',
-            pointStyle: 'circle',
-            backgroundColor: '#282b41',
-            pointBorderColor: '#282b41',
-            fill: false,
-        },
-    ];
+            stack: 'stack0'
+        }
+    ].filter(dataset => dataset.data.some(value => value !== 0));
 
+
+    const totalDataset = {
+        label: 'Итого',
+        data: data.map(item => item.main + item.support + item.auxiliary),
+        borderColor: '#0554F2',
+        pointStyle: 'circle',
+        backgroundColor: '#282b41',
+        pointBorderColor: '#282b41',
+        fill: false,
+    };
+
+    if (totalDataset.data.every(value => value === 0)) {
+        return {
+            labels: [],
+            datasets: []
+        };
+    }
 
     return {
         labels,
-        datasets
+        datasets: [totalDataset, ...stackedDatasets ]
     };
 }
 
@@ -224,13 +236,13 @@ function transformchangeStructuredate(data) {
             borderColor: '#325aa3',
             borderWidth: 1
         },
-    ];
+    ].filter(dataset => dataset.data.some(value => value !== 0));
 
 
     return {
         labels,
         datasets
-    };
+    }
 }
 
 function transformbarTurnedTwoDate(data) {
@@ -249,7 +261,7 @@ function transformbarTurnedTwoDate(data) {
             borderWidth: 1
         },
 
-    ];
+    ].filter(dataset => dataset.data.some(value => value !== 0));
 
 
     return {
@@ -274,7 +286,7 @@ function transformbarTurnedDate(data) {
             borderColor: '#7e9abf',
             borderWidth: 1
         }
-    ];
+    ].filter(dataset => dataset.data.some(value => value !== 0));
 
 
 

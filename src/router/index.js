@@ -66,7 +66,8 @@ const router = createRouter({
       name: 'new-user',
       component: () => import('@/views/registration/AdminUserRegistration.vue')
     },
-  ]
+  ],
+  
 })
 
 export default router

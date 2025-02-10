@@ -19,8 +19,8 @@
 
 
         <div v-else-if="mode === 'DynamicStructure'">
-          <div v-if="loading">Загрузка...</div>
-          <div v-else-if="error">Ошибка: {{ error }}</div>
+            <div v-if="loading">Загрузка...</div>
+            <div v-else-if="error">Ошибка: {{ error }}</div>
             <div v-else class="grid grid-cols-2 gap-6">
                 <div class="flex flex-col gap-y-6">
                     <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
@@ -37,9 +37,10 @@
         </div>
 
         <div v-else-if="mode === 'analysis'">
-          <div v-if="loading">Загрузка...</div>
-          <div v-else-if="error">Ошибка: {{ error }}</div>
-            <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-full" style="min-height: 400px">
+            <div v-if="loading">Загрузка...</div>
+            <div v-else-if="error">Ошибка: {{ error }}</div>
+            <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white min-h-full"
+                style="min-height: 400px">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
         </div>

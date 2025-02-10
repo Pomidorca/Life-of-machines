@@ -7,7 +7,7 @@ export const LineOptions = {
     plugins: {
         title: {
             display: true,
-            text: 'Изменения среднего роста эксплуатации парка оборудования',
+            text: 'Изменения структуры парка оборудования',
             font: {
                 size: function (context) {
                     if (context.chart.width < 500) {
@@ -50,7 +50,7 @@ export const LineOptions = {
             stacked: true,
             title: {
                 display: true,
-                text: 'Срок эксплуатации, лет',
+                text: 'Срок эксплуатации, шт',
                 font: {
                     size: function (context) {
                         if (context.chart.width < 500) {
@@ -87,7 +87,7 @@ export const changeStructureOptions = {
         },
         title: {
             display: true,
-            text: 'Изменения структуры парка оборудования',
+            text: 'Изменения среднего роста эксплуатации парка оборудования ',
             font: {
                 size: function (context) {
                     if (context.chart.width < 500) {

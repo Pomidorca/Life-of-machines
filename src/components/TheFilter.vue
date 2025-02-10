@@ -16,10 +16,12 @@
                         :class="{ 'bg-[#0554F2] text-white': toggle == 'month' }">Мес.</button>
                     <button
                         class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
-                        @click="handleClick('quarter')" :class="{ 'bg-[#0554F2] text-white': toggle == 'quarter' }">Кв.</button>
+                        @click="handleClick('quarter')"
+                        :class="{ 'bg-[#0554F2] text-white': toggle == 'quarter' }">Кв.</button>
                     <button
                         class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
-                        @click="handleClick('year')" :class="{ 'bg-[#0554F2] text-white': toggle == 'year' }">Год</button>
+                        @click="handleClick('year')"
+                        :class="{ 'bg-[#0554F2] text-white': toggle == 'year' }">Год</button>
                 </div>
                 <div class="flex gap-x-3">
                     <div>
@@ -51,8 +53,8 @@ import { useActiveStore } from '@/store/active.js';
 import { useMachineStore } from '@/store/machine.js';
 import { useKFVStore } from '@/store/kfv';
 import { useRoute, useRouter } from 'vue-router';
-import {useTEPStore} from "@/store/tep.js";
-import {log10} from "chart.js/helpers";
+import { useTEPStore } from "@/store/tep.js";
+import { log10 } from "chart.js/helpers";
 
 const route = useRoute();
 const router = useRouter();
@@ -143,7 +145,6 @@ const updateYearRange = () => {
     kfvStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     tepStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear }, timeInterval)
     saveStateToStorage();
-    updateUrl();
 };
 
 onMounted(() => {
@@ -152,10 +153,10 @@ onMounted(() => {
 });
 
 watch(() => route.query.toggle, (newToggle) => {
-  if (newToggle) {
-    timeInterval.value = newToggle;
-    updateYearRange()
-  }
+    if (newToggle) {
+        timeInterval.value = newToggle;
+        updateYearRange()
+    }
 });
 
 </script>
