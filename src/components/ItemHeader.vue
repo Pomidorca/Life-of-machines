@@ -1,17 +1,21 @@
 <template>
-  <div v-for="item in menu" :key="item.id">
-    <router-link @click.prevent="handleClick(item)" :to="item.route"
-      class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium"
-      :class="{ 'active': item.route === route.path }">
-      <img :src="item.route === route.path ? item.imgActive : item.img" class="w-6 h-6"
-        :class="{ 'active-img': isActive(item) }" loading="lazy" />
-      <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
-    </router-link>
-  </div>
+  <ul>
+    <li v-for="item in menu" :key="item.id">
+      <router-link @click.prevent="handleClick(item)" :to="item.route"
+                   class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium">
+        <img :src="item.route === route.path ? item.imgActive : item.img" class="w-6 h-6"
+             :class="{ 'active-img': isActive(item) }" loading="lazy" />
+        <span v-if="showMenu" class="duration-300">{{ item.title }}</span>
+      </router-link>
+    </li>
+    <li class="indicator" :style="indicatorStyle">
+
+    </li>
+  </ul>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import store from '@/store/store';
 import RegistrationDataService from '@/services/RegistrationDataService';
 import { useRoute } from 'vue-router';
@@ -29,10 +33,24 @@ const userRoleID = ref(0);
 const menu = ref([])
 const route = useRoute();
 
-
 function isActive(item) {
+
   return state.activeItem?.id === item.id;
 }
+
+const activeId = computed(() => {
+  const activeItem = menu.value.find((item) => item.route === route.path);
+  return activeItem ? activeItem.id : null;
+});
+
+const indicatorStyle = computed(() => {
+  const index = activeId.value;
+  const top = index !== -1 ? `calc(56px * ${index})` : '0';
+  return {
+    top: top,
+  };
+});
+
 
 const filterMenuByUserRole = (userRoleID) => {
   menu.value = store.state.header
@@ -57,20 +75,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.link {
-  text-decoration: none;
-  color: white;
-  font-size: 16px;
-  font-family: sans-serif;
-  line-height: 20px;
-  font-weight: 500;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.active {
-  background-color: white;
-  color: #0554F2;
-}
-</style>

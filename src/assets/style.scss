@@ -1,15 +1,19 @@
 /*=============== utils ===============*/
-@use '@/assets/utils/styles-forwarded';
+@use "./utils/styles-forwarded";
+@use "./utils/fonts";
 
 /*=============== global ===============*/
 
-@use './global';
+@use "./global";
 
 /*=============== pages ===============*/
-@use './pages/auth/login';
+@use "./pages/auth/login";
 
 /*=============== components ===============*/
-@use './components/adaptive-modal';
+@use "components/adaptive-modal";
+@use "components/header";
+@use "components/info-technic";
+@use "components/filter";
 
 @tailwind base;
 @tailwind components;

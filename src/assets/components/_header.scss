@@ -1,0 +1,126 @@
+@use "@/assets/utils/styles-forwarded" as *;
+
+.header{
+  overflow: visible;
+
+  .wrapper-sidebar{
+    scroll-margin-top: 24px;
+    margin: 24px 32px;
+    padding: 32px 0 32px 44px;
+    height: calc( 100vh - 48px);
+    background: $app-bg-primary;
+    width: 210px;
+    border-radius: 24px;
+    transition: all .3s;
+    overflow: hidden;
+    position:sticky;
+    top: 24px;
+    .sidebar-header{
+      .sidebar-header-logo{
+        font-family: 'SF Pro Text', sans-serif;
+        color: $app-text-inside;
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+        @include responsive-font( 20,24 );
+        transition: all .3s;
+      }
+      .sidebar-header-toggle{
+        position: relative;
+        width: 18px;
+        height: 10px;
+        .sidebar-header-toggle-line{
+          position: absolute;
+          transform: rotate(-180deg);
+          display: block;
+          background: $app-text-inside;
+          width: 18px;
+          height: 2px;
+          border-radius: 2px;
+
+          &:nth-child(1){
+            top: 0;
+          }
+          &:nth-child(2){
+            top: calc(50% - 1px);
+          }
+          &:nth-child(3){
+            top: calc(100% - 2px);
+          }
+        }
+      }
+    }
+    .sidebar-body{
+      ul{
+        position: relative;
+        z-index: 1;
+        li{
+          position: relative;
+          text-decoration: none;
+          font-size: 16px;
+          font-family: sans-serif;
+          line-height: 20px;
+          color: $app-text-inside !important;
+          font-weight: 500;
+          width: 100%;
+          box-sizing: border-box;
+          height: 56px;
+          border-top-left-radius: 24px;
+          border-bottom-left-radius: 24px;
+          a{
+            height: 56px;
+          }
+          .active-link-enclosure{
+            color: $app-text-active;
+          }
+        }
+        .indicator {
+          position: absolute;
+          width: 110%;
+          top: 0;
+          height: 56px;
+          background: $app-bg-global;
+          left: -10%;
+          z-index: -1;
+          transition: all 0.3s ease;
+          &:before{
+            content: '';
+            position: absolute;
+            top: -25px;
+            right: 0;
+            height: 25px;
+            width: 25px;
+            background: $app-bg-primary;
+            border-bottom-right-radius: 25px;
+            box-shadow: 5px 5px 0 5px $app-bg-global;
+          }
+          &:after{
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            right: 0;
+            height: 25px;
+            width: 25px;
+            background: $app-bg-primary;
+            border-top-right-radius: 25px;
+            box-shadow: 5px -5px 0 5px $app-bg-global;
+          }
+        }
+      }
+    }
+    &.show-menu{
+      width: 93px;
+      padding: 32px 0;
+      .sidebar-body{
+        a{
+          display: flex;
+          justify-content: center;
+        }
+        .indicator {
+          width: 80%;
+          left: 20%;
+        }
+      }
+    }
+  }
+}

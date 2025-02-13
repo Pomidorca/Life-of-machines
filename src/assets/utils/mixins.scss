@@ -1,6 +1,11 @@
 $maxWidth: 1280;
 
-@mixin responsive-font( $min-font, $max-font) {
+@mixin responsive-font($min-font, $max-font, $maxWidth: 1920) {
   $intermediateSize: $max-font - $min-font;
-  font-size: calc(#{$min-font + px} + #{$intermediateSize} * ((100vw - 320px) / #{$maxWidth}));
+
+  font-size: clamp(
+          #{$min-font + px},
+          calc(#{$min-font + px} + #{$intermediateSize} * ((100vw - 320px) / #{$maxWidth})),
+          #{$max-font + px}
+  );
 }

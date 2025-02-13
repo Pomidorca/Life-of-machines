@@ -10,13 +10,13 @@
   <div class="main-wrapper h-full w-full ">
     <main v-if="isAuth">
       <div class="flex">
-        <header>
+        <div class="header">
           <TheHeader />
-        </header>
-        <div class="w-full flex flex-col">
+        </div>
+        <div class="content-wrapper w-full flex flex-col">
           <TheInfoTech />
           <div class="flex flex-1">
-            <TheFilter />
+<!--            <TheFilter />-->
             <div class="pl-6 container">
               <div>
                 <router-view />

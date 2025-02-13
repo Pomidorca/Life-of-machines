@@ -1,0 +1,76 @@
+@use "@/assets/utils/styles-forwarded" as *;
+
+.wrapper-info-technic{
+  background: $app-bg-secondary;
+  border-radius: 40px;
+  .container-filter{
+    .title-filter{
+      font-weight: 600;
+      line-height: 22px;
+
+      @include responsive-font(16, 20)
+    }
+    .structure-filter{
+      display: grid;
+      grid-column-gap: 24px;
+      grid-template-columns: auto 36px 36px;
+      .params-radio{
+
+        input[type=radio]{
+          display: none;
+          &:checked + label{
+            color: $app-text-inside;
+            background: $app-bg-primary;
+          }
+        }
+        label{
+          text-align: center;
+          vertical-align: top;
+          display: inline-block;
+          cursor: pointer;
+          position: relative;
+          background: $app-bg-global;
+          color: $app-text-secondary;
+          padding: 8px 12px;
+          border-radius: 16px;
+          user-select: none;
+          transition: all .3s;
+          margin-left: 8px;
+          font-weight: 500;
+          line-height: 18.2px;
+
+          @include responsive-font(10, 14)
+
+        }
+      }
+      .button-info{
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        border: 1px solid $app-bg-global;
+
+        transition: all .3s;
+        img{
+          transition: all .3s;
+          &.img-rotate{
+            transform: rotate(180deg);
+          }
+        }
+        &:hover{
+          background: $app-bg-global;
+        }
+      }
+    }
+  }
+  .accordion-content{
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: all .3s;
+    & > div {
+      overflow: hidden;
+    }
+    &.accordion-active{
+      grid-template-rows: 1fr;
+    }
+  }
+}
