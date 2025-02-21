@@ -107,7 +107,7 @@
                 class="check-input"
                 :id="children.id"
                 :value="children.id"
-                v-model="selectedMachineModelIds"
+                v-model="selectedMachineClassIds"
               />
               <label :for="children.id">
                   <div class="checkbox">
@@ -206,7 +206,35 @@ const toggleSelectAllClass = () => {
   }
 };
 
+watch(selectedMachineClassIds, () => {
+  machineStore.machineClass.forEach(machineClass => {
+
+        const allClassesSelected = machineClass.children.every(children => selectedMachineModelIds.value.includes(children.id));
+
+        // Commented out before fix structure API request 
+        
+        // if (allClassesSelected && !machineStore.selectedMachineClassIds.includes(children.id)) {
+        //   console.log('выбрано все');
+          
+        //     if(!machineStore.selectedMachineClassIds.includes(children.id)) {
+        //       machineStore.selectedMachineClassIds.push(children.id)
+        //     }
+        // } else if (!allClassesSelected && machineStore.selectedMachineClassIds.includes(children.id)) {
+            
+        //     machineStore.selectedMachineClassIds = machineStore.selectedMachineClassIds.filter(id => id != children.id);
+        // }
+        
+      })
+}, { deep: true });
+
 /*========== class end ========== */
+
+/*========== switching between the filter type ========== */
+watch(machineStore.selectedMachineTypeIds, () => {
+  console.log('here');
+  
+  machineStore.removeStatusFilter
+})
 
 /*========== marks start ========== */
 
@@ -292,6 +320,8 @@ watch(selectedMachineModelIds, () => {
         const allModelsSelected = machineMark.models.every(model => selectedMachineModelIds.value.includes(model.id));
 
         if (allModelsSelected && !machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
+          console.log('выбрано все');
+          
             if(!machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
               machineStore.selectedMachineMarksIds.push(machineMark.id)
             }

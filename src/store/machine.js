@@ -27,21 +27,25 @@ export const useMachineStore = defineStore('machine', {
             localStorage.setItem('selectedMachineMarkIds', JSON.stringify(this.selectedMachineMarksIds));
             localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
         },
+        removeStatusFilter() {
+            localStorage.clear('selectedMachineModelIds');
+            localStorage.clear('selectedMachineMarkIds'); 
+        },
         async fetchMachines(filterParams) {
             console.log(filterParams);
             
             this.loading = true;
             this.error = null;
-            const machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1; 
+            const machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1;
+            
+            // this.removeStatusFilter();
+            
             try {
 
                 await MachineClassesDataService.getMashineClasses()
                 .then((response) => {
                     
                     this.machineClass = response.data
-
-                    console.log(response.data);
-                    
                         
                 })
                 .catch((e) => {
@@ -59,6 +63,7 @@ export const useMachineStore = defineStore('machine', {
                         console.log(e);
                         this.error = e;
                     })
+
             } catch (error) {
                 this.error = error;
             } finally {
