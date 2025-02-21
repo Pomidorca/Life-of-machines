@@ -85,52 +85,52 @@ const store = createStore({
                     machineClassIds: 1
                 },
                 {
-                    id: 5,
+                    id: 4,
                     image: '/img/tech/1.png',
                     title: 'Экскаватор',
                     total: '25',
                     repair: '2',
-                    machineClassIds: 5
+                    machineClassIds: 4
                 },
                 {
-                    id: 6,
+                    id: 5,
                     image: 'img/tech/2.png',
                     title: 'Самосвал',
                     total: '100',
                     repair: '10',
-                    machineClassIds: 6
+                    machineClassIds: 5
                 },
                 {
-                    id: 9,
+                    id:8,
                     image: 'img/tech/3.png',
                     title: 'Автогрейдеры',
                     total: '8',
                     repair: '0',
-                    machineClassIds: 9
+                    machineClassIds: 8
                 },
                 {
-                    id: 7,
+                    id: 6,
                     image: 'img/tech/4.png',
                     title: 'Бур.станки',
                     total: '10',
                     repair: '1',
-                    machineClassIds: 7
+                    machineClassIds: 6
                 },
                 {
-                    id: 8,
+                    id: 7,
                     image: 'img/tech/5.png',
                     title: 'Бульдозеры',
                     total: '20',
                     repair: '2',
-                    machineClassIds: 8
+                    machineClassIds: 7
                 },
                 {
-                    id: 10,
+                    id: 9,
                     image: 'img/tech/6.png',
                     title: 'Погрузчики',
                     total: '10',
                     repair: '0',
-                    machineClassIds: 10
+                    machineClassIds: 9
                 },
             ],
             selectedTechnique: null,

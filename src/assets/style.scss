@@ -10,6 +10,8 @@
 
 /*=============== components ===============*/
 @use './components/adaptive-modal';
+@use './components/checkbox.scss';
+@use './components/filter/filter.scss';
 
 @tailwind base;
 @tailwind components;

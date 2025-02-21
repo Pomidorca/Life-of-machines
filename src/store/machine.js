@@ -6,9 +6,14 @@ import MachineClassesDataService from '@/services/MachineClassesDataService';
 
 export const useMachineStore = defineStore('machine', {
     state: () => ({
+        machineClass: [],
         machineTypes: [],
+        machineMarks: [],
         selectedMachineType: null,
+        machineClassIds: [],
         selectedMachineTypeIds: [],
+        selectedMachineModelIds: [],
+        selectedMachineMarksIds: [],
         loading: false,
         error: null,
     }),
@@ -17,33 +22,41 @@ export const useMachineStore = defineStore('machine', {
             this.selectedMachineTypeIds = [];
             localStorage.setItem('selectedMachineTypeIds', JSON.stringify([]));
         },
+        saveStatusFilter() {
+            localStorage.setItem('selectedMachineModelIds', JSON.stringify(this.selectedMachineModelIds));
+            localStorage.setItem('selectedMachineMarkIds', JSON.stringify(this.selectedMachineMarksIds));
+            localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
+        },
         async fetchMachines(filterParams) {
+            console.log(filterParams);
+            
             this.loading = true;
             this.error = null;
-            const {
-                machineClassId = 1
-            } = filterParams || {};
+            const machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1; 
             try {
-                await MachineClassesDataService.getMashineClasses(filterParams.machineClassId)
+
+                await MachineClassesDataService.getMashineClasses()
+                .then((response) => {
+                    
+                    this.machineClass = response.data
+
+                    console.log(response.data);
+                    
+                        
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.error = e;
+                })
+
+                await MachineClassesDataService.getMashineMarks(machineClassId)
                     .then((response) => {
-                        const data = response.data;
+                        
+                        this.machineMarks = response.data
 
-                        let machineTypes = [];
-                        if (machineClassId === 1) {
-                            const children = data.children.flatMap(child => child.children || []);
-                            machineTypes = children.flatMap(child => child.machineTypes || []);
-                        } else if (machineClassId >= 2) {
-                            machineTypes = data.machineTypes || [];
-                        } else {
-                            machineTypes = [];
-                            console.warm('Неизвестный machineClassId', machineClassId);
-                        }
-
-                        this.machineTypes = machineTypes;
-
-                        this.selectedMachineType = machineTypes[0];
-                    }).catch((e) => {
-                        console.log(e)
+                    })
+                    .catch((e) => {
+                        console.log(e);
                         this.error = e;
                     })
             } catch (error) {

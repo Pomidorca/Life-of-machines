@@ -1,7 +1,16 @@
 import http from '../http-common.js'
 
 export default {
-    getMashineClasses(filterParams) {
-        return http.get(`/data/machine-classes/${filterParams}`);
+    getMashineClasses() {
+        return http.get(`/data/machine-classes`);
+    },
+    getMashineMarks(classType) {
+        console.log(classType); 
+
+        return http.get(`/data/machine-marks/`, {
+            params: {
+                classId: classType
+            }
+        });
     },
 }

@@ -54,7 +54,6 @@ import { useMachineStore } from '@/store/machine.js';
 import { useKFVStore } from '@/store/kfv';
 import { useRoute, useRouter } from 'vue-router';
 import { useTEPStore } from "@/store/tep.js";
-import { log10 } from "chart.js/helpers";
 
 const route = useRoute();
 const router = useRouter();
