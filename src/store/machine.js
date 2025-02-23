@@ -14,6 +14,7 @@ export const useMachineStore = defineStore('machine', {
         selectedMachineTypeIds: [],
         selectedMachineModelIds: [],
         selectedMachineMarksIds: [],
+        selectedMachineIds: [],
         loading: false,
         error: null,
     }),
@@ -26,19 +27,32 @@ export const useMachineStore = defineStore('machine', {
             localStorage.setItem('selectedMachineModelIds', JSON.stringify(this.selectedMachineModelIds));
             localStorage.setItem('selectedMachineMarkIds', JSON.stringify(this.selectedMachineMarksIds));
             localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
+            localStorage.setItem('selectedMachineIds', JSON.stringify(this.selectedMachineIds));
         },
         removeStatusFilter() {
-            localStorage.clear('selectedMachineModelIds');
-            localStorage.clear('selectedMachineMarkIds'); 
+            localStorage.removeItem('selectedMachineModelIds');
+            localStorage.removeItem('selectedMachineMarkIds');
+            localStorage.removeItem('selectedMachineIds');
         },
+
         async fetchMachines(filterParams) {
-            console.log(filterParams);
+
+            let machineClassId;
+
+            const storedCardsTechnique = localStorage.getItem('CardsTechnique');
+
+            if (storedCardsTechnique) {
+                const parsedCardsTechnique = JSON.parse(storedCardsTechnique);
+
+                machineClassId = parsedCardsTechnique.selectedTechniqueId;
+
+            } else {
+                machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1;
+            }
+
             
             this.loading = true;
             this.error = null;
-            const machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1;
-            
-            // this.removeStatusFilter();
             
             try {
 

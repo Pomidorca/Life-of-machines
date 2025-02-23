@@ -42,23 +42,50 @@
           <div v-if="machineMark.models && machineMark.models.length > 0" class="machineTypes-delail" :class="{ 'show-list': openedMachineMarkId === machineMark.id }">
             <div>
               <div v-for=" machineModel in machineMark.models" class=" ms-3 mb-3">
-              <input
-                type="checkbox"
-                class="check-input"
-                :id="machineModel.id"
-                :value="machineModel.id"
-                v-model="selectedMachineModelIds"
-                @change="toggleModelMachines(machineModel)"
-              />
-              <label :for="machineModel.id">
-                  <div class="checkbox">
-                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="flex items-center w-full justify-between mb-3">
+                  <div class="flex gap-x-2">
+                    <input
+                        type="checkbox"
+                        class="check-input"
+                        :id="machineModel.id"
+                        :value="machineModel.id"
+                        v-model="selectedMachineModelIds"
+                        @change="toggleModelMachines(machineModel)"
+                    />
+                    <label :for="machineModel.id">
+                      <div class="checkbox">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M1 11C1 6.28595 1 3.92893 2.46447 2.46447C3.92893 1 6.28595 1 11 1C15.714 1 18.0711 1 19.5355 2.46447C21 3.92893 21 6.28595 21 11C21 15.714 21 18.0711 19.5355 19.5355C18.0711 21 15.714 21 11 21C6.28595 21 3.92893 21 2.46447 19.5355C1 18.0711 1 15.714 1 11Z" stroke="#001233" stroke-opacity="0.6" stroke-width="1.5"/>
-                      </svg>
+                        </svg>
+                      </div>
+                      <p class="text-[#979DAC]">{{ machineModel.name }}</p>
+                    </label>
                   </div>
-                  <p class="text-[#979DAC]">{{ machineModel.name }}</p>
-              </label>
-            </div>
+                  <img v-if="machineModel.machines && machineModel.machines.length > 0" @click="toggleShowDetailInventoryNumber(machineModel)" class="filter-machine-details-list" :class="{ 'open-list': openedMachineId === machineModel.id }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
+                </div>
+                <div v-if="machineModel.machines && machineModel.machines.length > 0" class="machineTypes-delail" :class="{ 'show-list': openedMachineId === machineModel.id }">
+                  <div>
+                    <div v-for="machine in machineModel.machines" class="ms-3 mb-3">
+                      <input
+                          type="checkbox"
+                          class="check-input"
+                          :id="machine.id"
+                          :value="machine.id"
+                          v-model="selectedMachineIds"
+                          @change="toggleMachines(machine)"
+                      />
+                      <label :for="machine.id">
+                        <div class="checkbox">
+                          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 11C1 6.28595 1 3.92893 2.46447 2.46447C3.92893 1 6.28595 1 11 1C15.714 1 18.0711 1 19.5355 2.46447C21 3.92893 21 6.28595 21 11C21 15.714 21 18.0711 19.5355 19.5355C18.0711 21 15.714 21 11 21C6.28595 21 3.92893 21 2.46447 19.5355C1 18.0711 1 15.714 1 11Z" stroke="#001233" stroke-opacity="0.6" stroke-width="1.5"/>
+                          </svg>
+                        </div>
+                        <p class="text-[#979DAC]">{{ machineModel.name }}-{{ machine.inventoryNumber }}</p>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -140,6 +167,7 @@ const tepStore = useTEPStore();
 
 const selectedTechniqueId = ref(null);
 const openedMachineMarkId = ref(null);
+const openedMachineId = ref(null);
 const openedMachineClassId = ref(null);
 
 const loadStateFromLocalStorage = () => {
@@ -238,7 +266,6 @@ watch(machineStore.selectedMachineTypeIds, () => {
 
 /*========== marks start ========== */
 
-
 const selectedMachineMarkIds = computed({
     get() {
         return machineStore.selectedMachineMarksIds
@@ -255,6 +282,15 @@ const selectedMachineModelIds = computed({
     set(value) {
         machineStore.selectedMachineModelIds = value
     },
+});
+
+const selectedMachineIds = computed({
+  get() {
+    return machineStore.selectedMachineIds
+  },
+  set(value) {
+    machineStore.selectedMachineIds = value
+  },
 });
 
 const loadSelectedMachineFilter = () => {
@@ -277,64 +313,116 @@ const isMarkSelected = (machineMark) => {
 };
 
 const toggleMark = (machineMark) => {
-  const allSelected = isMarkSelected(machineMark)
+  const allSelected = isMarkSelected(machineMark);
 
-  const modelIds = machineMark.models.map(model => model.id);
-  
-  
-  if(allSelected) {
-    
-    modelIds.forEach(id => {
-      if (!machineStore.selectedMachineModelIds.includes(id)) {
-        machineStore.selectedMachineModelIds.push(id);
-      }
-    });
-    
-  } else {
-
-    machineStore.selectedMachineModelIds = machineStore.selectedMachineModelIds.filter(id => !modelIds.includes(id));
-
-  }
-}
-
-const toggleModelMachines = (machineModel) => {
-
-  const allSelected = isModelSelected(machineModel);
-
-  machineModel.machines.forEach(machine => {
+  machineMark.models.forEach(machineModel => {
     if (allSelected) {
-      
-      selectedMachineIds.value = selectedMachineIds.value.filter(id => id !== machine.id);
-    } else {
-      
-      if (!selectedMachineIds.value.includes(machine.id)) {
-        selectedMachineIds.value.push(machine.id);
+
+      if (!machineStore.selectedMachineModelIds.includes(machineModel.id)) {
+        machineStore.selectedMachineModelIds.push(machineModel.id);
       }
+
+      machineModel.machines.forEach(machine => {
+        if (!machineStore.selectedMachineIds.includes(machine.id)) {
+          machineStore.selectedMachineIds.push(machine.id);
+        }
+      });
+    } else {
+
+      machineStore.selectedMachineModelIds = machineStore.selectedMachineModelIds.filter(modelId => modelId !== machineModel.id);
+
+      machineModel.machines.forEach(machine => {
+        machineStore.selectedMachineIds = machineStore.selectedMachineIds.filter(machineId => machineId !== machine.id);
+      });
     }
   });
 };
 
-watch(selectedMachineModelIds, () => {
+
+const toggleModelMachines = (machineModel) => {
+
   machineStore.machineMarks.forEach(machineMark => {
 
-        const allModelsSelected = machineMark.models.every(model => selectedMachineModelIds.value.includes(model.id));
+    machineMark.models.forEach(machineModel => {
 
-        if (allModelsSelected && !machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
-          console.log('выбрано все');
-          
-            if(!machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
-              machineStore.selectedMachineMarksIds.push(machineMark.id)
-            }
-        } else if (!allModelsSelected && machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
-            
-            machineStore.selectedMachineMarksIds = machineStore.selectedMachineMarksIds.filter(id => id != machineMark.id);
+      if (machineStore.selectedMachineModelIds.includes(machineModel.id)) {
+
+        machineModel.machines.forEach(machine => {
+          if (!machineStore.selectedMachineIds.includes(machine.id)) {
+            machineStore.selectedMachineIds.push(machine.id);
+          }
+        });
+      } else {
+
+        machineModel.machines.forEach(machine => {
+          if (machineStore.selectedMachineIds.includes(machine.id)) {
+
+            machineStore.selectedMachineIds = machineStore.selectedMachineIds.filter(machineId => machineId !== machine.id);
+          }
+        });
+      }
+    });
+  });
+};
+
+const isMachinesSelected = (machineWithInventoryNumber) => {
+
+  return machineStore.selectedMachineIds.includes(machineWithInventoryNumber.id);
+};
+
+const toggleMachines = (machineWithInventoryNumber) => {
+  // console.log('dag')
+  // const allSelected = isMachinesSelected(machineWithInventoryNumber);
+  // console.log('dag', allSelected)
+  // if (allSelected) {
+  //
+  //   console.log('выбраны все')
+  // } else {
+  //
+  //   console.log('выбраны не все')
+  // }
+}
+
+watch(selectedMachineIds, () => {
+  machineStore.machineMarks.forEach(machineMark => {
+    machineMark.models.forEach(machineModel => {
+
+      const allMachinesSelected = machineModel.machines.every(machine => selectedMachineIds.value.includes(machine.id));
+
+      if (allMachinesSelected) {
+        if (!machineStore.selectedMachineModelIds.includes(machineModel.id)) {
+          machineStore.selectedMachineModelIds.push(machineModel.id);
         }
-        
+      } else {
+
+        machineStore.selectedMachineModelIds = machineStore.selectedMachineModelIds.filter(id => id !== machineModel.id);
+      }
+    });
+  });
+}, { deep: true });
+
+watch(selectedMachineModelIds, () => {
+
+  machineStore.machineMarks.forEach(machineMark => {
+
+    const allModelsSelected = machineMark.models.every(model => selectedMachineModelIds.value.includes(model.id));
+
+    if (allModelsSelected && !machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
+
+
+      if(!machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
+        machineStore.selectedMachineMarksIds.push(machineMark.id)
+      }
+      } else if (!allModelsSelected && machineStore.selectedMachineMarksIds.includes(machineMark.id)) {
+
+        machineStore.selectedMachineMarksIds = machineStore.selectedMachineMarksIds.filter(id => id != machineMark.id);
+      }
+
       })
 }, { deep: true });
 
 watch(
-  [selectedMachineMarkIds, selectedMachineModelIds, selectedMachineClassIds],
+  [selectedMachineIds, selectedMachineMarkIds, selectedMachineModelIds, selectedMachineClassIds],
   () => {
     machineStore.saveStatusFilter()
   },
@@ -347,6 +435,15 @@ const toggleShowDetail = (machineMark) => {
   } else {
     
     openedMachineMarkId.value = machineMark.id;
+  }
+};
+
+const toggleShowDetailInventoryNumber = (machine) => {
+  if (openedMachineId.value === machine.id) {
+    openedMachineId.value = null;
+  } else {
+
+    openedMachineId.value = machine.id;
   }
 };
 
@@ -368,24 +465,32 @@ const isAllSelected = computed(() => {
 });
 
 const toggleSelectAll = () => {
-
   if (isAllSelected.value) {
-    
+
     machineStore.machineMarks.forEach(machineMark => {
       machineMark.models.forEach(machineModel => {
 
-        machineStore.selectedMachineModelIds =  machineStore.selectedMachineModelIds.filter(id => id !== machineModel.id);
+        machineStore.selectedMachineModelIds = machineStore.selectedMachineModelIds.filter(modelId => modelId !== machineModel.id);
+
+        machineModel.machines.forEach(machine => {
+          machineStore.selectedMachineIds = machineStore.selectedMachineIds.filter(machineId => machineId !== machine.id);
+        });
       });
     });
-    
   } else {
-    
+
     machineStore.machineMarks.forEach(machineMark => {
-      
       machineMark.models.forEach(machineModel => {
+
         if (!machineStore.selectedMachineModelIds.includes(machineModel.id)) {
-            machineStore.selectedMachineModelIds.push(machineModel.id)
+          machineStore.selectedMachineModelIds.push(machineModel.id);
         }
+
+        machineModel.machines.forEach(machine => {
+          if (!machineStore.selectedMachineIds.includes(machine.id)) {
+            machineStore.selectedMachineIds.push(machine.id);
+          }
+        });
       });
     });
   }
