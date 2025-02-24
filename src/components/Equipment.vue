@@ -237,7 +237,11 @@ const toggleSelectAllClass = () => {
 watch(selectedMachineClassIds, () => {
   machineStore.machineClass.forEach(machineClass => {
 
-        const allClassesSelected = machineClass.children.every(children => selectedMachineModelIds.value.includes(children.id));
+    // problem
+
+    machineStore.removeStatusFilter('class')
+
+    const allClassesSelected = machineClass.children.every(children => selectedMachineModelIds.value.includes(children.id));
 
         // Commented out before fix structure API request 
         
@@ -259,9 +263,7 @@ watch(selectedMachineClassIds, () => {
 
 /*========== switching between the filter type ========== */
 watch(machineStore.selectedMachineTypeIds, () => {
-  console.log('here');
-  
-  machineStore.removeStatusFilter
+  // machineStore.removeStatusFilter();
 })
 
 /*========== marks start ========== */
@@ -424,7 +426,10 @@ watch(selectedMachineModelIds, () => {
 watch(
   [selectedMachineIds, selectedMachineMarkIds, selectedMachineModelIds, selectedMachineClassIds],
   () => {
-    machineStore.saveStatusFilter()
+
+    machineStore.saveStatusFilter();
+
+    saveStateToStorage();
   },
   { deep: true }
 );

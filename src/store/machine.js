@@ -29,10 +29,20 @@ export const useMachineStore = defineStore('machine', {
             localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
             localStorage.setItem('selectedMachineIds', JSON.stringify(this.selectedMachineIds));
         },
-        removeStatusFilter() {
-            localStorage.removeItem('selectedMachineModelIds');
-            localStorage.removeItem('selectedMachineMarkIds');
-            localStorage.removeItem('selectedMachineIds');
+        removeStatusFilter(event) {
+
+            if (event === 'class') {
+                this.selectedMachineModelIds = [];
+                this.selectedMachineMarksIds = [];
+                this.selectedMachineIds = [];
+            }else if ((event === 'machineType')) {
+                this.machineClassIds = [];
+            } else {
+                this.selectedMachineModelIds = [];
+                this.selectedMachineMarksIds = [];
+                this.machineClassIds = [];
+                this.selectedMachineIds = [];
+            }
         },
 
         async fetchMachines(filterParams) {

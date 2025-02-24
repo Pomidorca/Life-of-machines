@@ -26,15 +26,52 @@ export const useKFVStore = defineStore("KFV", {
                 datasets: []
             },
             filterParams: ref({
-                yearStart: 2000,
-                yearEnd: 2024,
-                machineClassIds: 1,
+                dateStart: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10),
+                dateEnd: new Date().toISOString().slice(0, 10),
+                machineModelIds: [],
+                machineMarkIds: [],
+                machineClassIds: [],
+                machineIds: [],
                 machineTypeIds: [],
             }),
             initialChangeOperatingTime: ChangeOperatingTime
         }
     },
     actions: {
+
+        filterMachines() {
+            const machineModelIds = localStorage.getItem('selectedMachineModelIds');
+            const machineMarkIds = localStorage.getItem('selectedMachineMarkIds');
+            const machineClassIds = localStorage.getItem('selectedMachineClassIds');
+            const machineIds = localStorage.getItem('selectedMachineIds');
+            let machineTypeIds = localStorage.getItem('selectedMachineTypeIds');
+
+            let classIds;
+
+            if (machineClassIds && JSON.parse(machineClassIds).length > 0) {
+
+                classIds = JSON.parse(machineClassIds);
+            } else if (machineTypeIds) {
+
+                if (Array.isArray(JSON.parse(machineTypeIds))) {
+
+                    classIds = JSON.parse(machineTypeIds);
+                } else {
+
+                    classIds = [JSON.parse(machineTypeIds)];
+                }
+            } else {
+
+                classIds = [1];
+            }
+
+            this.$patch(state => {
+                state.filterParams.machineModelIds = machineModelIds ? JSON.parse(machineModelIds) : [];
+                state.filterParams.machineMarkIds = machineMarkIds ? JSON.parse(machineMarkIds) : [];
+                state.filterParams.machineClassIds = classIds;
+                state.filterParams.machineIds = machineIds ? JSON.parse(machineIds) : [];
+            });
+        },
         async fetchKFV() {
 
             this.loading = true;
@@ -47,11 +84,22 @@ export const useKFVStore = defineStore("KFV", {
                 this.loading = false;
                 return;
             }
-        
-            const { yearStart, yearEnd, machineClassIds, machineTypeIds } = this.filterParams; 
-        
+            await this.filterMachines()
+
+            const storedFilterDate = localStorage.getItem('filterDate');
+
+            if (storedFilterDate) {
+
+                const parsedFilterDate = JSON.parse(storedFilterDate);
+
+                this.filterParams.dateStart = new Date(parsedFilterDate.startDate).toISOString().slice(0, 4);
+                this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString().slice(0, 4);
+            }
+
+            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds} = this.filterParams;
+
             try {
-                await CTFDataService.getWorkTimeByServiceLife(yearStart, yearEnd, machineClassIds, machineTypeIds)
+                await CTFDataService.getWorkTimeByServiceLife(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
                         // throw  new Error('Попа единорога ')
 
@@ -80,31 +128,21 @@ export const useKFVStore = defineStore("KFV", {
                     .catch((e) => {
                         console.log(e)
                     })
-
-                const responses = await Promise.all([
-                    fetch(`${API_BASE_URL}/ctf/charts/yearly?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }),
-                    fetch(`${API_BASE_URL}/ctf/charts/structure?dateStart=${yearStart}&dateEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        }
+                await CTFDataService.getYearly(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        this.changesStructureKFV = changesStructure(response.data);
                     })
-                ]);
-        
-                for (const response of responses) {
-                    if (!response.ok) {
-                        const text = await response.text();
-                        throw new Error(`HTTP error ${response.status}: ${text}`);
-                    }
-                }
-        
-                const data = await Promise.all(responses.map(res => res.json()));
-        
-                this.changesStructureKFV = changesStructure(data[0]);
-                this.structureKFV = StructureKFV(data[1]);
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
+                await CTFDataService.getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        this.structureKFV = StructureKFV(response.data);
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
 
         
             } catch (error) {

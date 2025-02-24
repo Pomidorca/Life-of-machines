@@ -1,13 +1,12 @@
 import http from '../http-common.js'
 
 export default {
-    getVolumeFulfillmentExtraction(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
             dateEnd: dateEnd,
-            // dateStart: '2010-01-01',
-            // dateEnd: '2024-12-01'
+
         };
 
         if (machineClassIds) {
@@ -26,25 +25,19 @@ export default {
             params.machineIds = machineIds
         }
 
-        if (breakdownType) {
-            params.breakdownType = breakdownType
-        } else {
-            params.breakdownType = 'year'
-        }
-
-        return http.get(`/tep/fulfilmentOfCoalMiningAndStrippingVolumes/`, {
+        return http.get(`/actives/charts/structure`, {
             params,
             paramsSerializer: {
                 indexes: false
             }
         });
     },
-
-    getMonthlyParkProductivity(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
             dateEnd: dateEnd,
+
         };
 
         if (machineClassIds) {
@@ -63,19 +56,19 @@ export default {
             params.machineIds = machineIds
         }
 
-        return http.get(`/tep/monthlyParkProductivity`, {
+        return http.get(`/actives/charts/average-age`, {
             params,
             paramsSerializer: {
                 indexes: false
             }
         });
     },
-
-    getDinamicsUnitCosts(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getWorkDistribution(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
             dateEnd: dateEnd,
+
         };
 
         if (machineClassIds) {
@@ -94,24 +87,19 @@ export default {
             params.machineIds = machineIds
         }
 
-        if (breakdownType) {
-            params.breakdownType = breakdownType
-        } else {
-            params.breakdownType = 'year'
-        }
-
-        return http.get(`/tep/dynamicsOfUnitCosts`, {
+        return http.get(`/actives/charts/work-distribution`, {
             params,
             paramsSerializer: {
                 indexes: false
             }
         });
     },
-    getComparisonOfTargetAndActualUnitCosts(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getCountAndAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
             dateEnd: dateEnd,
+
         };
 
         if (machineClassIds) {
@@ -130,7 +118,7 @@ export default {
             params.machineIds = machineIds
         }
 
-        return http.get(`/tep/comparisonOfTargetAndActualUnitCosts`, {
+        return http.get(`/actives/charts/count-and-average-age`, {
             params,
             paramsSerializer: {
                 indexes: false

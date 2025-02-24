@@ -7,6 +7,7 @@ import {
 import {
     ref
 } from "vue";
+import ActiveDataService from "@/services/ActiveDataService.js";
 
 /*
            Все машины = 1
@@ -41,9 +42,12 @@ export const useActiveStore = defineStore('active', {
             datasets: []
         },
         filterParams: ref({
-            yearStart: 2000,
-            yearEnd: 2024,
-            machineClassIds: 1,
+            dateStart: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10),
+            dateEnd: new Date().toISOString().slice(0, 10),
+            machineModelIds: [],
+            machineMarkIds: [],
+            machineClassIds: [],
+            machineIds: [],
             machineTypeIds: [],
         }),
     }),
@@ -74,6 +78,39 @@ export const useActiveStore = defineStore('active', {
             }
 
         },
+        filterMachines() {
+            const machineModelIds = localStorage.getItem('selectedMachineModelIds');
+            const machineMarkIds = localStorage.getItem('selectedMachineMarkIds');
+            const machineClassIds = localStorage.getItem('selectedMachineClassIds');
+            const machineIds = localStorage.getItem('selectedMachineIds');
+            let machineTypeIds = localStorage.getItem('selectedMachineTypeIds');
+
+            let classIds;
+
+            if (machineClassIds && JSON.parse(machineClassIds).length > 0) {
+
+                classIds = JSON.parse(machineClassIds);
+            } else if (machineTypeIds) {
+
+                if (Array.isArray(JSON.parse(machineTypeIds))) {
+
+                    classIds = JSON.parse(machineTypeIds);
+                } else {
+
+                    classIds = [JSON.parse(machineTypeIds)];
+                }
+            } else {
+
+                classIds = [1];
+            }
+
+            this.$patch(state => {
+                state.filterParams.machineModelIds = machineModelIds ? JSON.parse(machineModelIds) : [];
+                state.filterParams.machineMarkIds = machineMarkIds ? JSON.parse(machineMarkIds) : [];
+                state.filterParams.machineClassIds = classIds;
+                state.filterParams.machineIds = machineIds ? JSON.parse(machineIds) : [];
+            });
+        },
         async fetchData() {
             this.loadFilterParamsFromLocalStorage();
             this.loading = true;
@@ -86,48 +123,58 @@ export const useActiveStore = defineStore('active', {
                 this.loading = false;
                 return;
             }
-            const {
-                yearStart,
-                yearEnd,
-                machineClassIds,
-                machineTypeIds
-            } = this.filterParams;
+
+            await this.filterMachines()
+
+            const storedFilterDate = localStorage.getItem('filterDate');
+
+            if (storedFilterDate) {
+
+                const parsedFilterDate = JSON.parse(storedFilterDate);
+
+                this.filterParams.dateStart = new Date(parsedFilterDate.startDate).toISOString().slice(0, 4);
+                this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString().slice(0, 4);
+            }
+
+            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds} = this.filterParams;
+
             try {
-                const responses = await Promise.all([
-                    fetch(`${API_BASE_URL}/actives/charts/structure?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    }),
-                    fetch(`${API_BASE_URL}/actives/charts/average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    }),
-                    fetch(`${API_BASE_URL}/actives/charts/work-distribution?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    }),
-                    fetch(`${API_BASE_URL}/actives/charts/count-and-average-age?yearStart=${yearStart}&yearEnd=${yearEnd}&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    }),
-                    fetch(`${API_BASE_URL}/actives/machine-list?&machineClassIds=${machineClassIds}&machineTypeIds=${machineTypeIds}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    }),
-                ]);
 
-                const data = await Promise.all(responses.map(res => res.json()));
+                await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        this.lineDate = transformLinedate(response.data)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
 
+                await ActiveDataService.getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        this.changeStructureDate = transformchangeStructuredate(response.data);
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
 
-                this.lineDate = transformLinedate(data[0]);
-                this.changeStructureDate = transformchangeStructuredate(data[1]);
-                this.barTurnedTwoDate = transformbarTurnedTwoDate(data[2]);
-                this.barTurnedDate = transformbarTurnedDate(data[3]);
+                await ActiveDataService.getWorkDistribution(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        this.barTurnedTwoDate = transformbarTurnedTwoDate(response.data);
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
+
+                await ActiveDataService.getCountAndAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        this.barTurnedDate = transformbarTurnedDate(response.data);
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
 
             } catch (error) {
                 this.error = `Ошибка при загрузке данных: ${error.message}`;

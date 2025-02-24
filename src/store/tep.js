@@ -25,7 +25,10 @@ export const useTEPStore = defineStore("TEP", {
                 dateStart: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10),
                 dateEnd: new Date().toISOString().slice(0, 10),
                 breakdownType: null,
-                machineClassIds: 1,
+                machineModelIds: [],
+                machineMarkIds: [],
+                machineClassIds: [],
+                machineIds: [],
                 machineTypeIds: [],
             }),
             initialCarryingOutVolumes: CarryingOutVolumes,
@@ -45,6 +48,40 @@ export const useTEPStore = defineStore("TEP", {
     },
     actions: {
 
+        filterMachines() {
+            const machineModelIds = localStorage.getItem('selectedMachineModelIds');
+            const machineMarkIds = localStorage.getItem('selectedMachineMarkIds');
+            const machineClassIds = localStorage.getItem('selectedMachineClassIds');
+            const machineIds = localStorage.getItem('selectedMachineIds');
+            let machineTypeIds = localStorage.getItem('selectedMachineTypeIds');
+
+            let classIds;
+
+            if (machineClassIds && JSON.parse(machineClassIds).length > 0) {
+
+                classIds = JSON.parse(machineClassIds);
+            } else if (machineTypeIds) {
+
+                if (Array.isArray(JSON.parse(machineTypeIds))) {
+
+                    classIds = JSON.parse(machineTypeIds);
+                } else {
+
+                    classIds = [JSON.parse(machineTypeIds)];
+                }
+            } else {
+
+                classIds = [1];
+            }
+
+            this.$patch(state => {
+                state.filterParams.machineModelIds = machineModelIds ? JSON.parse(machineModelIds) : [];
+                state.filterParams.machineMarkIds = machineMarkIds ? JSON.parse(machineMarkIds) : [];
+                state.filterParams.machineClassIds = classIds;
+                state.filterParams.machineIds = machineIds ? JSON.parse(machineIds) : [];
+            });
+        },
+
         async fetchTEP(toggle) {
 
             this.loading = true;
@@ -59,6 +96,8 @@ export const useTEPStore = defineStore("TEP", {
             }
 
             try {
+
+                await this.filterMachines()
 
                 const storedFilterDate = localStorage.getItem('filterDate');
 
@@ -78,9 +117,9 @@ export const useTEPStore = defineStore("TEP", {
                     this.filterParams.breakdownType = toggle
                 }
 
-                const { dateStart, dateEnd, breakdownType, machineClassIds, machineTypeIds } = this.filterParams;
+                const { dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds } = this.filterParams;
 
-                await TEPDataService.getVolumeFulfillmentExtraction( dateStart, dateEnd, breakdownType, machineTypeIds, machineClassIds)
+                await TEPDataService.getVolumeFulfillmentExtraction( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
 
                         const data = response.data
@@ -124,7 +163,7 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     })
 
-                await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd,  machineTypeIds, machineClassIds)
+                await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd,  machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
 
                         const data = response.data
@@ -205,7 +244,7 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     })
 
-                await TEPDataService.getDinamicsUnitCosts( dateStart, dateEnd, breakdownType, machineTypeIds, machineClassIds)
+                await TEPDataService.getDinamicsUnitCosts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
 
                         const labels = []
@@ -299,7 +338,7 @@ export const useTEPStore = defineStore("TEP", {
                 this.loadingChartStructureKFV = true
                 this.errorChartStructureKFV = false
 
-                const { breakdownType } = this.filterParams;
+                const { breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds } = this.filterParams;
                 let dateStart, dateEnd;
 
                 if (breakdownType === 'year') {
@@ -324,9 +363,7 @@ export const useTEPStore = defineStore("TEP", {
                     return;
                 }
 
-                const { machineClassIds, machineTypeIds } = this.filterParams;
-
-                await TEPDataService.getComparisonOfTargetAndActualUnitCosts(dateStart, dateEnd, machineTypeIds, machineClassIds)
+                await TEPDataService.getComparisonOfTargetAndActualUnitCosts(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
 
                         const data = response.data
