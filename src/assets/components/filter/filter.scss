@@ -1,0 +1,19 @@
+.filter-machine-details-list{
+    transition: all .3s;
+    &.open-list{
+        transform: rotate(180deg);
+    }
+}
+.machineTypes-delail{
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: all .3s;
+
+    > div {
+        overflow: hidden;
+    }
+
+    &.show-list{
+        grid-template-rows: 1fr;
+    }
+}

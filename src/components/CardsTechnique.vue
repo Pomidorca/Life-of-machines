@@ -65,16 +65,29 @@ const selectTechnique = (techniqueId) => {
 
 
 onMounted(() => {
-  loadStateFromLocalStorage();
 
-  if (!selectedTechniqueId.value && techniques.value.length > 0) {
-    const initialTechnique = techniques.value[0].id;
-    selectTechnique(initialTechnique);
-  } else if (selectedTechniqueId.value) {
-    selectTechnique(selectedTechniqueId.value);
+  const storedCardsTechnique = localStorage.getItem('CardsTechnique');
+  if (storedCardsTechnique) {
+    try {
+      const parsedCardsTechnique = JSON.parse(storedCardsTechnique);
+
+      if (typeof parsedCardsTechnique?.selectedTechniqueId === 'number') {
+        selectedTechniqueId.value = parsedCardsTechnique.selectedTechniqueId;
+      }
+    } catch (error) {
+      console.error('Ошибка при загрузке CardsTechnique из localStorage:', error);
+    }
   }
 
+  if (!selectedTechniqueId.value) {
+    selectedTechniqueId.value = 1;
+  }
+
+  console.log('selectedTechniqueId:', selectedTechniqueId.value);
+
+  selectTechnique(selectedTechniqueId.value);
 });
+
 
 
 watch(selectedTechniqueId, (newTechniqueId) => {
@@ -84,6 +97,7 @@ watch(selectedTechniqueId, (newTechniqueId) => {
 });
 
 const fetchTechniques = (machineClassIds) => {
+  machineStore.removeStatusFilter();
   machineStore.fetchMachines({ machineClassId: machineClassIds });
 };
 

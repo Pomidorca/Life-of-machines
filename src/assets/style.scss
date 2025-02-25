@@ -14,6 +14,9 @@
 @use "components/header";
 @use "components/info-technic";
 @use "components/filter";
+@use './components/adaptive-modal';
+@use './components/checkbox.scss';
+@use './components/filter/filter.scss';
 
 @tailwind base;
 @tailwind components;

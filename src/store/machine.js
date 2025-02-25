@@ -6,9 +6,15 @@ import MachineClassesDataService from '@/services/MachineClassesDataService';
 
 export const useMachineStore = defineStore('machine', {
     state: () => ({
+        machineClass: [],
         machineTypes: [],
+        machineMarks: [],
         selectedMachineType: null,
+        machineClassIds: [],
         selectedMachineTypeIds: [],
+        selectedMachineModelIds: [],
+        selectedMachineMarksIds: [],
+        selectedMachineIds: [],
         loading: false,
         error: null,
     }),
@@ -17,35 +23,71 @@ export const useMachineStore = defineStore('machine', {
             this.selectedMachineTypeIds = [];
             localStorage.setItem('selectedMachineTypeIds', JSON.stringify([]));
         },
+        saveStatusFilter() {
+            localStorage.setItem('selectedMachineModelIds', JSON.stringify(this.selectedMachineModelIds));
+            localStorage.setItem('selectedMachineMarkIds', JSON.stringify(this.selectedMachineMarksIds));
+            localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
+            localStorage.setItem('selectedMachineIds', JSON.stringify(this.selectedMachineIds));
+        },
+        removeStatusFilter(event) {
+
+            if (event === 'class') {
+                this.selectedMachineModelIds = [];
+                this.selectedMachineMarksIds = [];
+                this.selectedMachineIds = [];
+            }else if ((event === 'machineType')) {
+                this.machineClassIds = [];
+            } else {
+                this.selectedMachineModelIds = [];
+                this.selectedMachineMarksIds = [];
+                this.machineClassIds = [];
+                this.selectedMachineIds = [];
+            }
+        },
+
         async fetchMachines(filterParams) {
+
+            let machineClassId;
+
+            const storedCardsTechnique = localStorage.getItem('CardsTechnique');
+
+            if (storedCardsTechnique) {
+                const parsedCardsTechnique = JSON.parse(storedCardsTechnique);
+
+                machineClassId = parsedCardsTechnique.selectedTechniqueId;
+
+            } else {
+                machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1;
+            }
+
+            
             this.loading = true;
             this.error = null;
-            const {
-                machineClassId = 1
-            } = filterParams || {};
+            
             try {
-                await MachineClassesDataService.getMashineClasses(filterParams.machineClassId)
+
+                await MachineClassesDataService.getMashineClasses()
+                .then((response) => {
+                    
+                    this.machineClass = response.data
+                        
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.error = e;
+                })
+
+                await MachineClassesDataService.getMashineMarks(machineClassId)
                     .then((response) => {
-                        const data = response.data;
+                        
+                        this.machineMarks = response.data
 
-                        let machineTypes = [];
-                        if (machineClassId === 1) {
-                            const children = data.children.flatMap(child => child.children || []);
-                            machineTypes = children.flatMap(child => child.machineTypes || []);
-                        } else if (machineClassId >= 2) {
-                            machineTypes = data.machineTypes || [];
-                        } else {
-                            machineTypes = [];
-                            console.warm('Неизвестный machineClassId', machineClassId);
-                        }
-
-                        this.machineTypes = machineTypes;
-
-                        this.selectedMachineType = machineTypes[0];
-                    }).catch((e) => {
-                        console.log(e)
+                    })
+                    .catch((e) => {
+                        console.log(e);
                         this.error = e;
                     })
+
             } catch (error) {
                 this.error = error;
             } finally {
