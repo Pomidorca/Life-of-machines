@@ -13,10 +13,8 @@
 @use "components/adaptive-modal";
 @use "components/header";
 @use "components/info-technic";
-@use "components/filter";
-@use './components/adaptive-modal';
-@use './components/checkbox.scss';
-@use './components/filter/filter.scss';
+@use "components/filter/filter";
+@use 'components/checkbox';
 
 @tailwind base;
 @tailwind components;

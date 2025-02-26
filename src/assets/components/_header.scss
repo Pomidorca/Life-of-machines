@@ -69,9 +69,14 @@
           border-bottom-left-radius: 24px;
           a{
             height: 56px;
-          }
-          .active-link-enclosure{
-            color: $app-text-active;
+            span{
+              transition: all .3s;
+            }
+            &.router-link-exact-active{
+              span {
+                color: $app-text-active
+              }
+            }
           }
         }
         .indicator {

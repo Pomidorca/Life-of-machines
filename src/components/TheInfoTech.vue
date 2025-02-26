@@ -1,19 +1,20 @@
 <template>
-    <div class="wrapper-info-technic flex flex-col justify-between py-8 px-6">
+  <div class="wrapper-info-technic flex flex-col justify-between">
+    <div class="py-8 px-6">
       <div class="container-filter flex justify-between items-center">
         <div class="title-filter">
           Выберите машину
         </div>
-        <div class="structure-filter flex">
-          <div class="params-radio">
-            <input type="radio" id="structure" name="params-structure" checked>
-            <label for="structure">
-              Структура парка
-            </label>
-            <input type="radio" id="params" name="params-structure">
-            <label for="params">
-              Параметры парка
-            </label>
+        <div class="structure-filter">
+          <div class="params-radio flex">
+            <router-link :to="{ name: $route.name, params: { pageName: $route.params.pageName }, query: { mode: link.mode } }"
+                         v-for="(link, index) in getCurrentPageLinks"
+                         :key="link.text">
+              <input type="radio" :id="`url-` + index" name="params-structure" :checked="($route.query.mode || getCurrentPageLinks[0].mode) === link.mode">
+              <label :for="`url-` + index">
+                {{ link.text }}
+              </label>
+            </router-link>
           </div>
           <div class="button-info button-filter">
             <img src="/img/filter/filter-icon.svg" alt="">
@@ -23,22 +24,35 @@
           </div>
         </div>
       </div>
-      <div class="accordion-content" :class="{ 'accordion-active': showAccordion }">
-        <CardsTechnique />
-      </div>
     </div>
+    <div class="accordion-content" :class="{ 'accordion-active': showAccordion }">
+      <CardsTechnique />
+    </div>
+  </div>
 </template>
 <script>
+import { pages } from '@/utilities/pagesData.js'
 import CardsTechnique from './CardsTechnique.vue';
 
 export default {
   components: {
     CardsTechnique
   },
+  props: {
+    route: Object,
+    mode: String
+  },
   data() {
     return {
       showAccordion: true
     };
+  },
+  computed: {
+    getCurrentPageLinks() {
+      const currentPageName = this.$route.name;
+      const currentPage = pages.find(page => page.name === currentPageName);
+      return currentPage?.links || [];
+    }
   },
   methods: {
     toggleShowTechniques() {

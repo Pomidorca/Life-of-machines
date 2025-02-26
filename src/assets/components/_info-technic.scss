@@ -68,6 +68,28 @@
     transition: all .3s;
     & > div {
       overflow: hidden;
+      .item-technic{
+        width: 140px;
+        cursor: pointer;
+        > div{
+          transition: all .3s;
+          &:hover{
+            @apply bg-blue-200 rounded-xl duration-300;
+          }
+        }
+        img{
+          width: 96px;
+          height: 96px;
+        }
+        .item-technic-text{
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 18px;
+          text-align: center;
+          color: $app-text-title;
+          @include responsive-font( 14, 18 )
+        }
+      }
     }
     &.accordion-active{
       grid-template-rows: 1fr;

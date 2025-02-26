@@ -14,7 +14,7 @@
           <TheHeader />
         </div>
         <div class="content-wrapper w-full flex flex-col">
-          <TheInfoTech />
+          <TheInfoTech/>
           <div class="flex flex-1">
 <!--            <TheFilter />-->
             <div class="pl-6 container">
