@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <div class="accordion-content" :class="{ 'accordion-active': showAccordion }">
+    <div class="accordion-content flex" :class="{ 'accordion-active': showAccordion }">
       <CardsTechnique />
     </div>
   </div>

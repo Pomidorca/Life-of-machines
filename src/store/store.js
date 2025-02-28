@@ -132,6 +132,14 @@ const store = createStore({
                     repair: '0',
                     machineClassIds: 9
                 },
+                {
+                    id: 9,
+                    image: 'img/tech/6.svg',
+                    title: 'Погрузчики',
+                    total: '10',
+                    repair: '0',
+                    machineClassIds: 9
+                }
             ],
             selectedTechnique: null,
         }

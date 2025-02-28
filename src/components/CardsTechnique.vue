@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper-technic-statistics">
-    <div class="wrapper-technic flex">
-      <div v-for="technique in techniques" :key="technique.id" class="item-technic mx-4">
-        <div class="flex items-center justify-center gap-x-3.5 relative p-2"
+    <div class="wrapper-technic flex px-2">
+      <div v-for="technique in techniques" :key="technique.id" class="item-technic">
+        <div class="flex items-center justify-center relative"
              @click="fetchTechniques(technique.machineClassIds), selectTechnique(technique.machineClassIds)"
              :class="{ 'selected-technique': selectedTechniqueId === technique.id }">
-          <div class="flex flex-col items-center gap-y-0.5">
+          <div class="flex flex-col items-center">
             <img class=" bg-cover bg-center bg-no-repeat rounded-md" :src="technique.image" alt="tech"
                  loading="lazy">
-            <p class="item-technic-text">{{ technique.title }}</p>
+            <p class="item-technic-text py-3">{{ technique.title }}</p>
           </div>
   <!--        <div class="flex flex-col gap-y-2">-->
   <!--          <p class="flex items-center gap-x-1 font-medium text-[#0554F2] leading-5"><img src="/img/tech/Check Circle.svg">-->
@@ -19,8 +19,20 @@
         </div>
       </div>
     </div>
-    <div class="wrapper-statistics">
-      content
+    <div class="wrapper-statistics grid grid-cols-2 py-8 px-6">
+      <div class="container-working-techniques">
+        <div class="chart-working-techniques"></div>
+        <div class="text-working-techniques">
+          Рабочие
+        </div>
+      </div>
+      <div class="container-out-of-order-techniques">
+        <div class="chart-out-of-order-techniques"></div>
+        <div class="text-out-of-order-techniques">
+          Вне сторя
+        </div>
+      </div>
+      {{ getActiveTechnique }}
     </div>
   </div>
 </template>
@@ -54,7 +66,8 @@ const loadStateFromLocalStorage = () => {
 };
 
 const getActiveTechnique = computed(() => {
-  // const activeTechnique = techniques.value.find
+  const activeTechnique = techniques.value.find(technique => technique.id === selectedTechniqueId.value)
+  return activeTechnique || 'Не найдено';
 })
 
 const saveToLocalStorage = () => {
