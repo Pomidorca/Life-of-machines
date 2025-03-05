@@ -96,7 +96,7 @@ const barTurnedTwoData = computed(() => activeStore.barTurnedTwoDate);
 
 
 onMounted(async () => {
-  await activeStore.fetchData();
+  // await activeStore.fetchData();
   await kfvStore.fetchKFV();
 });
 </script>

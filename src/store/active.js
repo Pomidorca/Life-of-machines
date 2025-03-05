@@ -112,6 +112,7 @@ export const useActiveStore = defineStore('active', {
             });
         },
         async fetchData() {
+            console.log('active модуль', this.filterParams, localStorage.getItem('selectedMachineMarkIds'), localStorage.getItem('selectedMachineTypeIds'))
             this.loadFilterParamsFromLocalStorage();
             this.loading = true;
             this.error = null;
@@ -151,6 +152,7 @@ export const useActiveStore = defineStore('active', {
 
                 await ActiveDataService.getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
+
                         this.changeStructureDate = transformchangeStructuredate(response.data);
                     })
                     .catch((e) => {
@@ -160,6 +162,7 @@ export const useActiveStore = defineStore('active', {
 
                 await ActiveDataService.getWorkDistribution(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
+
                         this.barTurnedTwoDate = transformbarTurnedTwoDate(response.data);
                     })
                     .catch((e) => {
@@ -212,14 +215,6 @@ function transformLinedate(data) {
             stack: 'stack0'
         },
         {
-            label: 'Поддерживающее',
-            data: data.map(item => item.support),
-            borderColor: '#3c6f9f',
-            backgroundColor: '#3c6f9f',
-            fill: true,
-            stack: 'stack0'
-        },
-        {
             label: 'Вспомогательное',
             data: data.map(item => item.auxiliary),
             borderColor: '#7e9abf',
@@ -232,7 +227,7 @@ function transformLinedate(data) {
 
     const totalDataset = {
         label: 'Итого',
-        data: data.map(item => item.main + item.support + item.auxiliary),
+        data: data.map(item => item.sum),
         borderColor: '#0554F2',
         pointStyle: 'circle',
         backgroundColor: '#282b41',
@@ -240,6 +235,7 @@ function transformLinedate(data) {
         fill: false,
     };
 
+    console.log(totalDataset)
     if (totalDataset.data.every(value => value === 0)) {
         return {
             labels: [],
@@ -318,7 +314,7 @@ function transformbarTurnedTwoDate(data) {
 }
 
 function transformbarTurnedDate(data) {
-    const labels = ['Добычные работы', 'Вскрышные работы', 'Дополнительные работы'];
+    const labels = ['Основное оборудование', 'Вспомогательное оборудование'];
     const datasets = [{
             label: 'Средний срок службы',
             data: [data.mainAvgAge, data.supportAvgAge, data.auxiliaryAvgAge],

@@ -91,19 +91,6 @@
         </div>
       </div>
       <div v-else>
-        <div class="flex items-center w-full justify-between mb-3">
-          <div class="flex gap-x-2">
-            <input class="check-input" type="checkbox" id="select-all" @change="toggleSelectAllClass" :checked="isAllSelectedClass">
-            <label for="select-all">
-              <div class="checkbox">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1 11C1 6.28595 1 3.92893 2.46447 2.46447C3.92893 1 6.28595 1 11 1C15.714 1 18.0711 1 19.5355 2.46447C21 3.92893 21 6.28595 21 11C21 15.714 21 18.0711 19.5355 19.5355C18.0711 21 15.714 21 11 21C6.28595 21 3.92893 21 2.46447 19.5355C1 18.0711 1 15.714 1 11Z" stroke="#001233" stroke-opacity="0.6" stroke-width="1.5"/>
-                  </svg>
-              </div>
-              <p class="text-[#979DAC]">Выбрать все</p>
-            </label>
-          </div>
-        </div>
         <div v-for="machineClass in machineStore.machineClass">
           <div class="flex items-center w-full justify-between mb-3">
             <div class="flex gap-x-2">
@@ -239,8 +226,6 @@ watch(selectedMachineClassIds, () => {
 
     // problem
 
-    machineStore.removeStatusFilter('class')
-
     const allClassesSelected = machineClass.children.every(children => selectedMachineModelIds.value.includes(children.id));
 
         // Commented out before fix structure API request 
@@ -295,19 +280,19 @@ const selectedMachineIds = computed({
   },
 });
 
-const loadSelectedMachineFilter = () => {
-  const storedMarksIds = localStorage.getItem('selectedMachineMarkIds');
-  const storedModelIds = localStorage.getItem('selectedMachineModelIds');
-  if (storedMarksIds) {
-    try {
-      machineStore.selectedMachineMarksIds = JSON.parse(storedMarksIds);
-      machineStore.selectedMachineModelIds = JSON.parse(storedModelIds)
-      
-    } catch (error) {
-      console.error('Ошибка при загрузке selectedMachineMarkIds из localStorage:', error);
-    }
-  }
-}
+// const loadSelectedMachineFilter = () => {
+//   const storedMarksIds = localStorage.getItem('selectedMachineMarkIds');
+//   const storedModelIds = localStorage.getItem('selectedMachineModelIds');
+//   if (storedMarksIds) {
+//     try {
+//       machineStore.selectedMachineMarksIds = JSON.parse(storedMarksIds);
+//       machineStore.selectedMachineModelIds = JSON.parse(storedModelIds)
+//
+//     } catch (error) {
+//       console.error('Ошибка при загрузке selectedMachineMarkIds из localStorage:', error);
+//     }
+//   }
+// }
 
 const isMarkSelected = (machineMark) => {
   
@@ -342,29 +327,19 @@ const toggleMark = (machineMark) => {
 
 
 const toggleModelMachines = (machineModel) => {
+  const isModelSelected = machineStore.selectedMachineModelIds.includes(machineModel.id);
 
-  machineStore.machineMarks.forEach(machineMark => {
-
-    machineMark.models.forEach(machineModel => {
-
-      if (machineStore.selectedMachineModelIds.includes(machineModel.id)) {
-
-        machineModel.machines.forEach(machine => {
-          if (!machineStore.selectedMachineIds.includes(machine.id)) {
-            machineStore.selectedMachineIds.push(machine.id);
-          }
-        });
-      } else {
-
-        machineModel.machines.forEach(machine => {
-          if (machineStore.selectedMachineIds.includes(machine.id)) {
-
-            machineStore.selectedMachineIds = machineStore.selectedMachineIds.filter(machineId => machineId !== machine.id);
-          }
-        });
+  if (isModelSelected) {
+    machineModel.machines.forEach(machine => {
+      if (!machineStore.selectedMachineIds.includes(machine.id)) {
+        machineStore.selectedMachineIds.push(machine.id);
       }
     });
-  });
+  } else {
+    machineModel.machines.forEach(machine => {
+      machineStore.selectedMachineIds = machineStore.selectedMachineIds.filter(id => id !== machine.id);
+    });
+  }
 };
 
 const isMachinesSelected = (machineWithInventoryNumber) => {
@@ -424,15 +399,18 @@ watch(selectedMachineModelIds, () => {
 }, { deep: true });
 
 watch(
-  [selectedMachineIds, selectedMachineMarkIds, selectedMachineModelIds, selectedMachineClassIds],
-  () => {
+    [selectedMachineIds],
+    async () => {
+      if (machineStore.loading) return
 
-    machineStore.saveStatusFilter();
-
-    saveStateToStorage();
-  },
-  { deep: true }
+      console.log('request', selectedMachineIds.value, selectedMachineMarkIds.value, selectedMachineModelIds.value, selectedMachineClassIds.value);
+      console.log('request')
+      await machineStore.saveStatusFilter();
+      await saveStateToStorage();
+    },
+    { deep: true }
 );
+
 
 const toggleShowDetail = (machineMark) => {
   if (openedMachineMarkId.value === machineMark.id) {
@@ -502,6 +480,9 @@ const toggleSelectAll = () => {
 };
 
 const saveStateToStorage = () => {
+    localStorage.setItem('selectedMachineMarkIds', JSON.stringify(selectedMachineMarkIds.value));
+    localStorage.setItem('selectedMachineModelIds', JSON.stringify(selectedMachineModelIds.value));
+    localStorage.setItem('selectedMachineIds', JSON.stringify(selectedMachineIds.value));
     localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
     activeStore.updateFilterParams({
         machineTypeIds: selectedMachineTypeIds.value,
@@ -553,11 +534,26 @@ const handleClick = (machineType) => {
     }
 };
 
-onMounted(() => {
-    machineStore.fetchMachines();
-    loadStateFromStorage();
-    loadStateFromLocalStorage();
-    loadSelectedMachineFilter();
+onMounted(async () => {
+  const machineClassIds = localStorage.getItem('selectedMachineTypeIds') || 1;
+  await machineStore.fetchMachines({ machineClassId: machineClassIds });
+  loadStateFromStorage();
+  loadStateFromLocalStorage();
+  // loadSelectedMachineFilter();
+
+  const storedMarkIds = localStorage.getItem('selectedMachineMarkIds');
+  const storedModelIds = localStorage.getItem('selectedMachineModelIds');
+  const storedMachineIds = localStorage.getItem('selectedMachineIds');
+
+  if (storedMarkIds) {
+    machineStore.selectedMachineMarksIds = JSON.parse(storedMarkIds);
+  }
+  if (storedModelIds) {
+    machineStore.selectedMachineModelIds = JSON.parse(storedModelIds);
+  }
+  if (storedMachineIds) {
+    machineStore.selectedMachineIds = JSON.parse(storedMachineIds);
+  }
 });
 
 watch(
@@ -571,5 +567,5 @@ watch(
   }
 );
 
-watch([selectedMachineTypeIds], saveStateToStorage, { deep: true });
+// watch([selectedMachineTypeIds], saveStateToStorage, { deep: true });
 </script>
