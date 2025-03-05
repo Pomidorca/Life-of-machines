@@ -127,6 +127,7 @@ export const useKFVStore = defineStore("KFV", {
                     })
                     .catch((e) => {
                         console.log(e)
+                        throw new Error(e)
                     })
                 await CTFDataService.getYearly(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
@@ -134,6 +135,7 @@ export const useKFVStore = defineStore("KFV", {
                     })
                     .catch((e) => {
                         console.log(e)
+                        throw new Error(e)
                     })
 
                 await CTFDataService.getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
@@ -142,6 +144,7 @@ export const useKFVStore = defineStore("KFV", {
                     })
                     .catch((e) => {
                         console.log(e)
+                        throw new Error(e)
                     })
 
         

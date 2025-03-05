@@ -252,6 +252,17 @@ export const StructureKFVOptions = {
             font: {
                 size: 20
             }
+        },
+        tooltip: {
+            enabled: true
+        },
+
+    },
+    scales: {
+        r: {
+            ticks: {
+                display: false
+            }
         }
     }
 }
