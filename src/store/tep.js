@@ -395,11 +395,13 @@ export const useTEPStore = defineStore("TEP", {
 
                         objectComparisonOfTargetAndActualUnitCosts.labels = labels
 
+                        const rusName = ['цель', 'факт']
+
                         costTypes.forEach((type, index) => {
                             const colorIndex = index % this.colors.length;
 
                             objectComparisonOfTargetAndActualUnitCosts.datasets.push({
-                                label: type,
+                                label: rusName[index],
                                 backgroundColor: this.colors[colorIndex].opacity,
                                 borderColor: this.colors[colorIndex].background,
                                 pointBackgroundColor: this.colors[colorIndex].background,

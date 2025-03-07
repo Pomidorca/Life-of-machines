@@ -47,10 +47,18 @@ export const useMachineStore = defineStore('machine', {
 
             } else {
                 this.machineClass.forEach(machineClass => {
+                    if (!this.machineClassIds.includes(machineClass.id)) {
+                        this.machineClassIds.push(machineClass.id);
+                    }
                     machineClass.children.forEach(children => {
                         if (!this.machineClassIds.includes(children.id)) {
                             this.machineClassIds.push(children.id);
                         }
+                        children.children.forEach(child => {
+                            if (!this.machineClassIds.includes(child.id)) {
+                                this.machineClassIds.push(child.id);
+                            }
+                        })
                     });
                 });
             }

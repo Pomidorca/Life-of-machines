@@ -91,50 +91,7 @@
         </div>
       </div>
       <div v-else>
-        <div v-for="machineClass in machineStore.machineClass">
-          <div class="flex items-center w-full justify-between mb-3">
-            <div class="flex gap-x-2">
-              <input
-                type="checkbox"
-                class="check-input"
-                :id="machineClass.id"
-                :value="machineClass.id"
-                v-model="selectedMachineClassIds"
-                
-              />
-              <label :for="machineClass.id">
-                  <div class="checkbox">
-                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M1 11C1 6.28595 1 3.92893 2.46447 2.46447C3.92893 1 6.28595 1 11 1C15.714 1 18.0711 1 19.5355 2.46447C21 3.92893 21 6.28595 21 11C21 15.714 21 18.0711 19.5355 19.5355C18.0711 21 15.714 21 11 21C6.28595 21 3.92893 21 2.46447 19.5355C1 18.0711 1 15.714 1 11Z" stroke="#001233" stroke-opacity="0.6" stroke-width="1.5"/>
-                      </svg>
-                  </div>
-                  <p class="text-[#979DAC]">{{ machineClass.name }}</p>
-              </label>
-            </div>
-            <img @click="toggleShowDetailClass(machineClass)" v-if="machineClass.children && machineClass.children.length > 0" class="filter-machine-details-list" :class="{ 'open-list': openedMachineClassId === machineClass.id }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
-          </div>
-          <div v-if="machineClass.children && machineClass.children.length > 0" class="machineTypes-delail" :class="{ 'show-list': openedMachineClassId === machineClass.id }">
-            <div>
-              <div v-for=" children in machineClass.children" class=" ms-3 mb-3">
-              <input
-                type="checkbox"
-                class="check-input"
-                :id="children.id"
-                :value="children.id"
-                v-model="selectedMachineClassIds"
-              />
-              <label :for="children.id">
-                  <div class="checkbox">
-                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M1 11C1 6.28595 1 3.92893 2.46447 2.46447C3.92893 1 6.28595 1 11 1C15.714 1 18.0711 1 19.5355 2.46447C21 3.92893 21 6.28595 21 11C21 15.714 21 18.0711 19.5355 19.5355C18.0711 21 15.714 21 11 21C6.28595 21 3.92893 21 2.46447 19.5355C1 18.0711 1 15.714 1 11Z" stroke="#001233" stroke-opacity="0.6" stroke-width="1.5"/>
-                      </svg>
-                  </div>
-                  <p class="text-[#979DAC]">{{ children.name }}</p>
-              </label>
-            </div>
-            </div>
-          </div>
-        </div>
+        <MachineClassComponent v-for="( item ) in machineStore.machineClass" :key="item.id" :machine-class="item" />
       </div>
     </div>
   </div>
@@ -146,6 +103,7 @@ import { onMounted, watch, ref, computed } from 'vue';
 import { useActiveStore } from '@/store/active';
 import { useKFVStore } from '@/store/kfv';
 import { useTEPStore } from "@/store/tep.js";
+import MachineClassComponent from '@/components/machineClassComponent.vue'
 
 const machineStore = useMachineStore();
 const activeStore = useActiveStore();
