@@ -79,7 +79,7 @@ const store = createStore({
             techniques: [{
                     id: 1,
                     image: 'img/tech/alltech.svg',
-                    title: 'Все машины',
+                    title: 'Весь парк',
                     total: '173',
                     repair: '15',
                     machineClassIds: 1

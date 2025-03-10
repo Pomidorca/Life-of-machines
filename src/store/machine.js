@@ -23,14 +23,57 @@ export const useMachineStore = defineStore('machine', {
             this.selectedMachineTypeIds = [];
             localStorage.setItem('selectedMachineTypeIds', JSON.stringify([]));
         },
+        selectAllMachines(typeTechnique) {
+
+            if (parseInt(typeTechnique) !== 1) {
+                this.machineMarks.forEach(machineMark => {
+
+                    if (!this.selectedMachineMarksIds.includes(machineMark.id)) {
+                        this.selectedMachineMarksIds.push(machineMark.id);
+                    }
+
+                    machineMark.models.forEach(machineModel => {
+                        if (!this.selectedMachineModelIds.includes(machineModel.id)) {
+                            this.selectedMachineModelIds.push(machineModel.id);
+                        }
+
+                        machineModel.machines.forEach(machine => {
+                            if (!this.selectedMachineIds.includes(machine.id)) {
+                                this.selectedMachineIds.push(machine.id);
+                            }
+                        });
+                    });
+                });
+
+            } else {
+                this.machineClass.forEach(machineClass => {
+                    if (!this.machineClassIds.includes(machineClass.id)) {
+                        this.machineClassIds.push(machineClass.id);
+                    }
+                    machineClass.children.forEach(children => {
+                        if (!this.machineClassIds.includes(children.id)) {
+                            this.machineClassIds.push(children.id);
+                        }
+                        children.children.forEach(child => {
+                            if (!this.machineClassIds.includes(child.id)) {
+                                this.machineClassIds.push(child.id);
+                            }
+                        })
+                    });
+                });
+            }
+            this.saveStatusFilter()
+
+        },
         saveStatusFilter() {
             localStorage.setItem('selectedMachineModelIds', JSON.stringify(this.selectedMachineModelIds));
             localStorage.setItem('selectedMachineMarkIds', JSON.stringify(this.selectedMachineMarksIds));
             localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
             localStorage.setItem('selectedMachineIds', JSON.stringify(this.selectedMachineIds));
+
         },
         removeStatusFilter(event) {
-
+            // console.log('в remove', this.selectedMachineMarksIds, event)
             if (event === 'class') {
                 this.selectedMachineModelIds = [];
                 this.selectedMachineMarksIds = [];
@@ -47,19 +90,12 @@ export const useMachineStore = defineStore('machine', {
 
         async fetchMachines(filterParams) {
 
-            let machineClassId;
+            let machineClassId = filterParams.machineClassId || parseInt(localStorage.getItem('selectedMachineTypeIds'));
 
-            const storedCardsTechnique = localStorage.getItem('CardsTechnique');
-
-            if (storedCardsTechnique) {
-                const parsedCardsTechnique = JSON.parse(storedCardsTechnique);
-
-                machineClassId = parsedCardsTechnique.selectedTechniqueId;
-
-            } else {
+            if (!machineClassId) {
                 machineClassId = filterParams && filterParams.machineClassId ? filterParams.machineClassId : 1;
-            }
 
+            }
             
             this.loading = true;
             this.error = null;
@@ -76,8 +112,8 @@ export const useMachineStore = defineStore('machine', {
                     console.log(e);
                     this.error = e;
                 })
-
-                await MachineClassesDataService.getMashineMarks(machineClassId)
+                console.log('in the function:', filterParams.machineClassId)
+                await MachineClassesDataService.getMashineMarks( filterParams.machineClassId)
                     .then((response) => {
                         
                         this.machineMarks = response.data
@@ -88,10 +124,17 @@ export const useMachineStore = defineStore('machine', {
                         this.error = e;
                     })
 
+                // await this.selectAllMachines()
+
             } catch (error) {
                 this.error = error;
             } finally {
-                this.loading = false;
+                this.removeStatusFilter( localStorage.getItem(this.selectedMachineTypeIds === 1 ? 'class' : ''))
+
+                this.selectAllMachines(machineClassId);
+                setTimeout(() => {
+                    this.loading = false;
+                }, 1000)
             }
         },
         selectMachineType(machineType) {

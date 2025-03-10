@@ -72,19 +72,33 @@ const getActiveTechnique = computed(() => {
 
 const saveToLocalStorage = () => {
   localStorage.setItem('CardsTechnique', JSON.stringify({ selectedTechniqueId: selectedTechniqueId.value }));
+  localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedTechniqueId.value));
 };
 
 const selectTechnique = (techniqueId) => {
   if (!techniqueId) return;
   selectedTechniqueId.value = techniqueId;
+  saveToLocalStorage();
   activeStore.updateFilterParams({ machineClassIds: techniqueId });
   kfvStore.updateFilterParams({ machineClassIds: techniqueId });
   tepStore.updateFilterParams({ machineClassIds: techniqueId });
-  saveToLocalStorage();
-  activeStore.fetchData();
+
+  // activeStore.fetchData();
 
 };
 
+const selectedMachineTypeIds = computed({
+  get() {
+    return machineStore.selectedMachineTypeIds
+  },
+  set(value) {
+    machineStore.selectedMachineTypeIds = value
+  },
+});
+
+const saveStateToStorage = () => {
+  localStorage.setItem('selectedMachineTypeIds', JSON.stringify(selectedMachineTypeIds.value));
+};
 
 onMounted(() => {
 
@@ -105,22 +119,28 @@ onMounted(() => {
     selectedTechniqueId.value = 1;
   }
 
-  console.log('selectedTechniqueId:', selectedTechniqueId.value);
-
   selectTechnique(selectedTechniqueId.value);
 });
 
 
 
-watch(selectedTechniqueId, (newTechniqueId) => {
-  if (newTechniqueId) {
-    fetchTechniques(newTechniqueId);
-  }
-});
+// watch(selectedTechniqueId, (newTechniqueId) => {
+//   if (newTechniqueId) {
+//
+//     fetchTechniques(newTechniqueId);
+//   }
+// });
 
-const fetchTechniques = (machineClassIds) => {
+const fetchTechniques = async (machineClassIds) => {
+  console.log(machineClassIds)
+  saveStateToStorage();
+
   machineStore.removeStatusFilter();
-  machineStore.fetchMachines({ machineClassId: machineClassIds });
+
+  await machineStore.fetchMachines({ machineClassId: machineClassIds });
+  selectTechnique(machineClassIds);
+  console.log('click');
 };
+
 
 </script>
