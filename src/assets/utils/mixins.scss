@@ -1,3 +1,4 @@
+@use "./variables" as *;
 $maxWidth: 1280;
 
 @mixin responsive-font($min-font, $max-font, $maxWidth: 1920) {
@@ -8,4 +9,10 @@ $maxWidth: 1280;
           calc(#{$min-font + px} + #{$intermediateSize} * ((100vw - 320px) / #{$maxWidth})),
           #{$max-font + px}
   ) !important;
+}
+
+@mixin chart-element() {
+  background: $app-bg-secondary;
+  border-radius: 24px;
+  padding: 20px;
 }

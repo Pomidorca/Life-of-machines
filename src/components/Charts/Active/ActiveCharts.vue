@@ -4,16 +4,16 @@
       <div v-if="loading">Загрузка...</div>
       <div v-else-if="error">Ошибка: {{ error }}</div>
       <div v-else class="grid grid-cols-2 gap-6">
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+        <div class="element-chart">
           <Line :options="LineOptions" :data="lineDate" />
         </div>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+        <div class="element-chart">
           <Line :options="changeStructureOptions" :data="changeStructureData" />
         </div>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+        <div class="element-chart">
           <Bar :options="barOptionsTurnedTwo" :data="barTurnedTwoData" />
         </div>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+        <div class="element-chart">
           <Bar :options="barOptionsTurned" :data="barTurnedData" />
         </div>
       </div>

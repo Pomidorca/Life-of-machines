@@ -2,7 +2,7 @@
   <div class="wrapper-filter-modal" :class="{ 'active-filter': monitorStatusModal }">
     <div class="modal-overlay" @click.self="closeModal">
     </div>
-    <div class="modal-content">
+    <div class="modal-content flex flex-col">
       <div class="modal-content-header flex justify-between items-center">
         <span class="title">
           Фильтры
@@ -11,7 +11,7 @@
           <img src="/img/filter/icon-close.svg">
         </div>
       </div>
-      <div class="modal-content-body">
+      <div class="modal-content-body flex-1">
         <TheFilter/>
       </div>
     </div>

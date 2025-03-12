@@ -16,8 +16,7 @@
         <div class="content-wrapper w-full flex flex-col">
           <TheInfoTech/>
           <div class="flex flex-1">
-<!--            <TheFilter />-->
-            <div class="pl-6 container">
+            <div class="container mt-6">
               <div>
                 <router-view />
               </div>

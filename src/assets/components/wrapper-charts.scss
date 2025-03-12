@@ -1,0 +1,5 @@
+@use "@/assets/utils/styles-forwarded" as *;
+
+.element-chart{
+  @include chart-element;
+}

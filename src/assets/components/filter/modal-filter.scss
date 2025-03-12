@@ -79,6 +79,41 @@
         -moz-appearance: textfield;
         padding: 10px;
         border: 1px solid #ccc;
+        width: 100%;
+        border-radius: 24px;
+      }
+      .wrapper-border-line{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .border-line{
+          width: 24px;
+          height: 1px;
+          background: $app-text-secondary;
+        }
+      }
+      .all-time-button{
+        width: 100%;
+        border: 2px solid $app-bg-primary;
+        background: $app-bg-primary;
+        color: $app-text-inside;
+        border-radius: 24px;
+        transition: all .3s;
+        &:hover{
+          background: $app-bg-secondary;
+          color: $app-bg-primary;
+        }
+      }
+      .send-button{
+        width: 100%;
+        border: 2px solid $app-bg-primary;
+        color: $app-bg-primary;
+        border-radius: 24px;
+        transition: all .3s;
+        &:hover{
+          background: $app-bg-primary;
+          color: $app-text-inside;
+        }
       }
     }
   }

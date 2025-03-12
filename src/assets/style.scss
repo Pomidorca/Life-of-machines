@@ -15,7 +15,8 @@
 @use "components/info-technic";
 @use "components/filter/filter";
 @use "components/filter/modal-filter";
-@use 'components/checkbox';
+@use "components/checkbox";
+@use "components/wrapper-charts";
 
 @tailwind base;
 @tailwind components;
