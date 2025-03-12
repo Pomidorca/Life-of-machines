@@ -1,0 +1,117 @@
+@use '@/assets/utils/styles-forwarded' as *;
+
+.wrapper-filter-modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  visibility: hidden;
+  transition: all .3s;
+  .modal-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all .5s;
+  }
+  .modal-content {
+    background: $app-bg-secondary;
+    height: 100vh;
+    width: 500px;
+    padding: 40px 32px 40px 24px;
+    transform: translateX(100%);
+    transition: all .5s;
+    .modal-content-header{
+      margin-bottom: 40px;
+      .title{
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: 0;
+        color: $app-text-title;
+
+        @include responsive-font(24, 32)
+      }
+      .button-close{
+        cursor: pointer;
+      }
+    }
+    .modal-content-body{
+      .title-technique{
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 24px;
+        color: $app-text-title;
+
+        @include responsive-font(18, 20)
+      }
+      .wrapper-technic-window{
+        height: 350px;
+      }
+      .item-type-time-range{
+        font-weight: 600;
+        line-height: 130%;
+        letter-spacing: 0;
+        padding: 8px 0;
+        text-align: center;
+        border: 1px solid $app-text-secondary;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all .3s;
+
+        color: $app-text-secondary;
+
+        @include responsive-font(14, 16);
+        &.active{
+          background: $app-text-active;
+          color: $app-text-inside;
+          border: none;
+        }
+      }
+      input[type="date"] {
+        appearance: none;
+        -moz-appearance: textfield;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+  &.active-filter{
+    visibility: visible;
+    .modal-overlay{
+      opacity: 1;
+      transition: all .5s;
+    }
+    .modal-content {
+      transform: translateX(0%);
+      transition: all .5s;
+    }
+  }
+}
+
+.custom-date-picker {
+  position: relative;
+}
+
+.datepicker {
+  appearance: none; /* Убираем стандартный стиль */
+  -moz-appearance: textfield; /* Для Firefox */
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.calendar-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}

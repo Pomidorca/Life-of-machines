@@ -19,20 +19,51 @@
         </div>
       </div>
     </div>
-    <div class="wrapper-statistics grid grid-cols-2 py-8 px-6">
+    <div class="wrapper-statistics grid grid-cols-2 gap-6 pb-6 pt-4 px-6">
       <div class="container-working-techniques">
-        <div class="chart-working-techniques"></div>
-        <div class="text-working-techniques">
-          Рабочие
+        <div class="chart-working-techniques flex justify-between items-center">
+          <div class="chart-working-techniques-selected" :style="{ width: workingWidth }">
+            <div class="indicator-percentages text-center">
+              {{ workingWidth }}
+            </div>
+          </div>
+          <div v-if="workingWidth !== '100%'" class="chart-divider"></div>
+          <div class="chart-working-techniques-secondary" :style="{ width: repairWidth }"></div>
+        </div>
+        <div class="text-working-techniques flex justify-between items-center">
+          <div class="text-working-techniques-title">
+            Рабочие
+          </div>
+          <div class="text-working-techniques-statistic">
+            <span class="text-positive">
+              {{ getActiveTechnique.total }}
+            </span>
+            / {{ getActiveTechnique.repair }}
+          </div>
         </div>
       </div>
       <div class="container-out-of-order-techniques">
-        <div class="chart-out-of-order-techniques"></div>
-        <div class="text-out-of-order-techniques">
-          Вне сторя
+        <div class="chart-out-of-order-techniques flex justify-between items-center">
+          <div class="chart-out-of-order-techniques-selected" :style="{ width: repairWidth }">
+            <div class="indicator-percentages text-center">
+              {{ repairWidth }}
+            </div>
+          </div>
+          <div v-if="repairWidth !== '100%'" class="chart-divider"></div>
+          <div class="chart-out-of-order-techniques-secondary" :style="{ width: workingWidth }"></div>
+        </div>
+        <div class="text-out-of-order-techniques flex justify-between items-center">
+          <div class="text-out-of-order-techniques-title">
+            Вне сторя
+          </div>
+          <div class="text-out-of-order-techniques-statistic">
+            <span class="text-negative">
+              {{ getActiveTechnique.repair }}
+            </span>
+            / {{ getActiveTechnique.total }}
+          </div>
         </div>
       </div>
-      {{ getActiveTechnique }}
     </div>
   </div>
 </template>
@@ -64,6 +95,26 @@ const loadStateFromLocalStorage = () => {
     }
   }
 };
+
+const workingWidth = computed(() => {
+  if (!getActiveTechnique.value || !getActiveTechnique.value.total) return '0%';
+
+  const total = parseInt(getActiveTechnique.value.total);
+  const repair = parseInt(getActiveTechnique.value.repair || 0);
+  const working = total - repair;
+
+
+  return `${Math.round((working / total) * 100)}%`;
+})
+
+const repairWidth = computed(() => {
+  if (!getActiveTechnique.value || !getActiveTechnique.value.total) return '0%';
+
+  const total = parseInt(getActiveTechnique.value.total);
+  const repair = parseInt(getActiveTechnique.value.repair || 0);
+
+  return `${Math.round((repair / total) * 100)}%`;
+})
 
 const getActiveTechnique = computed(() => {
   const activeTechnique = techniques.value.find(technique => technique.id === selectedTechniqueId.value)

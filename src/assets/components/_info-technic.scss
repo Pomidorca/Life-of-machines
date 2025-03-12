@@ -94,12 +94,11 @@
           height: 96px;
         }
         .item-technic-text{
-          font-weight: 500;
-          font-size: 16px;
+          font-weight: 600;
           line-height: 18px;
           text-align: center;
           color: $app-text-title;
-          @include responsive-font( 14, 18 )
+          @include responsive-font( 14, 16 )
         }
       }
     }
@@ -112,6 +111,93 @@
       overflow-x: auto;
       overflow-y: hidden;
       border-bottom: 1px solid $app-bg-global;
+    }
+    .wrapper-statistics{
+      .container-working-techniques, .container-out-of-order-techniques{
+        .chart-working-techniques, .chart-out-of-order-techniques{
+          & > div{
+            position: relative;
+            transition: all .3s;
+            user-select: none;
+            .indicator-percentages{
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: absolute;
+              height: 28px;
+              width: 44px;
+              top: calc(50% - 14px);
+              right: calc( 0% + 2px );
+              background: #FFFFFF40;
+              border: .5px solid #FFFFFF80;
+              border-radius: 8px;
+              color: $app-text-inside;
+              font-weight: 400;
+              line-height: 130%;
+
+              cursor: pointer;
+
+              transition: all .3s;
+              @include responsive-font(12, 14)
+            }
+          }
+          & > .chart-working-techniques-selected {
+            height: 32px;
+            min-width: 48px;
+            background: $app-bg-positive;
+            border-radius: 8px;
+          }
+
+          & > .chart-out-of-order-techniques-selected {
+            height: 32px;
+            min-width: 48px;
+            background: $app-bg-negative;
+            border-radius: 8px;
+          }
+
+          & > .chart-working-techniques-secondary, .chart-out-of-order-techniques-secondary {
+            height: 32px;
+            background: #E5E6EA;
+            border-radius: 8px;
+          }
+
+          .chart-divider {
+            width: 1px;
+            height: 10px;
+            border-radius: 8px;
+            background-color: $app-text-secondary;
+            margin: 0 2px;
+          }
+        }
+        .text-working-techniques, .text-out-of-order-techniques{
+          .text-working-techniques-title, .text-out-of-order-techniques-title{
+            font-weight: 600;
+            line-height: 130%;
+            letter-spacing: 0;
+            color: $app-text-title;
+
+            @include responsive-font(12, 16);
+          }
+          .text-working-techniques-statistic, .text-out-of-order-techniques-statistic{
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: 0;
+            color: $app-text-secondary;
+
+            @include responsive-font(12, 16);
+
+            .text-positive{
+              font-weight: 600;
+              color: $app-bg-positive;
+            }
+
+            .text-negative{
+              font-weight: 600;
+              color: $app-bg-negative;
+            }
+          }
+        }
+      }
     }
   }
 }

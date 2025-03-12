@@ -37,7 +37,7 @@
                   <p class="text-[#979DAC]">{{ machineMark.name }}</p>
               </label>
             </div>
-            <img v-if="machineMark.models && machineMark.models.length > 0" @click="toggleShowDetail(machineMark)" class="filter-machine-details-list" :class="{ 'open-list': openedMachineMarkId === machineMark.id }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
+            <img v-if="machineMark.models && machineMark.models.length > 0" @click="toggleShowDetail(machineMark)" class="filter-machine-details-list cursor-pointer" :class="{ 'open-list': openedMachineMarkId === machineMark.id }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
           </div>
           <div v-if="machineMark.models && machineMark.models.length > 0" class="machineTypes-delail" :class="{ 'show-list': openedMachineMarkId === machineMark.id }">
             <div>
@@ -61,7 +61,7 @@
                       <p class="text-[#979DAC]">{{ machineModel.name }}</p>
                     </label>
                   </div>
-                  <img v-if="machineModel.machines && machineModel.machines.length > 0" @click="toggleShowDetailInventoryNumber(machineModel)" class="filter-machine-details-list" :class="{ 'open-list': openedMachineId === machineModel.id }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
+                  <img v-if="machineModel.machines && machineModel.machines.length > 0" @click="toggleShowDetailInventoryNumber(machineModel)" class="filter-machine-details-list cursor-pointer" :class="{ 'open-list': openedMachineId === machineModel.id }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
                 </div>
                 <div v-if="machineModel.machines && machineModel.machines.length > 0" class="machineTypes-delail" :class="{ 'show-list': openedMachineId === machineModel.id }">
                   <div>

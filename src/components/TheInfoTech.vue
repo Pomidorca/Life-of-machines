@@ -16,7 +16,7 @@
               </label>
             </router-link>
           </div>
-          <div class="button-info button-filter">
+          <div @click="openFilter()" class="button-info button-filter">
             <img src="/img/filter/filter-icon.svg" alt="">
           </div>
           <div class="button-info button-accordion" @click="toggleShowTechniques">
@@ -28,14 +28,20 @@
     <div class="accordion-content flex" :class="{ 'accordion-active': showAccordion }">
       <CardsTechnique />
     </div>
+    <Teleport to="body">
+      <modal-filter/>
+    </Teleport>
   </div>
 </template>
 <script>
 import { pages } from '@/utilities/pagesData.js'
 import CardsTechnique from './CardsTechnique.vue';
+import ModalFilter from "@/components/modal-filter.vue";
+import router from "@/router/index.js";
 
 export default {
   components: {
+    ModalFilter,
     CardsTechnique
   },
   props: {
@@ -57,6 +63,14 @@ export default {
   methods: {
     toggleShowTechniques() {
       this.showAccordion = !this.showAccordion
+    },
+    openFilter() {
+      const queryParams = {
+        mode: this.$route.query.mode,
+        filter: 'selected'
+      };
+
+      router.push({ name: this.$route.name, params: { pageName: this.$route.params.pageName }, query: queryParams });
     }
   }
 }

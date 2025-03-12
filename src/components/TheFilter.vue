@@ -1,39 +1,49 @@
 <template>
-    <div class="flex flex-col justify-between px-6 py-10 bg-[#F2F2F2] max-w-[302px] min-w-[302px]">
+    <div class="flex flex-col justify-between">
         <div>
-            <h3 class="text-xl text-[#001233] font-medium leading-6">Оборудование</h3>
-            <div class="h-80 overflow-y-auto px-4 py-3 bg-white mt-3 rounded-lg drop-shadow-lg">
+            <h3 class="title-technique">Оборудование</h3>
+            <div class="wrapper-technic-window overflow-y-auto px-4 py-3 bg-white mt-3 rounded-lg drop-shadow-lg">
                 <Equipment />
             </div>
         </div>
 
         <div class="mt-5">
             <div class="flex flex-col mt-3 gap-y-3">
-                <div class="flex justify-between">
-                    <button
-                        class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
+                <div class="grid gap-2 grid-cols-3">
+                    <div
+                        class="item-type-time-range"
                         @click="handleClick('month')"
-                        :class="{ 'bg-[#0554F2] text-white': toggle == 'month' }">Мес.</button>
-                    <button
-                        class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
+                        :class="{ 'active': toggle === 'month' }">Мес.</div>
+                    <div
+                        class="item-type-time-range"
                         @click="handleClick('quarter')"
-                        :class="{ 'bg-[#0554F2] text-white': toggle == 'quarter' }">Кв.</button>
-                    <button
-                        class="py-2 px-6 border border-[#979DAC] rounded-lg text-[#979DAC] font-semibold duration-300"
+                        :class="{ 'active': toggle === 'quarter' }">Кв.</div>
+                    <div
+                        class="item-type-time-range"
                         @click="handleClick('year')"
-                        :class="{ 'bg-[#0554F2] text-white': toggle == 'year' }">Год</button>
+                        :class="{ 'active': toggle === 'year' }">Год</div>
                 </div>
-                <div class="flex gap-x-3">
+                <div class="grid gap-2 grid-cols-2">
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">От</p>
-                        <input class="mt-2 bg-[#F2F2F2]" type="date" :disabled="isError" v-model="startDate"
+                        <input class="" type="date" :disabled="isError" v-model="startDate"
                             @change="updateYearRange" max="2040-01-01" min="1900-01-01" />
                     </div>
                     <div>
                         <p class="text-xl leading-6 text-[#001233]">До</p>
-                        <input class="mt-2 bg-[#F2F2F2]" type="date" :disabled="isError" v-model="endDate"
+                        <input class="" type="date" :disabled="isError" v-model="endDate"
                             @change="updateYearRange" max="2040-01-01" min="1900-01-01" />
                     </div>
+                  <div class="custom-date-picker">
+                    <input
+                        type="date"
+                        id="date-picker"
+                        class="datepicker"
+                        v-model="selectedDate"
+                        ref="dateInput"
+                    />
+                    <button class="calendar-button" @click="openCalendar">📅</button>
+                  </div>
                 </div>
                 <div class="flex justify-between gap-x-3">
                     <button @click="resetButton"
@@ -69,6 +79,17 @@ const defaultStartYear = 2000;
 const defaultEndYear = 2025;
 const isError = ref(false)
 const timeInterval = ref(route.query.toggle)
+const selectedDate = ref(''); // Хранит выбранную дату
+const dateInput = ref(null); // Ссылка на input
+
+// Функция для открытия календаря
+const openCalendar = () => {
+  console.log('here')
+  if (dateInput.value) {
+    console.log('here')
+    dateInput.value.focus(); // Устанавливаем фокус на input, чтобы открыть календарь
+  }
+};
 
 const loadStateFromStorage = () => {
     const storedState = localStorage.getItem('filterDate');
@@ -157,5 +178,4 @@ watch(() => route.query.toggle, (newToggle) => {
         updateYearRange()
     }
 });
-
 </script>

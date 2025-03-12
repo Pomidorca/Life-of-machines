@@ -21,7 +21,7 @@
           </p>
         </label>
       </div>
-      <img v-if="machineClass.children && machineClass.children.length > 0" @click="toggleList(machineClass.id)" class="filter-machine-details-list" :class="{ 'open-list': isOpen }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
+      <img v-if="machineClass.children && machineClass.children.length > 0" @click="toggleList(machineClass.id)" class="filter-machine-details-list cursor-pointer" :class="{ 'open-list': isOpen }" src="/img/filter/Caret_Down_SM.svg" loading="lazy" />
     </div>
     <div v-if="machineClass.children && machineClass.children.length > 0" class="machineTypes-delail" :class="{ 'show-list': isOpen }">
       <div>
