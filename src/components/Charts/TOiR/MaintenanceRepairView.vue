@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="mode === 'GeneralInformation'">
 
-      <div class="grid grid-cols-2 gap-6 mt-10">
+      <div class="grid grid-cols-2 gap-6">
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
           <Bar :options="ActualAccidentRateOptions" :data="ActualAccidentRate" />
         </div>

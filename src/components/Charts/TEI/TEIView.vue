@@ -2,7 +2,9 @@
   <div>
     <div v-if="mode === 'GeneralInformation'">
       <div class="grid grid-cols-1 gap-6">
-        <div v-if="loading">Загрузка...</div>
+        <div v-if="loading" class="wrapper-loader">
+          <span class="loader"></span>
+        </div>
         <div v-else-if="error">Ошибка: {{ error }}</div>
         <div v-else>
           <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mb-5">

@@ -240,7 +240,7 @@ export const useTEPStore = defineStore("TEP", {
                             this.initialDynamicsUnitCosts.datasets.forEach(dataset => dataset.data = []);
                         } else {
                             console.log('Ошибка на стороне сервера ' + e);
-                            // Обработка других ошибок
+
                         }
                     })
 
@@ -309,7 +309,7 @@ export const useTEPStore = defineStore("TEP", {
                             this.initialDynamicsUnitCostsTwo.datasets.forEach(dataset => dataset.data = []);
                         } else {
                             console.log('Ошибка на стороне сервера ' + e);
-
+                            this.error = 'Ошибка на стороне сервера ' + e
                         }
                     })
 
@@ -451,6 +451,7 @@ export const useTEPStore = defineStore("TEP", {
                         } else {
                             console.log('Ошибка на стороне сервера ' + error);
                             this.errorChartStructureKFV = 'Ошибка на стороне сервера ' + error;
+
                         }
                     })
                     .finally(() => {

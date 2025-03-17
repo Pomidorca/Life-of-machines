@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col h-full">
 <!--    <div class="flex flex-col gap-y-4">-->
 <!--      <div>-->
 <!--        <div class="p-1 bg-[#F2F2F2] inline-flex rounded-2xl">-->
@@ -19,7 +19,7 @@
 <!--      </div>-->
 <!--      <TheServiceLife />-->
 <!--    </div>-->
-    <div>
+    <div class="wrapper-content-charts">
       <ChartsView :mode="mode" />
     </div>
   </div>

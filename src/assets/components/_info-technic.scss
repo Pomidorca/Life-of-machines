@@ -163,6 +163,7 @@
 
           .chart-divider {
             width: 1px;
+            min-width: 1px;
             height: 10px;
             border-radius: 8px;
             background-color: $app-text-secondary;

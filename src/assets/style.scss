@@ -17,6 +17,7 @@
 @use "components/filter/modal-filter";
 @use "components/checkbox";
 @use "components/wrapper-charts";
+@use "components/loading/loading";
 
 @tailwind base;
 @tailwind components;

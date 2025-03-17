@@ -1,9 +1,11 @@
 <template>
   <div>
     <div v-if="mode === 'GeneralInformation'">
-      <div v-if="loading">Загрузка...</div>
+      <div v-if="loading" class="wrapper-loader">
+        <span class="loader"></span>
+      </div>
       <div v-else-if="error">Ошибка: {{ error }}</div>
-      <div v-else class="grid grid-cols-2 gap-6">
+      <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="element-chart">
           <Line :options="LineOptions" :data="lineDate" />
         </div>

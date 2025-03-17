@@ -24,7 +24,7 @@
 <!--        </div>-->
 <!--      </div>-->
 <!--    </div>-->
-    <div class="">
+    <div>
       <ChartsView :mode="mode" />
     </div>
   </div>

@@ -49,7 +49,9 @@
               {{ repairWidth }}
             </div>
           </div>
-          <div v-if="repairWidth !== '100%'" class="chart-divider"></div>
+          <div v-if="repairWidth !== '100%'" class="chart-divider">
+
+          </div>
           <div class="chart-out-of-order-techniques-secondary" :style="{ width: workingWidth }"></div>
         </div>
         <div class="text-out-of-order-techniques flex justify-between items-center">

@@ -16,8 +16,8 @@
         <div class="content-wrapper w-full flex flex-col">
           <TheInfoTech/>
           <div class="flex flex-1">
-            <div class="container mt-6">
-              <div>
+            <div class="mt-6 w-full">
+              <div class="h-full">
                 <router-view />
               </div>
             </div>

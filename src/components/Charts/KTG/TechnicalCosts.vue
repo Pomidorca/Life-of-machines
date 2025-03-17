@@ -4,19 +4,19 @@
             <DateKtg />
         </div>
         <div class="grid grid-cols-2 gap-6 mt-10">
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+            <div class="element-chart">
                 <Bar :options="KAWFACTOptions" :data="KAWFACT" />
             </div>
 
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+            <div class="element-chart">
                 <Bar :options="MTBFOptions" :data="MTBF" />
             </div>
 
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+            <div class="element-chart">
                 <Bar :options="MTTFOptions" :data="MTTF" />
             </div>
 
-            <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+            <div class="element-chart">
                 <Bar :options="ProbabilityOperationOptions" :data="ProbabilityOperation" />
             </div>
         </div>

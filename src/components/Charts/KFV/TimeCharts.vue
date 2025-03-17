@@ -1,16 +1,18 @@
 <template>
-    <div class="container min-h-[100%]">
+    <div>
 
         <div v-if="mode === 'GeneralInformation'">
-            <div v-if="loading">Загрузка...</div>
+            <div v-if="loading" class="wrapper-loader">
+              <span class="loader"></span>
+            </div>
             <div v-else-if="error">Ошибка: {{ error }}</div>
             <div v-else class="grid grid-cols-2 gap-6 items-start">
 
-                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-[400px]">
+                <div class="element-chart">
                     <Line :options="ChangesStructureKFVOptions" :data="changesStructureKFV" />
                 </div>
 
-                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white h-[400px]">
+                <div class="element-chart">
                     <Radar :options="StructureKFVOptions" :data="structureKFV" />
                 </div>
             </div>
@@ -23,14 +25,14 @@
             <div v-else-if="error">Ошибка: {{ error }}</div>
             <div v-else class="grid grid-cols-2 gap-6">
                 <div class="flex flex-col gap-y-6">
-                    <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+                    <div class="element-chart">
                         <Bar :options="detailedStructureCfvOneOptions" :data="detailedStructureCfvOne" />
                     </div>
-                    <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+                    <div class="element-chart">
                         <Bar :options="detailedStructureCfvTwoOptions" :data="detailedStructureCfvTwo" />
                     </div>
                 </div>
-                <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+                <div class="element-chart">
                     <Bar :options="detailedStructureCfvThreeOptions" :data="detailedStructureCfvThree" />
                 </div>
             </div>
@@ -39,7 +41,7 @@
         <div v-else-if="mode === 'analysis'">
             <div v-if="loading">Загрузка...</div>
             <div v-else-if="error">Ошибка: {{ error }}</div>
-            <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white min-h-full"
+            <div v-else class="element-chart"
                 style="min-height: 400px">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
