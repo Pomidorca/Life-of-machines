@@ -185,14 +185,14 @@ onMounted(() => {
 // });
 
 const fetchTechniques = async (machineClassIds) => {
-  console.log(machineClassIds)
+
   saveStateToStorage();
 
   machineStore.removeStatusFilter();
 
   await machineStore.fetchMachines({ machineClassId: machineClassIds });
   selectTechnique(machineClassIds);
-  console.log('click');
+
 };
 
 

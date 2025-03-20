@@ -17,6 +17,7 @@ export const pages = [
     new Page('TechnicalEconomicIndicators', [
         { text: 'Производительность', mode: 'GeneralInformation' },
         { text: 'Затраты', mode: 'DynamicStructure' },
+        { text: 'Анализ', mode: 'analysis' },
     ]),
     new Page('MaintenanceRepair', [
         { text: 'Общие сведения', mode: 'GeneralInformation' },

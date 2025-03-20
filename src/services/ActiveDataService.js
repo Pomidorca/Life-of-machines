@@ -24,7 +24,7 @@ export default {
         if (machineIds) {
             params.machineIds = machineIds
         }
-        console.log(params)
+
         return http.get(`/actives/charts/structure`, {
             params,
             paramsSerializer: {

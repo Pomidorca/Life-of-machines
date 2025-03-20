@@ -137,4 +137,34 @@ export default {
             }
         });
     },
+    getStructureOfEquipmentOwnershipCosts(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+
+        const params = {
+            dateStart: dateStart,
+            dateEnd: dateEnd,
+        };
+
+        if (machineClassIds) {
+            params.machineClassIds = machineClassIds;
+        }
+
+        if (machineMarkIds) {
+            params.machineMarkIds = machineMarkIds
+        }
+
+        if (machineModelIds) {
+            params.machineTypeIds = machineModelIds
+        }
+
+        if (machineIds) {
+            params.machineIds = machineIds
+        }
+
+        return http.get(`/tep/structureOfEquipmentOwnershipCosts`, {
+            params,
+            paramsSerializer: {
+                indexes: false
+            }
+        });
+    },
 }

@@ -112,7 +112,7 @@ export const useActiveStore = defineStore('active', {
             });
         },
         async fetchData() {
-            console.log('active модуль', this.filterParams, localStorage.getItem('selectedMachineMarkIds'), localStorage.getItem('selectedMachineTypeIds'))
+
             this.loadFilterParamsFromLocalStorage();
             this.loading = true;
             this.error = null;
@@ -235,7 +235,6 @@ function transformLinedate(data) {
         fill: false,
     };
 
-    console.log(totalDataset)
     if (totalDataset.data.every(value => value === 0)) {
         return {
             labels: [],

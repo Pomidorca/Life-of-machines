@@ -112,10 +112,9 @@ export const useMachineStore = defineStore('machine', {
                     console.log(e);
                     this.error = e;
                 })
-                console.log('in the function:', filterParams.machineClassId)
+
                 await MachineClassesDataService.getMashineMarks( filterParams.machineClassId)
                     .then((response) => {
-                        
                         this.machineMarks = response.data
 
                     })

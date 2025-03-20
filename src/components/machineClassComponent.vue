@@ -171,6 +171,7 @@ export default {
       this.kfvStore.updateFilterParams({
         machineClassIds: this.selectedMachineClassIds,
       });
+
       this.tepStore.updateFilterParams({
         machineClassIds: this.selectedMachineClassIds,
       });

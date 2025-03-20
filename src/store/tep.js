@@ -4,6 +4,7 @@ import {
 import {ref} from "vue";
 import {
     CarryingOutVolumes,
+    CostStructure,
     DynamicsUnitCosts,
     DynamicsUnitCostsTwo,
     StructureKFV
@@ -35,6 +36,7 @@ export const useTEPStore = defineStore("TEP", {
             initialDynamicsUnitCosts: DynamicsUnitCosts,
             initialDynamicsUnitCostsTwo: DynamicsUnitCostsTwo,
             initialStructureKFV: StructureKFV,
+            initialCostStructure: CostStructure,
             colors: [
                 { background: 'rgba(255, 99, 132, 1)', border: 'rgba(255, 99, 132, 1)', opacity: 'rgba(255, 99, 132, 0.2)' },
                 { background: 'rgba(54, 162, 235, 1)', border: 'rgba(54, 162, 235, 1)', opacity: 'rgba(54, 162, 235, 0.2)' },
@@ -188,7 +190,7 @@ export const useTEPStore = defineStore("TEP", {
                                 }
                             })
 
-                            costTypes.push(item.typeName)
+                            costTypes.push(item.markName)
 
                         })
 
@@ -313,6 +315,81 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     })
 
+                await TEPDataService.getStructureOfEquipmentOwnershipCosts( dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds )
+                    .then((response) => {
+
+                        if (!response.data) {
+                            console.error('Данные отсутствуют');
+                            return;
+                        }
+
+                        const data = response.data;
+
+                        const costStructure = {
+                            labels: [],
+                            datasets: []
+                        };
+
+                        data.forEach((item) => {
+                            costStructure.labels.push(item.markName);
+                        });
+
+                        const uniqueCostTypes = [...new Set(data.flatMap(item => item.data.map(element => element.type)))];
+
+
+                        const totalCostIndex = uniqueCostTypes.findIndex(type => type.includes('ИТОГО удельные затраты на владение'));
+
+                        if (totalCostIndex !== -1) {
+
+                            const totalCostType = uniqueCostTypes.splice(totalCostIndex, 1)[0];
+
+
+                            uniqueCostTypes.unshift(totalCostType);
+                        }
+
+                        uniqueCostTypes.forEach((costType, index) => {
+                            const colorIndex = index % this.colors.length;
+
+                            const dataset = {
+                                label: costType,
+                                data: data.map(item => {
+                                    const cost = item.data.find(element => element.type === costType);
+                                    return cost ?
+                                        (costType.includes('ИТОГО') ? cost.totalCost :
+                                            costType.includes('Удельная стоимость') ? cost.specificCost :
+                                                costType.includes('ТО, ТР') ? cost.maintenanceAndRepairCosts :
+                                                    costType.includes('ФОТ и налоги') ? cost.laborAndTaxesCosts :
+                                                        costType.includes('эксплуатацию') ? cost.fuelCosts :
+                                                            costType.includes('Прочее') ? cost.otherCosts : 0)
+                                        : 0;
+                                }),
+                                backgroundColor: this.colors[colorIndex].background,
+                                borderColor: '',
+                            };
+
+                            if (costType.includes('ИТОГО удельные затраты на владение')) {
+                                dataset.backgroundColor = '#33538f';
+                                dataset.borderColor = '#33538f';
+                                dataset.type = 'line';
+                            }
+
+                            costStructure.datasets.push(dataset);
+                        });
+
+                        this.initialCostStructure.labels = costStructure.labels;
+                        this.initialCostStructure.datasets = costStructure.datasets;
+
+                    })
+                    .catch((e) => {
+                        if (e.response && e.response.status === 404) {
+                            this.initialCostStructure.labels = [];
+                            this.initialCostStructure.datasets = [];
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + e);
+                            this.error = 'Ошибка на стороне сервера ' + e;
+                        }
+                    });
+
                 await this.updateChartStructureKFV()
 
             } catch (error) {
@@ -395,13 +472,11 @@ export const useTEPStore = defineStore("TEP", {
 
                         objectComparisonOfTargetAndActualUnitCosts.labels = labels
 
-                        const rusName = ['цель', 'факт']
-
                         costTypes.forEach((type, index) => {
                             const colorIndex = index % this.colors.length;
 
                             objectComparisonOfTargetAndActualUnitCosts.datasets.push({
-                                label: rusName[index],
+                                label: type,
                                 backgroundColor: this.colors[colorIndex].opacity,
                                 borderColor: this.colors[colorIndex].background,
                                 pointBackgroundColor: this.colors[colorIndex].background,
