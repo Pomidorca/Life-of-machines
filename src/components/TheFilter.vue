@@ -48,7 +48,7 @@
                           class="all-time-button py-3">Весь период</button>
                 </div>
             </div>
-            <div class="flex justify-between gap-x-3">
+            <div class="flex justify-between gap-x-3 mt-3">
                 <button @click="updateYearRange"
                         class="send-button py-3">Применить</button>
             </div>

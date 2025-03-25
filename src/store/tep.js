@@ -4,8 +4,8 @@ import {
 import {ref} from "vue";
 import {
     CarryingOutVolumes,
-    CostStructure,
-    DynamicsUnitCosts,
+    CostStructure, DynamicsSpecificAccumulated,
+    DynamicsUnitCosts, DynamicsUnitCostsThree,
     DynamicsUnitCostsTwo,
     StructureKFV
 } from "@/components/Charts/TEI/index.js";
@@ -37,14 +37,16 @@ export const useTEPStore = defineStore("TEP", {
             initialDynamicsUnitCostsTwo: DynamicsUnitCostsTwo,
             initialStructureKFV: StructureKFV,
             initialCostStructure: CostStructure,
+            initialDynamicsSpecificAccumulated: DynamicsSpecificAccumulated,
+            initialDynamicsUnitCostsThree: DynamicsUnitCostsThree,
             colors: [
-                { background: 'rgba(255, 99, 132, 1)', border: 'rgba(255, 99, 132, 1)', opacity: 'rgba(255, 99, 132, 0.2)' },
-                { background: 'rgba(54, 162, 235, 1)', border: 'rgba(54, 162, 235, 1)', opacity: 'rgba(54, 162, 235, 0.2)' },
-                { background: 'rgba(255, 206, 86, 1)', border: 'rgba(255, 206, 86, 1)', opacity: 'rgba(255, 206, 86, 0.2)'},
-                { background: 'rgba(75, 192, 192, 1)', border: 'rgba(75, 192, 192, 1)', opacity: 'rgba(75, 192, 192, 0.2)' },
-                { background: 'rgba(153, 102, 255, 1)', border: 'rgba(153, 102, 255, 1)', opacity: 'rgba(153, 102, 255, 0.2)' },
-                { background: 'rgba(255, 159, 64, 1)', border: 'rgba(255, 159, 64, 1)', opacity: 'rgba(255, 159, 64, 0.2)' },
-                { background: 'rgb(99, 255, 64)', border: 'rgb(99, 255, 64, 1)', opacity: 'rgb(99, 255, 64, 0.2)' },
+                { background: 'rgba(255, 99, 132, 1)', border: 'rgba(255, 99, 132, 1)', opacity: 'rgba(255, 99, 132, 0.2)', secondBg: 'rgb(161,35,59)'},
+                { background: 'rgba(54, 162, 235, 1)', border: 'rgba(54, 162, 235, 1)', opacity: 'rgba(54, 162, 235, 0.2)', secondBg: 'rgb(37,105,161)' },
+                { background: 'rgba(255, 206, 86, 1)', border: 'rgba(255, 206, 86, 1)', opacity: 'rgba(255, 206, 86, 0.2)', secondBg: 'rgb(175,142,59)'},
+                { background: 'rgba(75, 192, 192, 1)', border: 'rgba(75, 192, 192, 1)', opacity: 'rgba(75, 192, 192, 0.2)', secondBg: 'rgb(62,161,161)' },
+                { background: 'rgba(153, 102, 255, 1)', border: 'rgba(153, 102, 255, 1)', opacity: 'rgba(153, 102, 255, 0.2)', secondBg: 'rgb(82,52,135)' },
+                { background: 'rgba(255, 159, 64, 1)', border: 'rgba(255, 159, 64, 1)', opacity: 'rgba(255, 159, 64, 0.2)', secondBg: 'rgb(142,92,39)' },
+                { background: 'rgb(99, 255, 64)', border: 'rgb(99, 255, 64, 1)', opacity: 'rgb(99, 255, 64, 0.2)', secondBg: 'rgb(56,143,37)' },
             ]
         }
     },
@@ -386,9 +388,118 @@ export const useTEPStore = defineStore("TEP", {
                             this.initialCostStructure.datasets = [];
                         } else {
                             console.log('Ошибка на стороне сервера ' + e);
+                            this.error = 'Ошибка на стороне сервераааа ' + e;
+                        }
+                    });
+
+                await TEPDataService.getDynamicsOfUnitAccumulatedCosts( dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds )
+                    .then((response) => {
+
+                        if (!response.data) {
+                            console.error('Данные отсутствуют');
+                            return;
+                        }
+
+                        const data = response.data;
+                        const labels = Array.from(new Set(data.flatMap(item => item.data.map(d => d.year)))).sort((a, b) => a - b);
+
+                        const graphData = {
+                            labels: labels,
+                            datasets: []
+                        };
+
+                        data.forEach((machine, index) => {
+
+                            graphData.datasets.push({
+                                label: `Уд. нак. затрат ${machine.markName}`,
+                                data: labels.map(year => {
+                                    const yearData = machine.data.find(d => d.year === year);
+                                    return yearData ? yearData.productivity : 0;
+                                }),
+                                backgroundColor: this.colors[index].secondBg,
+                                borderColor: this.colors[index].secondBg,
+                                yAxisID: 'y-cost'
+                            });
+
+
+                            graphData.datasets.push({
+                                label: `Производ. ${machine.markName}`,
+                                data: labels.map(year => {
+                                    const yearData = machine.data.find(d => d.year === year);
+                                    return yearData ? yearData.accumulatedProductivity : 0;
+                                }),
+                                backgroundColor: this.colors[index].background,
+                                borderColor: this.colors[index].border,
+                                yAxisID: 'y-costTwo',
+                            });
+                        });
+
+                        this.initialDynamicsSpecificAccumulated.labels = graphData.labels
+                        this.initialDynamicsSpecificAccumulated.datasets = graphData.datasets
+
+                        })
+                    .catch((e) => {
+                        if (e.response && e.response.status === 404) {
+                            this.initialDynamicsSpecificAccumulated.labels = [];
+
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + e);
+                            this.error = 'Ошибка на стороне сервера ' + e;
+                        }
+                    })
+
+                await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        if (!response.data) {
+                            console.error('Данные отсутствуют');
+                            return;
+                        }
+
+                        const data = response.data;
+
+                        const labels = Array.from({ length: data[0].data.length }, (_, i) => i + 1);
+
+                        const graphData = {
+                            labels: labels,
+                            datasets: []
+                        };
+
+                        data.forEach((item, index) => {
+                            if (item.machineId) {
+                                graphData.datasets.push({
+                                    label: `Уд. нак. затрат ${item.markName}`,
+                                    data: item.data.map(d => d.costToProductivityRatio),
+                                    backgroundColor: this.colors[index].opacity,
+                                    borderColor: this.colors[index].border,
+                                    type: 'line'
+                                });
+                            } else if (item.markId) {
+                                graphData.datasets.push({
+                                    label: `Средний отраслевой уровень Уд. нак. затрат ${item.markName}`,
+                                    data: item.data.map(d => d.costToProductivityRatio),
+                                    borderDash: [10, 10],
+                                    backgroundColor: this.colors[index].background,
+                                    borderColor: this.colors[index].border,
+                                    type: 'line'
+                                });
+                            }
+                        });
+
+                        this.initialDynamicsUnitCostsThree.labels = graphData.labels;
+                        this.initialDynamicsUnitCostsThree.datasets = graphData.datasets;
+
+                        console.log(graphData);
+                    })
+                    .catch((e) => {
+                        if (e.response && e.response.status === 404) {
+                            this.initialDynamicsUnitCostsThree.labels = [];
+                            this.initialDynamicsUnitCostsThree.datasets = [];
+                        } else {
+                            console.log('Ошибка на стороне сервера ' + e);
                             this.error = 'Ошибка на стороне сервера ' + e;
                         }
                     });
+
 
                 await this.updateChartStructureKFV()
 

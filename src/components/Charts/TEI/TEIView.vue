@@ -48,13 +48,11 @@
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
           <Bar :options="CostStructureOptions" :data="CostStructure" />
         </div>
-        <div class="grid grid-cols-2 gap-6">
-          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
-            <Line :options="DynamicsSpecificAccumulatedOptions" :data="DynamicsSpecificAccumulated" />
-          </div>
-          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
-            <Line :options="DynamicsUnitCostsThreeOptions" :data="DynamicsUnitCostsThree" />
-          </div>
+        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+          <Line :options="DynamicsSpecificAccumulatedOptions" :data="DynamicsSpecificAccumulated" />
+        </div>
+        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+          <Line :options="DynamicsUnitCostsThreeOptions" :data="DynamicsUnitCostsThree" />
         </div>
       </div>
     </div>

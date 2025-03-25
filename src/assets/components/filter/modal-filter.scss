@@ -27,6 +27,7 @@
     width: 500px;
     padding: 40px 32px 40px 24px;
     transform: translateX(100%);
+    overflow-y: auto;
     transition: all .5s;
     .modal-content-header{
       margin-bottom: 40px;

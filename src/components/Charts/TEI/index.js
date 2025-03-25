@@ -313,7 +313,7 @@ export const DynamicsSpecificAccumulated = {
             data: [9.35, 6.80, 8.83, 9.19, 8.79, 7.17, 7.17, 7.33],
             backgroundColor: '#ccae53',
             borderColor: '#ccae53',
-            yAxisID: 'y-costTwo',
+            yAxisID: 'x-costTwo',
         },
     ]
 }
@@ -335,24 +335,28 @@ export const DynamicsSpecificAccumulatedOptions = {
         }
     },
     scales: {
-        y: {
-            'y-cost': {
-                type: 'linear',
-                position: 'right',
-                title: {
-                    display: true,
-                    text: 'млн. ткм; куь.м; пог.м',
-                }
+        'y-cost': {
+            type: 'linear',
+            position: 'right',
+            title: {
+                display: true,
+                text: 'млн. ткм; куь.м; пог.м',
             },
-            'y-costTwo': {
-                type: 'linear',
-                position: 'left',
-                title: {
-                    display: true,
-                    text: 'руб./ед',
-                }
-            }
+            grid: { display: false }
         },
+        'y-costTwo': {
+            type: 'linear',
+            position: 'left',
+            title: {
+                display: true,
+                text: 'руб./ед',
+                align: 'start'
+            },
+        },
+        x: { // Обязательная ось X
+            display: true,
+            title: { display: true, text: 'Год' }
+        }
     }
 }
 
