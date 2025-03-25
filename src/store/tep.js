@@ -488,7 +488,6 @@ export const useTEPStore = defineStore("TEP", {
                         this.initialDynamicsUnitCostsThree.labels = graphData.labels;
                         this.initialDynamicsUnitCostsThree.datasets = graphData.datasets;
 
-                        console.log(graphData);
                     })
                     .catch((e) => {
                         if (e.response && e.response.status === 404) {
