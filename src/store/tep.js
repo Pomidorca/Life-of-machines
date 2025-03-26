@@ -410,14 +410,16 @@ export const useTEPStore = defineStore("TEP", {
 
                         data.forEach((machine, index) => {
 
+                            const colorIndex = index % this.colors.length;
+
                             graphData.datasets.push({
                                 label: `Уд. нак. затрат ${machine.markName}`,
                                 data: labels.map(year => {
                                     const yearData = machine.data.find(d => d.year === year);
                                     return yearData ? yearData.productivity : 0;
                                 }),
-                                backgroundColor: this.colors[index].secondBg,
-                                borderColor: this.colors[index].secondBg,
+                                backgroundColor: this.colors[colorIndex].secondBg,
+                                borderColor: this.colors[colorIndex].secondBg,
                                 yAxisID: 'y-cost'
                             });
 
@@ -428,8 +430,8 @@ export const useTEPStore = defineStore("TEP", {
                                     const yearData = machine.data.find(d => d.year === year);
                                     return yearData ? yearData.accumulatedProductivity : 0;
                                 }),
-                                backgroundColor: this.colors[index].background,
-                                borderColor: this.colors[index].border,
+                                backgroundColor: this.colors[colorIndex].background,
+                                borderColor: this.colors[colorIndex].border,
                                 yAxisID: 'y-costTwo',
                             });
                         });
@@ -465,12 +467,15 @@ export const useTEPStore = defineStore("TEP", {
                         };
 
                         data.forEach((item, index) => {
+
+                            const colorIndex = index % this.colors.length;
+
                             if (item.machineId) {
                                 graphData.datasets.push({
                                     label: `Уд. нак. затрат ${item.markName}`,
                                     data: item.data.map(d => d.costToProductivityRatio),
-                                    backgroundColor: this.colors[index].opacity,
-                                    borderColor: this.colors[index].border,
+                                    backgroundColor: this.colors[colorIndex].opacity,
+                                    borderColor: this.colors[colorIndex].border,
                                     type: 'line'
                                 });
                             } else if (item.markId) {
@@ -478,8 +483,8 @@ export const useTEPStore = defineStore("TEP", {
                                     label: `Средний отраслевой уровень Уд. нак. затрат ${item.markName}`,
                                     data: item.data.map(d => d.costToProductivityRatio),
                                     borderDash: [10, 10],
-                                    backgroundColor: this.colors[index].background,
-                                    borderColor: this.colors[index].border,
+                                    backgroundColor: this.colors[colorIndex].background,
+                                    borderColor: this.colors[colorIndex].border,
                                     type: 'line'
                                 });
                             }
