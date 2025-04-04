@@ -26,17 +26,45 @@
       <div v-if="loading" class="wrapper-loader">
         <span class="loader"></span>
       </div>
-      <div v-else-if="error">Ошибка: {{ error }}</div>
-      <div v-else class="grid grid-cols-2 gap-6">
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10" style="min-height: 400px">
+      <div v-else-if="error">
+        <div class="element-chart">
+          <img src="/img/specialСharacters/no-selected.gif" alt=""/>
+          Ошибкаsf: {{ error }}
+        </div>
+      </div>
+      <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="element-chart col-span-2" style="min-height: 50px; height: auto;">
+          <div class="flex">
+            <img src="/img/specialСharacters/warning-circle-svgrepo-com.svg" alt=""/>
+            <h2 class="tips-title ms-1">
+              Примечание:
+            </h2>
+          </div>
+          <hr class="my-2">
+          <span class="tips-description">
+            Для просмотра графика "Сравнение целевых и фактических удельных затрат" выберите год на графике "Динамика удельных затрат на экскавацию"
+          </span>
+        </div> 
+        <div class="element-chart" style="min-height: 400px">
           <Bar ref="chartRef" :options="DynamicsUnitCostsTwoOptions" :data="DynamicsUnitCostsTwo" @click="handleClickChart"/>
         </div>
-        <div v-if="loadingChartStructureKFV">Загрузка...</div>
-        <div v-else-if="errorChartStructureKFV">
-          {{ errorChartStructureKFV }}
+        <div v-if="loadingChartStructureKFV">
+          <div class="element-chart flex flex-col justify-center item-center">
+            <span class="tips-description text-center">
+              Загрузка...
+            </span>
+          </div>
         </div>
-        <div v-else class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
-          <div>
+        <div v-else-if="errorChartStructureKFV">
+          <div class="element-chart flex flex-col justify-center item-center">
+            <img src="/img/specialСharacters/no-selected.gif" alt="" style="height: 100px; width: 100px; margin: 0 auto;"/>
+            <span class="tips-description text-center mt-5">
+              {{ errorChartStructureKFV }}
+            </span>
+          </div>
+        </div>
+        <div v-else class="element-chart">
+          <div style="min-height: 400px">
             <Radar :options="StructureKFVOptions" :data="StructureKFV" />
           </div>
         </div>
@@ -48,14 +76,14 @@
         <span class="loader"></span>
       </div>
       <div v-else-if="error">Ошибка: {{ error }}</div>
-      <div v-else>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+      <div v-else сlass="grid grid-cols-2 gap-6">
+        <div class="element-chart">
           <Bar :options="CostStructureOptions" :data="CostStructure" />
         </div>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+        <div class="element-chart my-6">
           <Line :options="DynamicsSpecificAccumulatedOptions" :data="DynamicsSpecificAccumulated" />
         </div>
-        <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
+        <div class="element-chart">
           <Line :options="DynamicsUnitCostsThreeOptions" :data="DynamicsUnitCostsThree" />
         </div>
       </div>

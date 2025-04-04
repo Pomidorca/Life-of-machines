@@ -3,3 +3,15 @@
 .element-chart{
   @include chart-element;
 }
+
+.tips-title{
+  font-weight: 600;
+  line-height: 22px;
+  @include responsive-font( 16, 16 )
+}
+
+.tips-description{
+  font-weight: 500;
+  line-height: 22px;
+  @include responsive-font( 14, 14 )
+}

@@ -82,7 +82,7 @@ const timeInterval = ref(route.query.toggle)
 
 const setFullPeriod = () => {
   startDate.value = '1900-01-01';
-  endDate.value = '2040-01-01';
+  endDate.value = new Date().toISOString().split('T')[0];
 };
 
 const loadStateFromStorage = () => {

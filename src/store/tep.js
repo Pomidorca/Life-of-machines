@@ -388,7 +388,7 @@ export const useTEPStore = defineStore("TEP", {
                             this.initialCostStructure.datasets = [];
                         } else {
                             console.log('Ошибка на стороне сервера ' + e);
-                            this.error = 'Ошибка на стороне сервераааа ' + e;
+                            this.error = 'Ошибка на стороне сервера ' + e;
                         }
                     });
 
@@ -450,26 +450,37 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     })
 
-                await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
                         if (!response.data) {
                             console.error('Данные отсутствуют');
                             return;
                         }
-
+                
                         const data = response.data;
-
-                        const labels = Array.from({ length: data[0].data.length }, (_, i) => i + 1);
-
+                
+                        let maxLength = 0;
+                        data.forEach(item => {
+                            if (item.data && Array.isArray(item.data) && item.data.length > maxLength) {
+                                maxLength = item.data.length;
+                            }
+                        });
+                
+                        const labels = Array.from({ length: maxLength }, (_, i) => i + 1);
+                
                         const graphData = {
                             labels: labels,
                             datasets: []
                         };
-
+                
                         data.forEach((item, index) => {
 
+                            if (!item.data || !Array.isArray(item.data) || item.data.length === 0) {
+                                return;
+                            }
+                
                             const colorIndex = index % this.colors.length;
-
+                
                             if (item.machineId) {
                                 graphData.datasets.push({
                                     label: `Уд. нак. затрат ${item.markName}`,
@@ -489,10 +500,9 @@ export const useTEPStore = defineStore("TEP", {
                                 });
                             }
                         });
-
+                
                         this.initialDynamicsUnitCostsThree.labels = graphData.labels;
                         this.initialDynamicsUnitCostsThree.datasets = graphData.datasets;
-
                     })
                     .catch((e) => {
                         if (e.response && e.response.status === 404) {
@@ -500,7 +510,7 @@ export const useTEPStore = defineStore("TEP", {
                             this.initialDynamicsUnitCostsThree.datasets = [];
                         } else {
                             console.log('Ошибка на стороне сервера ' + e);
-                            this.error = 'Ошибка на стороне сервера ' + e;
+                            this.error = 'Ошибка на стороне сервера' + e;
                         }
                     });
 
@@ -635,9 +645,9 @@ export const useTEPStore = defineStore("TEP", {
                     .catch((error) => {
                         if (error.response && error.response.status === 404) {
 
-                            this.initialStructureKFV.labels = [];
+                            // this.initialStructureKFV.labels = [];
                             this.initialStructureKFV.datasets.forEach(dataset => dataset.data = []);
-                            this.errorChartStructureKFV = 'Данные не найдены (404)';
+                            // this.errorChartStructureKFV = 'Данные не найдены (404)';
                         } else {
                             console.log('Ошибка на стороне сервера ' + error);
                             this.errorChartStructureKFV = 'Ошибка на стороне сервера ' + error;
@@ -650,7 +660,7 @@ export const useTEPStore = defineStore("TEP", {
                         }, 1000)
                     })
             } else {
-                this.errorChartStructureKFV = 'Ошибка: временной диапозон не выбран'
+                this.errorChartStructureKFV = 'Временной диапозон не выбран.'
             }
         },
 

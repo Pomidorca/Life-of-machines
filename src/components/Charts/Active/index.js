@@ -3,7 +3,7 @@ let delayed;
 
 export const LineOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
         title: {
             display: true,

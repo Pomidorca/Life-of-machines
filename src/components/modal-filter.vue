@@ -25,7 +25,8 @@ export default {
   components: {TheFilter},
   methods: {
     closeModal() {
-      const currentQuery = { ...this.$router.query };
+      const currentQuery = { ...this.$route.query };
+      
       delete currentQuery.filter;
 
       this.$router.replace({ query: currentQuery });

@@ -6,7 +6,7 @@
       </div>
       <div v-else-if="error">Ошибка: {{ error }}</div>
       <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="element-chart">
+        <div class="element-chart" style="height:40vh;">
           <Line :options="LineOptions" :data="lineDate" />
         </div>
         <div class="element-chart">

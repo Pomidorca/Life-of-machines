@@ -30,7 +30,7 @@ export const CarryingOutVolumes = {
 
 export const CarryingOutVolumesOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     height: 300,
     plugins: {
         title: {
@@ -126,8 +126,7 @@ export const DynamicsUnitCosts = {
 
 export const DynamicsUnitCostsOptions = {
     responsive: true,
-    maintainAspectRatio: true,
-    height: 300,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             position: 'bottom',
@@ -188,7 +187,7 @@ export const DynamicsUnitCostsTwo = {
 
 export const DynamicsUnitCostsTwoOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     height: 300,
     plugins: {
         legend: {
