@@ -216,7 +216,7 @@ function transformLinedate(data) {
         },
         {
             label: 'Вспомогательное',
-            data: data.map(item => item.auxiliary),
+            data: data.map(item => item.support),
             borderColor: '#7e9abf',
             backgroundColor: '#7e9abf',
             fill: true,
@@ -270,14 +270,7 @@ function transformchangeStructuredate(data) {
             backgroundColor: '#848484',
             borderColor: '#848484',
             borderWidth: 1
-        },
-        {
-            label: 'Вспомогательное',
-            data: data.map(item => item.auxiliary),
-            backgroundColor: '#325aa3',
-            borderColor: '#325aa3',
-            borderWidth: 1
-        },
+        }
     ].filter(dataset => dataset.data.some(value => value !== 0));
 
 
