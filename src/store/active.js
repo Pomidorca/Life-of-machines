@@ -216,7 +216,7 @@ function transformLinedate(data) {
         },
         {
             label: 'Вспомогательное',
-            data: data.map(item => item.support),
+            data: data.map(item => item.auxiliary),
             borderColor: '#7e9abf',
             backgroundColor: '#7e9abf',
             fill: true,
@@ -265,8 +265,8 @@ function transformchangeStructuredate(data) {
             borderWidth: 1
         },
         {
-            label: 'Поддерживающее',
-            data: data.map(item => item.support),
+            label: 'Вспомогательное',
+            data: data.map(item => item.auxiliary),
             backgroundColor: '#848484',
             borderColor: '#848484',
             borderWidth: 1
