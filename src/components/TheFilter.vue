@@ -44,8 +44,9 @@
                     </div>
                 </div>
                 <div class="flex justify-between mt-3">
-                  <button @click="setFullPeriod"
-                          class="all-time-button py-3">Весь период</button>
+                    <button @click="setFullPeriod" class="all-time-button py-3">
+                        {{ dateStore.loading ? 'Загрузка...' : 'Весь период' }}
+                    </button>
                 </div>
             </div>
             <div class="flex justify-between gap-x-3 mt-3">
@@ -64,6 +65,8 @@ import { useMachineStore } from '@/store/machine.js';
 import { useKFVStore } from '@/store/kfv';
 import { useRoute, useRouter } from 'vue-router';
 import { useTEPStore } from "@/store/tep.js";
+import { pages } from '@/utilities/pagesData.js'
+import { useDateStore } from '@/store/date';
 
 const route = useRoute();
 const router = useRouter();
@@ -71,6 +74,7 @@ const activeStore = useActiveStore();
 const machineStore = useMachineStore();
 const kfvStore = useKFVStore();
 const tepStore = useTEPStore();
+const dateStore = useDateStore();
 const startDate = ref(new Date(defaultStartYear, 0, 1));
 const endDate = ref(new Date(defaultEndYear, 11, 31));
 const toggle = ref('Год');
@@ -79,10 +83,26 @@ const defaultStartYear = 2000;
 const defaultEndYear = 2025;
 const isError = ref(false)
 const timeInterval = ref(route.query.toggle)
+const isLoading = ref(false);
 
-const setFullPeriod = () => {
-  startDate.value = '1900-01-01';
-  endDate.value = new Date().toISOString().split('T')[0];
+const setFullPeriod = async () => {
+    
+    if(dateStore.loading) return
+
+    try {
+        
+
+        startDate.value = await dateStore.fetchDate();
+        
+        endDate.value = new Date().toISOString().split('T')[0];
+        
+        
+    } catch (error) {
+        
+    } finally {
+        isLoading.value = false;
+    }
+  
 };
 
 const loadStateFromStorage = () => {
@@ -155,9 +175,18 @@ const updateYearRange = () => {
     } else {
         isError.value = false
     }
+
+    // const currentPage = pages.find(page => page.name === route.name);
+    // if (currentPage && currentPage.updateStore) {
+    //     currentPage.updateStore(startYear, endYear, timeInterval.value);
+    // } else {
+    //     console.warn('Неизвестная страница или отсутствует функция обновления.');
+    // }
+
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     kfvStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     tepStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear }, timeInterval)
+    
     saveStateToStorage();
 };
 

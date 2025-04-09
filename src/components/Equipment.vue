@@ -205,9 +205,7 @@ watch(selectedMachineClassIds, () => {
 /*========== class end ========== */
 
 /*========== switching between the filter type ========== */
-watch(machineStore.selectedMachineTypeIds, () => {
-  // machineStore.removeStatusFilter();
-})
+
 
 /*========== marks start ========== */
 

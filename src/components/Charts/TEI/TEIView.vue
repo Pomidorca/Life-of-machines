@@ -7,11 +7,11 @@
         </div>
         <div v-else-if="error">Ошибка: {{ error }}</div>
         <div v-else>
-          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mb-5">
+          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mb-5" style="min-height: 400px;">
             <Bar :options="CarryingOutVolumesOptions" :data="CarryingOutVolumes" />
           </div>
 
-          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
+          <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white" style="aspect-ratio: 16 / 9;">
             <Bar :options="DynamicsUnitCostsOptions" :data="DynamicsUnitCosts" />
           </div>
         </div>

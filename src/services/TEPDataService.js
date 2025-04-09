@@ -197,6 +197,7 @@ export default {
             }
         });
     },
+    
     getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {

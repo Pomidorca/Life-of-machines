@@ -30,4 +30,5 @@ export default {
     getUserRole (userRole) {
         return http.get('/administration/users', userRole)
     }
+    
 }
