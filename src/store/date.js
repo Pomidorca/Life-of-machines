@@ -60,18 +60,15 @@ export const useDateStore = defineStore("earliest-date-state", {
 
                 
                 const { machineClassIds, machineMarkIds, machineModelIds, machineIds } = this.filterParams;
-                console.log('тута');
-                
                 
                 await UserDataService.getEarliestEntryDate( machineClassIds, machineMarkIds, machineModelIds, machineIds )
                     .then((response) => {
-
-                        this.earliestDate =response.data
                         
-                        return this.earliestDate.toISOString().split('T')[0];
+                        this.earliestDate = new Date(response.data);
+                        
                     })
                     .catch((e) => {
-                        console.error("Ошибка:", error);
+                        console.error("Ошибка:", e);
                         return '2000-01-01';
                     }) 
             } catch (e) {

@@ -77,7 +77,7 @@ const tepStore = useTEPStore();
 const dateStore = useDateStore();
 const startDate = ref(new Date(defaultStartYear, 0, 1));
 const endDate = ref(new Date(defaultEndYear, 11, 31));
-const toggle = ref('Год');
+const toggle = ref('year');
 const selectedMachineTypeIds = ref([]);
 const defaultStartYear = 2000;
 const defaultEndYear = 2025;
@@ -92,9 +92,13 @@ const setFullPeriod = async () => {
     try {
         
 
-        startDate.value = await dateStore.fetchDate();
+        await dateStore.fetchDate();
+
+        startDate.value = dateStore.earliestDate.toISOString().split('T')[0];
         
         endDate.value = new Date().toISOString().split('T')[0];
+
+        updateUrl()
         
         
     } catch (error) {
@@ -116,6 +120,7 @@ const loadStateFromStorage = () => {
             startDate.value = parsedState.startDate;
             endDate.value = parsedState.endDate;
             toggle.value = parsedState.toggle;
+            updateUrl()
         } catch (error) {
             console.error("Ошибка при загрузке состояния из localStorage:", error);
         }
