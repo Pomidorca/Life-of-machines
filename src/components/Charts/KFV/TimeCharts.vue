@@ -42,7 +42,7 @@
             <div v-if="loading">Загрузка...</div>
             <div v-else-if="error">Ошибка: {{ error }}</div>
             <div v-else class="element-chart"
-                style="min-height: 400px">
+                style="aspect-ratio: 16 / 7; height: auto;">
                 <Line :options="ChangeOperatingTimeOptions" :data="ChangeOperatingTime" />
             </div>
         </div>
