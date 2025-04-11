@@ -210,7 +210,7 @@ function StructureKFV(data) {
    const labels = ['Время в работе', 'Плановые простои', 'Неплановые простои'];
    const datasets = [
         {
-            label: 'calc',
+            label: 'план',
             backgroundColor: 'rgba(255,99,132,0.2)',
             borderColor: 'rgba(255,99,132,1)',
             pointBackgroundColor: 'rgba(255,99,132,1)',
@@ -224,7 +224,7 @@ function StructureKFV(data) {
             ]
         },
         {
-            label: 'fact',
+            label: 'факт',
             backgroundColor: 'rgba(179,181,198,0.2)',
             borderColor: 'rgba(179,181,198,1)',
             pointBackgroundColor: 'rgba(179,181,198,1)',

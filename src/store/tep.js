@@ -254,6 +254,8 @@ export const useTEPStore = defineStore("TEP", {
                         const labels = []
 
                         const data = response.data
+                        console.log(data);
+                        
 
                         const elementData = []
 
@@ -297,6 +299,15 @@ export const useTEPStore = defineStore("TEP", {
                         if (objectDynamicsUnitCosts.datasets.length > 0) {
                             const lastDataset = objectDynamicsUnitCosts.datasets.pop();
                             objectDynamicsUnitCosts.datasets.unshift(lastDataset);
+
+                            const targetObject = objectDynamicsUnitCosts.datasets.find(item => item.label === 'Total');
+                            if (targetObject) {
+                                targetObject.label = 'Общий';
+                            }
+                            console.log(targetObject);
+                            console.log(objectDynamicsUnitCosts.datasets);
+                            
+                            
                         }
 
                         if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
