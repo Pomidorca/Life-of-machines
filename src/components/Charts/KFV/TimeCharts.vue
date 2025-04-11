@@ -6,13 +6,13 @@
               <span class="loader"></span>
             </div>
             <div v-else-if="error">Ошибка: {{ error }}</div>
-            <div v-else class="grid grid-cols-2 gap-6 items-start">
+            <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
-                <div class="element-chart">
+                <div class="element-chart" style="aspect-ratio: 16 / 9; height: auto;">
                     <Line :options="ChangesStructureKFVOptions" :data="changesStructureKFV" />
                 </div>
 
-                <div class="element-chart">
+                <div class="element-chart" style="aspect-ratio: 16 / 9; height: auto;">
                     <Radar :options="StructureKFVOptions" :data="structureKFV" />
                 </div>
             </div>
