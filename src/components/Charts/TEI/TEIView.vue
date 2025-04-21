@@ -81,6 +81,7 @@
           <Bar :options="CostStructureOptions" :data="CostStructure" />
         </div>
         <div class="element-chart my-6">
+          365836
           <Line :options="DynamicsSpecificAccumulatedOptions" :data="DynamicsSpecificAccumulated" />
         </div>
         <div class="element-chart">

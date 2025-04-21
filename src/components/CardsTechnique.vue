@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper-technic-statistics">
-    <div class="wrapper-technic flex px-2">
+    <div class="wrapper-technic flex px-2 p">
       <div v-for="technique in techniques" :key="technique.id" class="item-technic">
         <div class="flex items-center justify-center relative"
              @click="fetchTechniques(technique.machineClassIds), selectTechnique(technique.machineClassIds)"
@@ -8,6 +8,11 @@
           <div class="flex flex-col items-center">
             <img class=" bg-cover bg-center bg-no-repeat rounded-md" :src="technique.image" alt="tech"
                  loading="lazy">
+            <div class="info-note">
+              {{ technique.total }}
+              /
+              {{ technique.repair }}
+            </div>
             <p class="item-technic-text py-3">{{ technique.title }}</p>
           </div>
   <!--        <div class="flex flex-col gap-y-2">-->
@@ -16,54 +21,6 @@
   <!--          <p class="flex items-center gap-x-1 font-medium text-[#979DAC] leading-5"><img-->
   <!--              src="/img/tech/Danger Circle.svg"> {{ technique.repair }}</p>-->
   <!--        </div>-->
-        </div>
-      </div>
-    </div>
-    <div class="wrapper-statistics grid grid-cols-2 gap-6 pb-6 pt-4 px-6">
-      <div class="container-working-techniques">
-        <div class="chart-working-techniques flex justify-between items-center">
-          <div class="chart-working-techniques-selected" :style="{ width: workingWidth }">
-            <div class="indicator-percentages text-center">
-              {{ workingWidth }}
-            </div>
-          </div>
-          <div v-if="workingWidth !== '100%'" class="chart-divider"></div>
-          <div class="chart-working-techniques-secondary" :style="{ width: repairWidth }"></div>
-        </div>
-        <div class="text-working-techniques flex justify-between items-center">
-          <div class="text-working-techniques-title">
-            Рабочие
-          </div>
-          <div class="text-working-techniques-statistic">
-            <span class="text-positive">
-              {{ getActiveTechnique.total }}
-            </span>
-            / {{ getActiveTechnique.repair }}
-          </div>
-        </div>
-      </div>
-      <div class="container-out-of-order-techniques">
-        <div class="chart-out-of-order-techniques flex justify-between items-center">
-          <div class="chart-out-of-order-techniques-selected" :style="{ width: repairWidth }">
-            <div class="indicator-percentages text-center">
-              {{ repairWidth }}
-            </div>
-          </div>
-          <div v-if="repairWidth !== '100%'" class="chart-divider">
-
-          </div>
-          <div class="chart-out-of-order-techniques-secondary" :style="{ width: workingWidth }"></div>
-        </div>
-        <div class="text-out-of-order-techniques flex justify-between items-center">
-          <div class="text-out-of-order-techniques-title">
-            Вне сторя
-          </div>
-          <div class="text-out-of-order-techniques-statistic">
-            <span class="text-negative">
-              {{ getActiveTechnique.repair }}
-            </span>
-            / {{ getActiveTechnique.total }}
-          </div>
         </div>
       </div>
     </div>

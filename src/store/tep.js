@@ -167,7 +167,7 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     })
 
-                await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd,  machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
 
                         const data = response.data
@@ -191,8 +191,11 @@ export const useTEPStore = defineStore("TEP", {
                                     labelsDynamics.push(element.combinedDate);
                                 }
                             })
-
-                            costTypes.push(item.markName)
+                            if(item.markName) {
+                                costTypes.push(item.markName)
+                            } else {
+                                costTypes.push(item.machineClassName)
+                            }
 
                         })
 
@@ -254,8 +257,6 @@ export const useTEPStore = defineStore("TEP", {
                         const labels = []
 
                         const data = response.data
-                        console.log(data);
-                        
 
                         const elementData = []
 
@@ -304,10 +305,7 @@ export const useTEPStore = defineStore("TEP", {
                             if (targetObject) {
                                 targetObject.label = 'Общий';
                             }
-                            console.log(targetObject);
-                            console.log(objectDynamicsUnitCosts.datasets);
-                            
-                            
+
                         }
 
                         if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
@@ -403,7 +401,7 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     });
 
-                await TEPDataService.getDynamicsOfUnitAccumulatedCosts( dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds )
+                await TEPDataService.getDynamicsOfUnitAccumulatedCosts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds )
                     .then((response) => {
 
                         if (!response.data) {
@@ -412,7 +410,8 @@ export const useTEPStore = defineStore("TEP", {
                         }
 
                         const data = response.data;
-                        const labels = Array.from(new Set(data.flatMap(item => item.data.map(d => d.year)))).sort((a, b) => a - b);
+                        console.log(data)
+                        const labels = Array.from(new Set(data.flatMap(item => item.data.map(d => d.combinedDate)))).sort((a, b) => a - b);
 
                         const graphData = {
                             labels: labels,
@@ -425,8 +424,8 @@ export const useTEPStore = defineStore("TEP", {
 
                             graphData.datasets.push({
                                 label: `Уд. нак. затрат ${machine.markName}`,
-                                data: labels.map(year => {
-                                    const yearData = machine.data.find(d => d.year === year);
+                                data: labels.map(combinedDate => {
+                                    const yearData = machine.data.find(d => d.combinedDate === combinedDate);
                                     return yearData ? yearData.productivity : 0;
                                 }),
                                 backgroundColor: this.colors[colorIndex].secondBg,
@@ -437,9 +436,9 @@ export const useTEPStore = defineStore("TEP", {
 
                             graphData.datasets.push({
                                 label: `Производ. ${machine.markName}`,
-                                data: labels.map(year => {
-                                    const yearData = machine.data.find(d => d.year === year);
-                                    return yearData ? yearData.accumulatedProductivity : 0;
+                                data: labels.map(combinedDate => {
+                                    const yearData = machine.data.find(d => d.combinedDate === combinedDate);
+                                    return yearData ? yearData.costToProductivityRatio : 0;
                                 }),
                                 backgroundColor: this.colors[colorIndex].background,
                                 borderColor: this.colors[colorIndex].border,

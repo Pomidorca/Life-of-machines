@@ -75,6 +75,17 @@
         flex-shrink: 0;
         > div{
           transition: all .3s;
+          img {
+            filter: grayscale(100%);
+          }
+          .info-note{
+            position: absolute;
+            border-radius: 16px;
+            background: $app-bg-primary;
+            color: $app-text-inside;
+            padding: 2px 4px;
+            top: 4px;
+          }
           &:after{
             content: '';
             position: absolute;
@@ -82,11 +93,15 @@
             height: 1px;
             bottom: 0px;
           }
-          &:hover:after{
-            background: $app-bg-primary;
+          &:hover{
+            img {
+              filter: grayscale(0%);
+            }
           }
-          &.selected-technique:after{
-            background: $app-bg-primary;
+          &.selected-technique{
+            img {
+              filter: grayscale(0%);
+            }
           }
         }
         img{

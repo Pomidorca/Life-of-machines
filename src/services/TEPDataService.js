@@ -40,7 +40,7 @@ export default {
         });
     },
 
-    getMonthlyParkProductivity(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getMonthlyParkProductivity(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
@@ -61,6 +61,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (breakdownType) {
+            params.breakdownType = breakdownType
+        } else {
+            params.breakdownType = 'year'
         }
 
         return http.get(`/tep/monthlyParkProductivity`, {
@@ -137,7 +143,7 @@ export default {
             }
         });
     },
-    getDynamicsOfUnitAccumulatedCosts(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getDynamicsOfUnitAccumulatedCosts(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
@@ -158,6 +164,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (breakdownType) {
+            params.breakdownType = breakdownType
+        } else {
+            params.breakdownType = 'year'
         }
 
         return http.get(`/tep/dynamicsOfUnitAccumulatedCosts`, {
