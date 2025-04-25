@@ -29,7 +29,7 @@
       <div v-else-if="error">
         <div class="element-chart">
           <img src="/img/specialСharacters/no-selected.gif" alt=""/>
-          Ошибкаsf: {{ error }}
+          Ошибка: {{ error }}
         </div>
       </div>
       <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">

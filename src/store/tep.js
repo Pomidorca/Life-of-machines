@@ -6,8 +6,8 @@ import {
     CarryingOutVolumes,
     CostStructure, DynamicsSpecificAccumulated,
     DynamicsUnitCosts, DynamicsUnitCostsThree,
-    DynamicsUnitCostsTwo,
-    StructureKFV
+    DynamicsUnitCostsTwo, DynamicsUnitCostsTwoOptions,
+    StructureKFV, StructureKFVOptions
 } from "@/components/Charts/TEI/index.js";
 import {useMachineStore} from "@/store/machine.js";
 import TEPDataService from "@/services/TEPDataService.js";
@@ -35,7 +35,9 @@ export const useTEPStore = defineStore("TEP", {
             initialCarryingOutVolumes: CarryingOutVolumes,
             initialDynamicsUnitCosts: DynamicsUnitCosts,
             initialDynamicsUnitCostsTwo: DynamicsUnitCostsTwo,
+            initialDynamicsUnitCostsTwoOptions: DynamicsUnitCostsTwoOptions,
             initialStructureKFV: StructureKFV,
+            initialStructureKFVOptions: StructureKFVOptions,
             initialCostStructure: CostStructure,
             initialDynamicsSpecificAccumulated: DynamicsSpecificAccumulated,
             initialDynamicsUnitCostsThree: DynamicsUnitCostsThree,
@@ -460,7 +462,7 @@ export const useTEPStore = defineStore("TEP", {
                         }
                     })
 
-                    await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {
                         if (!response.data) {
                             console.error('Данные отсутствуют');
@@ -525,8 +527,6 @@ export const useTEPStore = defineStore("TEP", {
                     });
 
 
-                await this.updateChartStructureKFV()
-
             } catch (error) {
                 console.log(error)
                 this.error = 'Внутренняя ошибка:' + error
@@ -545,6 +545,8 @@ export const useTEPStore = defineStore("TEP", {
                 this.dateComparisonOfTargetAndActualUnitCosts = data
 
             }
+
+            console.log(data)
 
             if (this.dateComparisonOfTargetAndActualUnitCosts) {
                 this.loadingChartStructureKFV = true
@@ -574,6 +576,8 @@ export const useTEPStore = defineStore("TEP", {
                     this.errorChartStructureKFV = 'Неизвестный тип разбивки'
                     return;
                 }
+
+                this.initialStructureKFVOptions.plugins.title.text = `Сравнение целевых и фактических удельных затрат ${data ? 'за ' + data : ''}, руб/м3`
 
                 await TEPDataService.getComparisonOfTargetAndActualUnitCosts(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
                     .then((response) => {

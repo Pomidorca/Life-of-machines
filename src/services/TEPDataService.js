@@ -210,7 +210,7 @@ export default {
         });
     },
     
-    getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
 
         const params = {
             dateStart: dateStart,
@@ -231,6 +231,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (breakdownType) {
+            params.breakdownType = breakdownType
+        } else {
+            params.breakdownType = 'year'
         }
 
         return http.get(`/tep/dynamicsOfUnitAccumulatedCostsWithIndustryReplacement`, {
