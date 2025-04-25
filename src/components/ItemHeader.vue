@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for="item in menu" :key="item.id">
-      <router-link @click.prevent="handleClick(item)" :to="item.route"
+      <router-link @click.prevent="handleClick(item)" :to="getRouteWithQuery(item.route)"
                    class="text-nowrap link flex gap-x-2 items-center px-2 py-3 rounded-lg font-medium">
         <img :src="item.route === route.path ? item.imgActive : item.img" class="w-6 h-6"
              :class="{ 'active-img': isActive(item) }" loading="lazy" />
@@ -51,6 +51,12 @@ const indicatorStyle = computed(() => {
   };
 });
 
+const getRouteWithQuery = (path) => {
+  return {
+    path: path,
+    query: route.query
+  }
+}
 
 const filterMenuByUserRole = (userRoleID) => {
   menu.value = store.state.header

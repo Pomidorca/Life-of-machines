@@ -359,8 +359,6 @@ watch(
     async () => {
       if (machineStore.loading) return
 
-      console.log('request', selectedMachineIds.value, selectedMachineMarkIds.value, selectedMachineModelIds.value, selectedMachineClassIds.value);
-      console.log('request')
       await machineStore.saveStatusFilter();
       await saveStateToStorage();
     },

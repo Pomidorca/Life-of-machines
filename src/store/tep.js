@@ -410,7 +410,7 @@ export const useTEPStore = defineStore("TEP", {
                         }
 
                         const data = response.data;
-                        console.log(data)
+
                         const labels = Array.from(new Set(data.flatMap(item => item.data.map(d => d.combinedDate)))).sort((a, b) => a - b);
 
                         const graphData = {
