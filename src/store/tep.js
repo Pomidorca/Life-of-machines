@@ -101,440 +101,440 @@ export const useTEPStore = defineStore("TEP", {
                 return;
             }
 
-            try {
-
-                await this.filterMachines()
-
-                const storedFilterDate = localStorage.getItem('filterDate');
-
-                if (storedFilterDate) {
-
-                    const parsedFilterDate = JSON.parse(storedFilterDate);
-
-                    this.filterParams.dateStart = new Date(parsedFilterDate.startDate).toISOString().slice(0, 10);
-                    this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString().slice(0, 10);
-                }
-
-                const machineStore = useMachineStore();
-
-                this.filterParams.machineTypeIds = machineStore.selectedMachineTypeIds;
-
-                if (toggle) {
-                    this.filterParams.breakdownType = toggle
-                }
-
-                const { dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds } = this.filterParams;
-
-                await TEPDataService.getVolumeFulfillmentExtraction( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-                    .then((response) => {
-
-                        const data = response.data
-
-                        const labels = []
-
-                        const coefficient = []
-
-                        const volumeExtraction = []
-
-                        const volumeStripping = []
-
-                        data.map((item, index) => {
-
-                            labels.push(item.combinedDate)
-
-                            coefficient.push(item.coefficient)
-
-                            volumeExtraction.push(item.extraction)
-
-                            volumeStripping.push(item.stripping)
-
-                        })
-
-                        this.initialCarryingOutVolumes.labels = labels
-
-                        this.initialCarryingOutVolumes.datasets[0].data = coefficient
-
-                        this.initialCarryingOutVolumes.datasets[1].data = volumeStripping
-
-                        this.initialCarryingOutVolumes.datasets[2].data = volumeExtraction
-
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.status === 404) {
-
-                            this.initialCarryingOutVolumes.datasets.forEach(dataset => dataset.data = []);
-                        } else {
-                            console.log('Ошибка на стороне сервера ' + e);
-
-                        }
-                    })
-
-                await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-                    .then((response) => {
-
-                        const data = response.data
-
-                        const elementData = []
-
-                        const costTypes = []
-
-                        const labelsDynamics = []
-
-                        const objectDynamicsUnitCosts = {
-                            labels: [],
-                            datasets: []
-                        };
-
-                        data.map((item, index) => {
-
-                            item.data.map((element) => {
-
-                                if (!labelsDynamics.includes(element.combinedDate)) {
-                                    labelsDynamics.push(element.combinedDate);
-                                }
-                            })
-                            if(item.markName) {
-                                costTypes.push(item.markName)
-                            } else {
-                                costTypes.push(item.machineClassName)
-                            }
-
-                        })
-
-                        objectDynamicsUnitCosts.labels = labelsDynamics
-
-                        costTypes.forEach((type, index) => {
-                            const colorIndex = index % this.colors.length;
-
-                            objectDynamicsUnitCosts.datasets.push({
-                                label: type,
-                                data: [],
-                                backgroundColor: this.colors[colorIndex].background,
-                                borderColor: this.colors[colorIndex].border,
-                                borderWidth: 1,
-                                pointRadius: 0,
-                            });
-                        });
-
-
-                        data.forEach((item, index) => {
-
-                            elementData.length = 0
-
-                            item.data.forEach(element => {
-                                if (!labelsDynamics.includes(element.combinedDate)) {
-                                    labelsDynamics.push(element.combinedDate);
-                                }
-                                elementData.push(element.productivity)
-
-
-                            });
-
-                            objectDynamicsUnitCosts.datasets[index].data = elementData.map(item => {
-                                return item
-                            })
-
-                        });
-
-
-                        if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
-                            this.initialDynamicsUnitCosts.labels = objectDynamicsUnitCosts.labels;
-                            this.initialDynamicsUnitCosts.datasets = objectDynamicsUnitCosts.datasets
-                        }
-
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.status === 404) {
-
-                            this.initialDynamicsUnitCosts.datasets.forEach(dataset => dataset.data = []);
-                        } else {
-                            console.log('Ошибка на стороне сервера ' + e);
-
-                        }
-                    })
-
-                await TEPDataService.getDinamicsUnitCosts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-                    .then((response) => {
-
-                        const labels = []
-
-                        const data = response.data
-
-                        const elementData = []
-
-                        const objectDynamicsUnitCosts = {
-                            datasets: []
-                        };
-
-                        data.map((item, index) => {
-
-                            elementData.length = 0
-
-                            item.data.map((element) => {
-
-                                if (element.combinedDate && !labels.includes(element.combinedDate)) {
-                                    labels.push(element.combinedDate);
-                                }
-
-                                if (index === data.length - 1) {
-                                    elementData.push(element.totalCostToProductivityRatio);
-                                } else {
-                                    elementData.push(element.costToProductivityRatio);
-                                }
-                            })
-
-                            const colorIndex = index % this.colors.length;
-
-                            objectDynamicsUnitCosts.datasets.push({
-                                label: item.kindName,
-                                data: [],
-                                backgroundColor: this.colors[colorIndex].background,
-                                ...(index === data.length - 1 ? {borderColor: this.colors[colorIndex].border} : {}),
-                                ...(index === data.length - 1 ? {type: 'line'} : {})
-                            });
-
-                            objectDynamicsUnitCosts.datasets[index].data = elementData.map(item => {
-                                return item
-                            })
-
-                        })
-
-                        if (objectDynamicsUnitCosts.datasets.length > 0) {
-                            const lastDataset = objectDynamicsUnitCosts.datasets.pop();
-                            objectDynamicsUnitCosts.datasets.unshift(lastDataset);
-
-                            const targetObject = objectDynamicsUnitCosts.datasets.find(item => item.label === 'Total');
-                            if (targetObject) {
-                                targetObject.label = 'Общий';
-                            }
-
-                        }
-
-                        if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
-                            this.initialDynamicsUnitCostsTwo.labels = labels;
-                            this.initialDynamicsUnitCostsTwo.datasets = objectDynamicsUnitCosts.datasets
-                        } else {
-                            throw new Error('Пустой объект')
-                        }
-
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.status === 404) {
-
-                            this.initialDynamicsUnitCostsTwo.datasets.forEach(dataset => dataset.data = []);
-                        } else {
-                            console.log('Ошибка на стороне сервера ' + e);
-                            this.error = 'Ошибка на стороне сервера ' + e
-                        }
-                    })
-
-                await TEPDataService.getStructureOfEquipmentOwnershipCosts( dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds )
-                    .then((response) => {
-
-                        if (!response.data) {
-                            console.error('Данные отсутствуют');
-                            return;
-                        }
-
-                        const data = response.data;
-
-                        const costStructure = {
-                            labels: [],
-                            datasets: []
-                        };
-
-                        data.forEach((item) => {
-                            costStructure.labels.push(item.markName);
-                        });
-
-                        const uniqueCostTypes = [...new Set(data.flatMap(item => item.data.map(element => element.type)))];
-
-
-                        const totalCostIndex = uniqueCostTypes.findIndex(type => type.includes('ИТОГО удельные затраты на владение'));
-
-                        if (totalCostIndex !== -1) {
-
-                            const totalCostType = uniqueCostTypes.splice(totalCostIndex, 1)[0];
-
-
-                            uniqueCostTypes.unshift(totalCostType);
-                        }
-
-                        uniqueCostTypes.forEach((costType, index) => {
-                            const colorIndex = index % this.colors.length;
-
-                            const dataset = {
-                                label: costType,
-                                data: data.map(item => {
-                                    const cost = item.data.find(element => element.type === costType);
-                                    return cost ?
-                                        (costType.includes('ИТОГО') ? cost.totalCost :
-                                            costType.includes('Удельная стоимость') ? cost.specificCost :
-                                                costType.includes('ТО, ТР') ? cost.maintenanceAndRepairCosts :
-                                                    costType.includes('ФОТ и налоги') ? cost.laborAndTaxesCosts :
-                                                        costType.includes('эксплуатацию') ? cost.fuelCosts :
-                                                            costType.includes('Прочее') ? cost.otherCosts : 0)
-                                        : 0;
-                                }),
-                                backgroundColor: this.colors[colorIndex].background,
-                                borderColor: '',
-                            };
-
-                            if (costType.includes('ИТОГО удельные затраты на владение')) {
-                                dataset.backgroundColor = '#33538f';
-                                dataset.borderColor = '#33538f';
-                                dataset.type = 'line';
-                            }
-
-                            costStructure.datasets.push(dataset);
-                        });
-
-                        this.initialCostStructure.labels = costStructure.labels;
-                        this.initialCostStructure.datasets = costStructure.datasets;
-
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.status === 404) {
-                            this.initialCostStructure.labels = [];
-                            this.initialCostStructure.datasets = [];
-                        } else {
-                            console.log('Ошибка на стороне сервера ' + e);
-                            this.error = 'Ошибка на стороне сервера ' + e;
-                        }
-                    });
-
-                await TEPDataService.getDynamicsOfUnitAccumulatedCosts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds )
-                    .then((response) => {
-
-                        if (!response.data) {
-                            console.error('Данные отсутствуют');
-                            return;
-                        }
-
-                        const data = response.data;
-
-                        const labels = Array.from(new Set(data.flatMap(item => item.data.map(d => d.combinedDate)))).sort((a, b) => a - b);
-
-                        const graphData = {
-                            labels: labels,
-                            datasets: []
-                        };
-
-                        data.forEach((machine, index) => {
-
-                            const colorIndex = index % this.colors.length;
-
-                            graphData.datasets.push({
-                                label: `Уд. нак. затрат ${machine.markName}`,
-                                data: labels.map(combinedDate => {
-                                    const yearData = machine.data.find(d => d.combinedDate === combinedDate);
-                                    return yearData ? yearData.productivity : 0;
-                                }),
-                                backgroundColor: this.colors[colorIndex].secondBg,
-                                borderColor: this.colors[colorIndex].secondBg,
-                                yAxisID: 'y-cost'
-                            });
-
-
-                            graphData.datasets.push({
-                                label: `Производ. ${machine.markName}`,
-                                data: labels.map(combinedDate => {
-                                    const yearData = machine.data.find(d => d.combinedDate === combinedDate);
-                                    return yearData ? yearData.costToProductivityRatio : 0;
-                                }),
-                                backgroundColor: this.colors[colorIndex].background,
-                                borderColor: this.colors[colorIndex].border,
-                                yAxisID: 'y-costTwo',
-                            });
-                        });
-
-                        this.initialDynamicsSpecificAccumulated.labels = graphData.labels
-                        this.initialDynamicsSpecificAccumulated.datasets = graphData.datasets
-
-                        })
-                    .catch((e) => {
-                        if (e.response && e.response.status === 404) {
-                            this.initialDynamicsSpecificAccumulated.labels = [];
-
-                        } else {
-                            console.log('Ошибка на стороне сервера ' + e);
-                            this.error = 'Ошибка на стороне сервера ' + e;
-                        }
-                    })
-
-                    await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-                    .then((response) => {
-                        if (!response.data) {
-                            console.error('Данные отсутствуют');
-                            return;
-                        }
-                
-                        const data = response.data;
-                
-                        let maxLength = 0;
-                        data.forEach(item => {
-                            if (item.data && Array.isArray(item.data) && item.data.length > maxLength) {
-                                maxLength = item.data.length;
-                            }
-                        });
-                
-                        const labels = Array.from({ length: maxLength }, (_, i) => i + 1);
-                
-                        const graphData = {
-                            labels: labels,
-                            datasets: []
-                        };
-                
-                        data.forEach((item, index) => {
-
-                            if (!item.data || !Array.isArray(item.data) || item.data.length === 0) {
-                                return;
-                            }
-                
-                            const colorIndex = index % this.colors.length;
-                
-                            if (item.machineId) {
-                                graphData.datasets.push({
-                                    label: `Уд. нак. затрат ${item.markName}`,
-                                    data: item.data.map(d => d.costToProductivityRatio),
-                                    backgroundColor: this.colors[colorIndex].opacity,
-                                    borderColor: this.colors[colorIndex].border,
-                                    type: 'line'
-                                });
-                            } else if (item.markId) {
-                                graphData.datasets.push({
-                                    label: `Средний отраслевой уровень Уд. нак. затрат ${item.markName}`,
-                                    data: item.data.map(d => d.costToProductivityRatio),
-                                    borderDash: [10, 10],
-                                    backgroundColor: this.colors[colorIndex].background,
-                                    borderColor: this.colors[colorIndex].border,
-                                    type: 'line'
-                                });
-                            }
-                        });
-                
-                        this.initialDynamicsUnitCostsThree.labels = graphData.labels;
-                        this.initialDynamicsUnitCostsThree.datasets = graphData.datasets;
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.status === 404) {
-                            this.initialDynamicsUnitCostsThree.labels = [];
-                            this.initialDynamicsUnitCostsThree.datasets = [];
-                        } else {
-                            console.log('Ошибка на стороне сервера ' + e);
-                            this.error = 'Ошибка на стороне сервера' + e;
-                        }
-                    });
-
-
-            } catch (error) {
-                console.log(error)
-                this.error = 'Внутренняя ошибка:' + error
-            } finally {
-                setTimeout(() => {
-                    this.loading = false;
-                }, 1000)
-            }
+            // try {
+            //
+            //     await this.filterMachines()
+            //
+            //     const storedFilterDate = localStorage.getItem('filterDate');
+            //
+            //     if (storedFilterDate) {
+            //
+            //         const parsedFilterDate = JSON.parse(storedFilterDate);
+            //
+            //         this.filterParams.dateStart = new Date(parsedFilterDate.startDate).toISOString().slice(0, 10);
+            //         this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString().slice(0, 10);
+            //     }
+            //
+            //     const machineStore = useMachineStore();
+            //
+            //     this.filterParams.machineTypeIds = machineStore.selectedMachineTypeIds;
+            //
+            //     if (toggle) {
+            //         this.filterParams.breakdownType = toggle
+            //     }
+            //
+            //     const { dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds } = this.filterParams;
+            //
+            //     await TEPDataService.getVolumeFulfillmentExtraction( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+            //         .then((response) => {
+            //
+            //             const data = response.data
+            //
+            //             const labels = []
+            //
+            //             const coefficient = []
+            //
+            //             const volumeExtraction = []
+            //
+            //             const volumeStripping = []
+            //
+            //             data.map((item, index) => {
+            //
+            //                 labels.push(item.combinedDate)
+            //
+            //                 coefficient.push(item.coefficient)
+            //
+            //                 volumeExtraction.push(item.extraction)
+            //
+            //                 volumeStripping.push(item.stripping)
+            //
+            //             })
+            //
+            //             this.initialCarryingOutVolumes.labels = labels
+            //
+            //             this.initialCarryingOutVolumes.datasets[0].data = coefficient
+            //
+            //             this.initialCarryingOutVolumes.datasets[1].data = volumeStripping
+            //
+            //             this.initialCarryingOutVolumes.datasets[2].data = volumeExtraction
+            //
+            //         })
+            //         .catch((e) => {
+            //             if (e.response && e.response.status === 404) {
+            //
+            //                 this.initialCarryingOutVolumes.datasets.forEach(dataset => dataset.data = []);
+            //             } else {
+            //                 console.log('Ошибка на стороне сервера ' + e);
+            //
+            //             }
+            //         })
+            //
+            //     await TEPDataService.getMonthlyParkProductivity( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+            //         .then((response) => {
+            //
+            //             const data = response.data
+            //
+            //             const elementData = []
+            //
+            //             const costTypes = []
+            //
+            //             const labelsDynamics = []
+            //
+            //             const objectDynamicsUnitCosts = {
+            //                 labels: [],
+            //                 datasets: []
+            //             };
+            //
+            //             data.map((item, index) => {
+            //
+            //                 item.data.map((element) => {
+            //
+            //                     if (!labelsDynamics.includes(element.combinedDate)) {
+            //                         labelsDynamics.push(element.combinedDate);
+            //                     }
+            //                 })
+            //                 if(item.markName) {
+            //                     costTypes.push(item.markName)
+            //                 } else {
+            //                     costTypes.push(item.machineClassName)
+            //                 }
+            //
+            //             })
+            //
+            //             objectDynamicsUnitCosts.labels = labelsDynamics
+            //
+            //             costTypes.forEach((type, index) => {
+            //                 const colorIndex = index % this.colors.length;
+            //
+            //                 objectDynamicsUnitCosts.datasets.push({
+            //                     label: type,
+            //                     data: [],
+            //                     backgroundColor: this.colors[colorIndex].background,
+            //                     borderColor: this.colors[colorIndex].border,
+            //                     borderWidth: 1,
+            //                     pointRadius: 0,
+            //                 });
+            //             });
+            //
+            //
+            //             data.forEach((item, index) => {
+            //
+            //                 elementData.length = 0
+            //
+            //                 item.data.forEach(element => {
+            //                     if (!labelsDynamics.includes(element.combinedDate)) {
+            //                         labelsDynamics.push(element.combinedDate);
+            //                     }
+            //                     elementData.push(element.productivity)
+            //
+            //
+            //                 });
+            //
+            //                 objectDynamicsUnitCosts.datasets[index].data = elementData.map(item => {
+            //                     return item
+            //                 })
+            //
+            //             });
+            //
+            //
+            //             if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
+            //                 this.initialDynamicsUnitCosts.labels = objectDynamicsUnitCosts.labels;
+            //                 this.initialDynamicsUnitCosts.datasets = objectDynamicsUnitCosts.datasets
+            //             }
+            //
+            //         })
+            //         .catch((e) => {
+            //             if (e.response && e.response.status === 404) {
+            //
+            //                 this.initialDynamicsUnitCosts.datasets.forEach(dataset => dataset.data = []);
+            //             } else {
+            //                 console.log('Ошибка на стороне сервера ' + e);
+            //
+            //             }
+            //         })
+            //
+            //     await TEPDataService.getDinamicsUnitCosts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+            //         .then((response) => {
+            //
+            //             const labels = []
+            //
+            //             const data = response.data
+            //
+            //             const elementData = []
+            //
+            //             const objectDynamicsUnitCosts = {
+            //                 datasets: []
+            //             };
+            //
+            //             data.map((item, index) => {
+            //
+            //                 elementData.length = 0
+            //
+            //                 item.data.map((element) => {
+            //
+            //                     if (element.combinedDate && !labels.includes(element.combinedDate)) {
+            //                         labels.push(element.combinedDate);
+            //                     }
+            //
+            //                     if (index === data.length - 1) {
+            //                         elementData.push(element.totalCostToProductivityRatio);
+            //                     } else {
+            //                         elementData.push(element.costToProductivityRatio);
+            //                     }
+            //                 })
+            //
+            //                 const colorIndex = index % this.colors.length;
+            //
+            //                 objectDynamicsUnitCosts.datasets.push({
+            //                     label: item.kindName,
+            //                     data: [],
+            //                     backgroundColor: this.colors[colorIndex].background,
+            //                     ...(index === data.length - 1 ? {borderColor: this.colors[colorIndex].border} : {}),
+            //                     ...(index === data.length - 1 ? {type: 'line'} : {})
+            //                 });
+            //
+            //                 objectDynamicsUnitCosts.datasets[index].data = elementData.map(item => {
+            //                     return item
+            //                 })
+            //
+            //             })
+            //
+            //             if (objectDynamicsUnitCosts.datasets.length > 0) {
+            //                 const lastDataset = objectDynamicsUnitCosts.datasets.pop();
+            //                 objectDynamicsUnitCosts.datasets.unshift(lastDataset);
+            //
+            //                 const targetObject = objectDynamicsUnitCosts.datasets.find(item => item.label === 'Total');
+            //                 if (targetObject) {
+            //                     targetObject.label = 'Общий';
+            //                 }
+            //
+            //             }
+            //
+            //             if (objectDynamicsUnitCosts && Object.keys(objectDynamicsUnitCosts).length > 0) {
+            //                 this.initialDynamicsUnitCostsTwo.labels = labels;
+            //                 this.initialDynamicsUnitCostsTwo.datasets = objectDynamicsUnitCosts.datasets
+            //             } else {
+            //                 throw new Error('Пустой объект')
+            //             }
+            //
+            //         })
+            //         .catch((e) => {
+            //             if (e.response && e.response.status === 404) {
+            //
+            //                 this.initialDynamicsUnitCostsTwo.datasets.forEach(dataset => dataset.data = []);
+            //             } else {
+            //                 console.log('Ошибка на стороне сервера ' + e);
+            //                 this.error = 'Ошибка на стороне сервера ' + e
+            //             }
+            //         })
+            //
+            //     await TEPDataService.getStructureOfEquipmentOwnershipCosts( dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds )
+            //         .then((response) => {
+            //
+            //             if (!response.data) {
+            //                 console.error('Данные отсутствуют');
+            //                 return;
+            //             }
+            //
+            //             const data = response.data;
+            //
+            //             const costStructure = {
+            //                 labels: [],
+            //                 datasets: []
+            //             };
+            //
+            //             data.forEach((item) => {
+            //                 costStructure.labels.push(item.markName);
+            //             });
+            //
+            //             const uniqueCostTypes = [...new Set(data.flatMap(item => item.data.map(element => element.type)))];
+            //
+            //
+            //             const totalCostIndex = uniqueCostTypes.findIndex(type => type.includes('ИТОГО удельные затраты на владение'));
+            //
+            //             if (totalCostIndex !== -1) {
+            //
+            //                 const totalCostType = uniqueCostTypes.splice(totalCostIndex, 1)[0];
+            //
+            //
+            //                 uniqueCostTypes.unshift(totalCostType);
+            //             }
+            //
+            //             uniqueCostTypes.forEach((costType, index) => {
+            //                 const colorIndex = index % this.colors.length;
+            //
+            //                 const dataset = {
+            //                     label: costType,
+            //                     data: data.map(item => {
+            //                         const cost = item.data.find(element => element.type === costType);
+            //                         return cost ?
+            //                             (costType.includes('ИТОГО') ? cost.totalCost :
+            //                                 costType.includes('Удельная стоимость') ? cost.specificCost :
+            //                                     costType.includes('ТО, ТР') ? cost.maintenanceAndRepairCosts :
+            //                                         costType.includes('ФОТ и налоги') ? cost.laborAndTaxesCosts :
+            //                                             costType.includes('эксплуатацию') ? cost.fuelCosts :
+            //                                                 costType.includes('Прочее') ? cost.otherCosts : 0)
+            //                             : 0;
+            //                     }),
+            //                     backgroundColor: this.colors[colorIndex].background,
+            //                     borderColor: '',
+            //                 };
+            //
+            //                 if (costType.includes('ИТОГО удельные затраты на владение')) {
+            //                     dataset.backgroundColor = '#33538f';
+            //                     dataset.borderColor = '#33538f';
+            //                     dataset.type = 'line';
+            //                 }
+            //
+            //                 costStructure.datasets.push(dataset);
+            //             });
+            //
+            //             this.initialCostStructure.labels = costStructure.labels;
+            //             this.initialCostStructure.datasets = costStructure.datasets;
+            //
+            //         })
+            //         .catch((e) => {
+            //             if (e.response && e.response.status === 404) {
+            //                 this.initialCostStructure.labels = [];
+            //                 this.initialCostStructure.datasets = [];
+            //             } else {
+            //                 console.log('Ошибка на стороне сервера ' + e);
+            //                 this.error = 'Ошибка на стороне сервера ' + e;
+            //             }
+            //         });
+            //
+            //     await TEPDataService.getDynamicsOfUnitAccumulatedCosts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds )
+            //         .then((response) => {
+            //
+            //             if (!response.data) {
+            //                 console.error('Данные отсутствуют');
+            //                 return;
+            //             }
+            //
+            //             const data = response.data;
+            //
+            //             const labels = Array.from(new Set(data.flatMap(item => item.data.map(d => d.combinedDate)))).sort((a, b) => a - b);
+            //
+            //             const graphData = {
+            //                 labels: labels,
+            //                 datasets: []
+            //             };
+            //
+            //             data.forEach((machine, index) => {
+            //
+            //                 const colorIndex = index % this.colors.length;
+            //
+            //                 graphData.datasets.push({
+            //                     label: `Уд. нак. затрат ${machine.markName}`,
+            //                     data: labels.map(combinedDate => {
+            //                         const yearData = machine.data.find(d => d.combinedDate === combinedDate);
+            //                         return yearData ? yearData.productivity : 0;
+            //                     }),
+            //                     backgroundColor: this.colors[colorIndex].secondBg,
+            //                     borderColor: this.colors[colorIndex].secondBg,
+            //                     yAxisID: 'y-cost'
+            //                 });
+            //
+            //
+            //                 graphData.datasets.push({
+            //                     label: `Производ. ${machine.markName}`,
+            //                     data: labels.map(combinedDate => {
+            //                         const yearData = machine.data.find(d => d.combinedDate === combinedDate);
+            //                         return yearData ? yearData.costToProductivityRatio : 0;
+            //                     }),
+            //                     backgroundColor: this.colors[colorIndex].background,
+            //                     borderColor: this.colors[colorIndex].border,
+            //                     yAxisID: 'y-costTwo',
+            //                 });
+            //             });
+            //
+            //             this.initialDynamicsSpecificAccumulated.labels = graphData.labels
+            //             this.initialDynamicsSpecificAccumulated.datasets = graphData.datasets
+            //
+            //             })
+            //         .catch((e) => {
+            //             if (e.response && e.response.status === 404) {
+            //                 this.initialDynamicsSpecificAccumulated.labels = [];
+            //
+            //             } else {
+            //                 console.log('Ошибка на стороне сервера ' + e);
+            //                 this.error = 'Ошибка на стороне сервера ' + e;
+            //             }
+            //         })
+            //
+            //         await TEPDataService.getDynamicsOfUnitAccumulatedCostsWithIndustryReplacement(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+            //         .then((response) => {
+            //             if (!response.data) {
+            //                 console.error('Данные отсутствуют');
+            //                 return;
+            //             }
+            //
+            //             const data = response.data;
+            //
+            //             let maxLength = 0;
+            //             data.forEach(item => {
+            //                 if (item.data && Array.isArray(item.data) && item.data.length > maxLength) {
+            //                     maxLength = item.data.length;
+            //                 }
+            //             });
+            //
+            //             const labels = Array.from({ length: maxLength }, (_, i) => i + 1);
+            //
+            //             const graphData = {
+            //                 labels: labels,
+            //                 datasets: []
+            //             };
+            //
+            //             data.forEach((item, index) => {
+            //
+            //                 if (!item.data || !Array.isArray(item.data) || item.data.length === 0) {
+            //                     return;
+            //                 }
+            //
+            //                 const colorIndex = index % this.colors.length;
+            //
+            //                 if (item.machineId) {
+            //                     graphData.datasets.push({
+            //                         label: `Уд. нак. затрат ${item.markName}`,
+            //                         data: item.data.map(d => d.costToProductivityRatio),
+            //                         backgroundColor: this.colors[colorIndex].opacity,
+            //                         borderColor: this.colors[colorIndex].border,
+            //                         type: 'line'
+            //                     });
+            //                 } else if (item.markId) {
+            //                     graphData.datasets.push({
+            //                         label: `Средний отраслевой уровень Уд. нак. затрат ${item.markName}`,
+            //                         data: item.data.map(d => d.costToProductivityRatio),
+            //                         borderDash: [10, 10],
+            //                         backgroundColor: this.colors[colorIndex].background,
+            //                         borderColor: this.colors[colorIndex].border,
+            //                         type: 'line'
+            //                     });
+            //                 }
+            //             });
+            //
+            //             this.initialDynamicsUnitCostsThree.labels = graphData.labels;
+            //             this.initialDynamicsUnitCostsThree.datasets = graphData.datasets;
+            //         })
+            //         .catch((e) => {
+            //             if (e.response && e.response.status === 404) {
+            //                 this.initialDynamicsUnitCostsThree.labels = [];
+            //                 this.initialDynamicsUnitCostsThree.datasets = [];
+            //             } else {
+            //                 console.log('Ошибка на стороне сервера ' + e);
+            //                 this.error = 'Ошибка на стороне сервера' + e;
+            //             }
+            //         });
+            //
+            //
+            // } catch (error) {
+            //     console.log(error)
+            //     this.error = 'Внутренняя ошибка:' + error
+            // } finally {
+            //     setTimeout(() => {
+            //         this.loading = false;
+            //     }, 1000)
+            // }
 
         },
 

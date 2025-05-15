@@ -27,26 +27,7 @@ export const useAuthStore = defineStore("auth", {
                         console.log(e)
                         this.errorMessage = 'Ошибка авторизации';
                     })
-                // const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(credentials),
-                // });
 
-                // if (!response.ok) {
-                //     const errorData = await response.json();
-                //     this.errorMessage = errorData.message || 'Ошибка авторизации';
-                //     throw new Error(this.errorMessage);
-                // }
-
-                // const data = await response.data;
-                // console.log(data.access_token)
-                // this.accessToken = data.access_token;
-                // this.refreshToken = data.refresh_token;
-                // this.user = data.user;
-                // this.saveTokensToSessionStorage();
             } catch (error) {
                 console.error('Ошибка авторизации:', error);
             }

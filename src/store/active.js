@@ -44,6 +44,7 @@ export const useActiveStore = defineStore('active', {
         filterParams: ref({
             dateStart: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10),
             dateEnd: new Date().toISOString().slice(0, 10),
+            breakdownType: null,
             machineModelIds: [],
             machineMarkIds: [],
             machineClassIds: [],
@@ -83,6 +84,17 @@ export const useActiveStore = defineStore('active', {
             const machineMarkIds = localStorage.getItem('selectedMachineMarkIds');
             const machineClassIds = localStorage.getItem('selectedMachineClassIds');
             const machineIds = localStorage.getItem('selectedMachineIds');
+            const filterDate = localStorage.getItem('filterDate');
+            let toggle;
+
+            if (filterDate) {
+
+                const filterObject = JSON.parse(filterDate)
+
+                toggle = filterObject.toggle
+
+            }
+
             let machineTypeIds = localStorage.getItem('selectedMachineTypeIds');
 
             let classIds;
@@ -109,6 +121,7 @@ export const useActiveStore = defineStore('active', {
                 state.filterParams.machineMarkIds = machineMarkIds ? JSON.parse(machineMarkIds) : [];
                 state.filterParams.machineClassIds = classIds;
                 state.filterParams.machineIds = machineIds ? JSON.parse(machineIds) : [];
+                state.filterParams.breakdownType = filterDate ? toggle : 'year'
             });
         },
         async fetchData() {
@@ -133,15 +146,22 @@ export const useActiveStore = defineStore('active', {
 
                 const parsedFilterDate = JSON.parse(storedFilterDate);
 
-                this.filterParams.dateStart = new Date(parsedFilterDate.startDate).toISOString().slice(0, 4);
-                this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString().slice(0, 4);
+                this.filterParams.dateStart = new Date(parsedFilterDate.startDate).toISOString();
+                this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString();
             }
 
-            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds} = this.filterParams;
+            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType} = this.filterParams;
 
+            // const checkingVoid = localStorage.getItem()
+            //
+            // if(checkingVoid) {
+            //
+            // }
+
+            console.log(this.filterParams)
             try {
 
-                await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType)
                     .then((response) => {
                         this.lineDate = transformLinedate(response.data)
                     })
@@ -150,10 +170,11 @@ export const useActiveStore = defineStore('active', {
                         throw new Error(e)
                     })
 
-                await ActiveDataService.getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                await ActiveDataService.getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType)
                     .then((response) => {
 
                         this.changeStructureDate = transformchangeStructuredate(response.data);
+
                     })
                     .catch((e) => {
                         console.log(e)
@@ -164,6 +185,9 @@ export const useActiveStore = defineStore('active', {
                     .then((response) => {
 
                         this.barTurnedTwoDate = transformbarTurnedTwoDate(response.data);
+
+                        console.log(response.data)
+                        console.log(this.barTurnedTwoDate)
                     })
                     .catch((e) => {
                         console.log(e)
@@ -204,7 +228,7 @@ function transformLinedate(data) {
             datasets: []
         };
     }
-    const labels = data.map(item => item.year);
+    const labels = data.map(item => item.key);
     const stackedDatasets = [
         {
             label: 'Основное',
@@ -256,7 +280,7 @@ function transformchangeStructuredate(data) {
             datasets: []
         };
     }
-    const labels = data.map(item => item.year);
+    const labels = data.map(item => item.key);
     const datasets = [{
             label: 'Основное',
             data: data.map(item => item.main),

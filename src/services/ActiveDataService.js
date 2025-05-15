@@ -1,7 +1,7 @@
 import http from '../http-common.js'
 
 export default {
-    getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType) {
 
         const params = {
             dateStart: dateStart,
@@ -23,6 +23,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (breakdownType) {
+            params.breakdownType = breakdownType
+        } else {
+            params.breakdownType = 'year'
         }
 
         return http.get(`/actives/charts/structure`, {
@@ -32,7 +38,7 @@ export default {
             }
         });
     },
-    getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType) {
 
         const params = {
             dateStart: dateStart,
@@ -54,6 +60,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (breakdownType) {
+            params.breakdownType = breakdownType
+        } else {
+            params.breakdownType = 'year'
         }
 
         return http.get(`/actives/charts/average-age`, {
