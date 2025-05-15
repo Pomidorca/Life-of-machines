@@ -175,7 +175,7 @@ function handleClickChart(event) {
       if (index !== -1) {
         tips.value.splice(index, 1);
       }
-    }, 8000);
+    }, 7000);
   }
 }
 
