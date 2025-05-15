@@ -8,7 +8,7 @@ import {
     ref
 } from "vue";
 import CTFDataService from "@/services/CTFDataService.js";
-import {ChangeOperatingTime, ChangeOperatingTimeOptions} from "@/components/Charts/KFV/index.js";
+import {ChangeOperatingTime, ChangeOperatingTimeOptions, StructureKFVOptions} from "@/components/Charts/KFV/index.js";
 
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL
@@ -17,6 +17,8 @@ export const useKFVStore = defineStore("KFV", {
         return {
             loading: false,
             error: null,
+            loadingStructureKFV: false,
+            errorStructureKFV: false,
             changesStructureKFV: {
                 labels: [],
                 datasets: []
@@ -28,13 +30,15 @@ export const useKFVStore = defineStore("KFV", {
             filterParams: ref({
                 dateStart: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10),
                 dateEnd: new Date().toISOString().slice(0, 10),
+                breakdownType: null,
                 machineModelIds: [],
                 machineMarkIds: [],
                 machineClassIds: [],
                 machineIds: [],
                 machineTypeIds: [],
             }),
-            initialChangeOperatingTime: ChangeOperatingTime
+            initialChangeOperatingTime: ChangeOperatingTime,
+            initialStructureKFVOptions: StructureKFVOptions
         }
     },
     actions: {
@@ -44,6 +48,17 @@ export const useKFVStore = defineStore("KFV", {
             const machineMarkIds = localStorage.getItem('selectedMachineMarkIds');
             const machineClassIds = localStorage.getItem('selectedMachineClassIds');
             const machineIds = localStorage.getItem('selectedMachineIds');
+            const filterDate = localStorage.getItem('filterDate');
+            let toggle;
+
+            if (filterDate) {
+
+                const filterObject = JSON.parse(filterDate)
+
+                toggle = filterObject.toggle
+
+            }
+
             let machineTypeIds = localStorage.getItem('selectedMachineTypeIds');
 
             let classIds;
@@ -70,6 +85,7 @@ export const useKFVStore = defineStore("KFV", {
                 state.filterParams.machineMarkIds = machineMarkIds ? JSON.parse(machineMarkIds) : [];
                 state.filterParams.machineClassIds = classIds;
                 state.filterParams.machineIds = machineIds ? JSON.parse(machineIds) : [];
+                state.filterParams.breakdownType = filterDate ? toggle : 'year';
             });
         },
         async fetchKFV() {
@@ -96,70 +112,114 @@ export const useKFVStore = defineStore("KFV", {
                 this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString().slice(0, 4);
             }
 
-            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds} = this.filterParams;
+            this.updateChartStructureKFV()
 
-            // try {
-            //     await CTFDataService.getWorkTimeByServiceLife(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-            //         .then((response) => {
-            //             // throw  new Error('Попа единорога ')
-            //
-            //             const data = response.data
-            //
-            //             const labels = []
-            //
-            //             const datasetsBlue = []
-            //
-            //             const datasetsRed = []
-            //
-            //             data.map((item, index) => {
-            //
-            //                 labels.push(item.serviceLife)
-            //
-            //                 datasetsRed.push(item.worktime)
-            //
-            //                 datasetsBlue.push(item.worktimeAverage)
-            //             })
-            //
-            //             this.initialChangeOperatingTime.labels = labels;
-            //             this.initialChangeOperatingTime.datasets[0].data = datasetsBlue;
-            //             this.initialChangeOperatingTime.datasets[1].data = datasetsRed;
-            //
-            //         })
-            //         .catch((e) => {
-            //             console.log(e)
-            //             throw new Error(e)
-            //         })
-            //     await CTFDataService.getYearly(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-            //         .then((response) => {
-            //             this.changesStructureKFV = changesStructure(response.data);
-            //         })
-            //         .catch((e) => {
-            //             console.log(e)
-            //             throw new Error(e)
-            //         })
-            //
-            //     await CTFDataService.getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
-            //         .then((response) => {
-            //             this.structureKFV = StructureKFV(response.data);
-            //         })
-            //         .catch((e) => {
-            //             console.log(e)
-            //             throw new Error(e)
-            //         })
-            //
-            //
-            // } catch (error) {
-            //     this.error = `Error loading data: ${error.message}`;
-            // } finally {
-            //     this.loading = false;
-            // }
+            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType} = this.filterParams;
+
+            try {
+                await CTFDataService.getWorkTimeByServiceLife(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        // throw  new Error('Попа единорога ')
+
+                        const data = response.data
+
+                        const labels = []
+
+                        const datasetsBlue = []
+
+                        const datasetsRed = []
+
+                        data.map((item, index) => {
+
+                            labels.push(item.serviceLife)
+
+                            datasetsRed.push(item.worktime)
+
+                            datasetsBlue.push(item.worktimeAverage)
+                        })
+
+                        this.initialChangeOperatingTime.labels = labels;
+                        this.initialChangeOperatingTime.datasets[0].data = datasetsBlue;
+                        this.initialChangeOperatingTime.datasets[1].data = datasetsRed;
+
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
+                await CTFDataService.getYearly(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType)
+                    .then((response) => {
+                        this.changesStructureKFV = changesStructure(response.data);
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
+
+                // await CTFDataService.getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                //     .then((response) => {
+                //         this.structureKFV = StructureKFV(response.data);
+                //     })
+                //     .catch((e) => {
+                //         console.log(e)
+                //         throw new Error(e)
+                //     })
+
+
+            } catch (error) {
+                this.error = `Error loading data: ${error.message}`;
+            } finally {
+                this.loading = false;
+            }
         },
+
         updateFilterParams(params) {
             this.$patch(state => {
                 Object.assign(state.filterParams, params);
             });
             this.fetchKFV();
         },
+        async updateChartStructureKFV(date) {
+
+            console.log(date)
+            if (date) {
+                try {
+                    console.log('sgfhsh')
+
+                    this.loadingStructureKFV = true
+                    this.errorStructureKFV = false
+
+                    let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds } = this.filterParams;
+
+                    await CTFDataService.getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, date)
+                        .then((response) => {
+
+                            this.initialStructureKFVOptions.plugins.title.text = ' Структура КФВ среднесписочной единицы техники за ' + date
+
+                            this.structureKFV = StructureKFV(response.data);
+
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                            throw new Error(e)
+                        })
+
+
+
+                } catch (e) {
+
+                    this.errorStructureKFV = ' внутренняя ошибка '
+                    console.log(e)
+
+                } finally {
+                    setTimeout(() => {
+                        this.loadingStructureKFV = false;
+                    }, 1000)
+                }
+            } else {
+                this.errorStructureKFV = ' Временной диапозон не выбран. '
+            }
+        }
     }
 })
 
@@ -171,7 +231,7 @@ function changesStructure(data) {
             datasets: []
         };
     }
-    const labels = data.map(item => item.year);
+    const labels = data.map(item => item.key);
     const datasets = [{
             label: "Время в работе",
             data: data.map((item) => item.fact.worktime_f),

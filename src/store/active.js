@@ -44,6 +44,7 @@ export const useActiveStore = defineStore('active', {
         filterParams: ref({
             dateStart: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10),
             dateEnd: new Date().toISOString().slice(0, 10),
+            level: null,
             breakdownType: null,
             machineModelIds: [],
             machineMarkIds: [],
@@ -51,6 +52,22 @@ export const useActiveStore = defineStore('active', {
             machineIds: [],
             machineTypeIds: [],
         }),
+        colors: [
+            { background: 'rgb(31,101,145)', border: 'rgb(31,101,145)' },
+            { background: 'rgb(40,126,186)', border: 'rgb(40,126,186)' },
+            { background: 'rgb(61,161,234)', border: 'rgb(61,161,234)' },
+            { background: 'rgb(84,173,241)', border: 'rgb(84,173,241)' },
+            { background: 'rgb(132,194,243)', border: 'rgb(132,194,243)' },
+            { background: 'rgb(159,210,250)', border: 'rgb(159,210,250)' },
+            { background: 'rgb(182,220,250)', border: 'rgb(182,220,250)' },
+            { background: 'rgb(207,229,250)', border: 'rgb(207,229,250)' },
+            { background: 'rgb(150,167,184)', border: 'rgb(150,167,184)' },
+            { background: 'rgb(108,119,129)', border: 'rgb(108,119,129)' },
+            { background: 'rgb(97,105,112)', border: 'rgb(97,105,112)' },
+            { background: 'rgb(92,97,103)', border: 'rgb(92,97,103)' },
+            { background: 'rgb(71,73,76)', border: 'rgb(71,73,76)' },
+            { background: 'rgb(58,58,60)', border: 'rgb(58,58,60)' },
+        ]
     }),
     actions: {
         loadFilterParamsFromLocalStorage() {
@@ -85,6 +102,10 @@ export const useActiveStore = defineStore('active', {
             const machineClassIds = localStorage.getItem('selectedMachineClassIds');
             const machineIds = localStorage.getItem('selectedMachineIds');
             const filterDate = localStorage.getItem('filterDate');
+            const level = localStorage.getItem('level')
+
+            console.log(level)
+
             let toggle;
 
             if (filterDate) {
@@ -121,7 +142,8 @@ export const useActiveStore = defineStore('active', {
                 state.filterParams.machineMarkIds = machineMarkIds ? JSON.parse(machineMarkIds) : [];
                 state.filterParams.machineClassIds = classIds;
                 state.filterParams.machineIds = machineIds ? JSON.parse(machineIds) : [];
-                state.filterParams.breakdownType = filterDate ? toggle : 'year'
+                state.filterParams.breakdownType = filterDate ? toggle : 'year';
+                state.filterParams.level = level ? level : 'class'
             });
         },
         async fetchData() {
@@ -150,7 +172,7 @@ export const useActiveStore = defineStore('active', {
                 this.filterParams.dateEnd = new Date(parsedFilterDate.endDate).toISOString();
             }
 
-            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType} = this.filterParams;
+            let { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level} = this.filterParams;
 
             // const checkingVoid = localStorage.getItem()
             //
@@ -158,11 +180,11 @@ export const useActiveStore = defineStore('active', {
             //
             // }
 
-            console.log(this.filterParams)
             try {
 
-                await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType)
+                await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level)
                     .then((response) => {
+                        console.log(response.data)
                         this.lineDate = transformLinedate(response.data)
                     })
                     .catch((e) => {
@@ -228,31 +250,68 @@ function transformLinedate(data) {
             datasets: []
         };
     }
+
+    const colors = [
+        { background: 'rgb(31,101,145)', border: 'rgb(31,101,145)' },
+        { background: 'rgb(40,126,186)', border: 'rgb(40,126,186)' },
+        { background: 'rgb(61,161,234)', border: 'rgb(61,161,234)' },
+        { background: 'rgb(84,173,241)', border: 'rgb(84,173,241)' },
+        { background: 'rgb(132,194,243)', border: 'rgb(132,194,243)' },
+        { background: 'rgb(159,210,250)', border: 'rgb(159,210,250)' },
+        { background: 'rgb(182,220,250)', border: 'rgb(182,220,250)' },
+        { background: 'rgb(207,229,250)', border: 'rgb(207,229,250)' },
+        { background: 'rgb(150,167,184)', border: 'rgb(150,167,184)' },
+        { background: 'rgb(108,119,129)', border: 'rgb(108,119,129)' },
+        { background: 'rgb(97,105,112)', border: 'rgb(97,105,112)' },
+        { background: 'rgb(92,97,103)', border: 'rgb(92,97,103)' },
+        { background: 'rgb(71,73,76)', border: 'rgb(71,73,76)' },
+        { background: 'rgb(58,58,60)', border: 'rgb(58,58,60)' },
+    ]
+
+    const allKeys = Array.from(new Set(data.flatMap(item => item.children.map(child => child.key))));
+
+    const childrenDatasets = allKeys.map((key, index) => {
+
+        const colorIndex = index % colors.length;
+
+        return {
+            label: key,
+            data: data.map(item => {
+                const child = item.children.find(child => child.key === key);
+                return child ? child.quantity : 0;
+            }),
+            borderColor: colors[colorIndex].background,
+            backgroundColor: colors[colorIndex].border,
+            fill: true,
+            stack: 'stack0'
+        };
+    });
+
     const labels = data.map(item => item.key);
-    const stackedDatasets = [
-        {
-            label: 'Основное',
-            data: data.map(item => item.main),
-            borderColor: '#31608c',
-            backgroundColor: '#31608c',
-            fill: true,
-            stack: 'stack0'
-        },
-        {
-            label: 'Вспомогательное',
-            data: data.map(item => item.auxiliary),
-            borderColor: '#7e9abf',
-            backgroundColor: '#7e9abf',
-            fill: true,
-            stack: 'stack0'
-        }
-    ].filter(dataset => dataset.data.some(value => value !== 0));
+    // const stackedDatasets = [
+    //     {
+    //         label: 'Основное',
+    //         data: data.map(item => item.main),
+    //         borderColor: '#31608c',
+    //         backgroundColor: '#31608c',
+    //         fill: true,
+    //         stack: 'stack0'
+    //     },
+    //     {
+    //         label: 'Вспомогательное',
+    //         data: data.map(item => item.auxiliary),
+    //         borderColor: '#7e9abf',
+    //         backgroundColor: '#7e9abf',
+    //         fill: true,
+    //         stack: 'stack0'
+    //     }
+    // ].filter(dataset => dataset.data.some(value => value !== 0));
 
 
     const totalDataset = {
         label: 'Итого',
-        data: data.map(item => item.sum),
-        borderColor: '#0554F2',
+        data: data.map(item => item.main + item.auxiliary),
+        borderColor: '#636161',
         pointStyle: 'circle',
         backgroundColor: '#282b41',
         pointBorderColor: '#282b41',
@@ -268,11 +327,11 @@ function transformLinedate(data) {
 
     return {
         labels,
-        datasets: [totalDataset, ...stackedDatasets ]
+        datasets: [totalDataset, ...childrenDatasets ]
     };
 }
 
-function transformchangeStructuredate(data) {
+function transformchangeStructuredate(data,) {
     if (!data || data.length === 0) {
         console.error("Ошибка: Некорректные данные получены от API:", data);
         return {

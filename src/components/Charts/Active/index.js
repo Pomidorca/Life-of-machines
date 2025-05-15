@@ -130,7 +130,7 @@ export const barOptionsTurnedTwo = {
     plugins: {
         title: {
             display: true,
-            text: 'Распределение парка оборудования по видам работ',
+            text: 'Распределение парка оборудования по количеству работ',
             font: {
                 size: 20
             }

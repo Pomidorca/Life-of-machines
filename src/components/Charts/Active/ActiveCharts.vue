@@ -7,7 +7,7 @@
       <div v-else-if="error">Ошибка: {{ error }}</div>
       <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="element-chart" style="height:40vh;">
-          <Line :options="LineOptions" :data="lineDate" />
+          <Line ref="chartRef" :options="LineOptions" :data="lineDate"/>
         </div>
         <div class="element-chart">
           <Line :options="changeStructureOptions" :data="changeStructureData" />
@@ -56,7 +56,7 @@ import {
   Line,
   Bar
 } from 'vue-chartjs';
-import { computed, onMounted } from "vue";
+import {computed, onMounted, ref} from "vue";
 import { useActiveStore } from '@/store/active';
 import { useKFVStore } from '@/store/kfv';
 import TableForSTR from '@/components/TableForSTR.vue';
@@ -94,8 +94,7 @@ const lineDate = computed(() => activeStore.lineDate);
 const changeStructureData = computed(() => activeStore.changeStructureDate);
 const barTurnedData = computed(() => activeStore.barTurnedDate);
 const barTurnedTwoData = computed(() => activeStore.barTurnedTwoDate);
-
-
+const chartRef = ref(null);
 
 onMounted(async () => {
   // await activeStore.fetchData();

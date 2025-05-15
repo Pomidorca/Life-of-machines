@@ -71,6 +71,19 @@ export const useMachineStore = defineStore('machine', {
             localStorage.setItem('selectedMachineClassIds', JSON.stringify(this.machineClassIds));
             localStorage.setItem('selectedMachineIds', JSON.stringify(this.selectedMachineIds));
 
+            let level = 'class';
+
+            if (this.machineClassIds && this.machineClassIds.length > 0) {
+                level = 'class';
+            } else if (this.selectedMachineMarksIds && this.selectedMachineMarksIds.length > 0) {
+                level = 'mark';
+            } else if (this.selectedMachineModelIds && this.selectedMachineModelIds.length > 0) {
+                level = 'type';
+            } else if (this.selectedMachineIds && this.selectedMachineIds.length > 0) {
+                level = 'machine';
+            }
+
+            localStorage.setItem('level', level);
         },
         removeStatusFilter(event) {
             // console.log('в remove', this.selectedMachineMarksIds, event)

@@ -1,7 +1,7 @@
 import http from '../http-common.js'
 
 export default {
-    getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType) {
+    getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level) {
 
         const params = {
             dateStart: dateStart,
@@ -29,6 +29,12 @@ export default {
             params.breakdownType = breakdownType
         } else {
             params.breakdownType = 'year'
+        }
+
+        if (level) {
+            params.level = level
+        } else {
+            params.level = 'class'
         }
 
         return http.get(`/actives/charts/structure`, {

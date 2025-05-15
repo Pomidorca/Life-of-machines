@@ -28,7 +28,7 @@ export default {
         });
     },
 
-    getYearly(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getYearly(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType) {
 
         const params= {
             dateStart: dateStart,
@@ -49,6 +49,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (breakdownType) {
+            params.breakdownType = breakdownType
+        } else {
+            params.breakdownType = 'year'
         }
 
         return http.get(`/ctf/charts/yearly`, {
@@ -56,7 +62,7 @@ export default {
         });
     },
 
-    getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, date) {
 
         const params= {
             dateStart: dateStart,
@@ -77,6 +83,12 @@ export default {
 
         if (machineIds) {
             params.machineIds = machineIds
+        }
+
+        if (date) {
+
+            params.selectedPeriod = date
+
         }
 
         return http.get(`/ctf/charts/structure`, {
