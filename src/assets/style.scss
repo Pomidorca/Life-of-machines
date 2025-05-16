@@ -10,6 +10,7 @@
 @use "./pages/auth/login";
 
 /*=============== components ===============*/
+@use "components/tips/tips";
 @use "components/adaptive-modal";
 @use "components/header";
 @use "components/info-technic";
@@ -18,7 +19,6 @@
 @use "components/checkbox";
 @use "components/wrapper-charts";
 @use "components/loading/loading";
-@use "components/tips";
 
 @tailwind base;
 @tailwind components;
