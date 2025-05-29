@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper-info-technic flex flex-col justify-between">
+  <div ref="filter-url" class="wrapper-info-technic flex flex-col justify-between" :class="{ 'shadow': isScrolled }" @scroll="handleScroll">
     <div class="py-8 px-6">
       <div class="container-filter flex justify-between items-center">
         <div class="title-filter">
@@ -50,7 +50,8 @@ export default {
   },
   data() {
     return {
-      showAccordion: true
+      showAccordion: true,
+      isScrolled: false
     };
   },
   computed: {
@@ -63,6 +64,11 @@ export default {
   methods: {
     toggleShowTechniques() {
       this.showAccordion = !this.showAccordion
+    },
+    handleScroll(event) {
+      console.log('dggdgd')
+      console.log(event.currentTarget.scrollTop)
+      this.isScrolled = event.currentTarget.scrollTop > 0;
     },
     openFilter() {
       const queryParams = {

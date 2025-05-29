@@ -181,10 +181,8 @@ export const useKFVStore = defineStore("KFV", {
         },
         async updateChartStructureKFV(date) {
 
-            console.log(date)
             if (date) {
                 try {
-                    console.log('sgfhsh')
 
                     this.loadingStructureKFV = true
                     this.errorStructureKFV = false

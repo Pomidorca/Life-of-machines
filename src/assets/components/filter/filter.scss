@@ -1,3 +1,4 @@
+@use "../../utils/styles-forwarded" as *;
 .filter-machine-details-list{
     transition: all .3s;
     &.open-list{
@@ -15,4 +16,15 @@
     &.show-list{
         grid-template-rows: 1fr;
     }
+}
+
+.error-status-filter{
+    .element-chart{
+        width: 100%;
+        max-width: 400px;
+        img{
+            margin-top: 50px;
+        }
+    }
+    @include responsive-font(18, 24)
 }

@@ -10,6 +10,7 @@
   justify-content: end;
   align-items: center;
   visibility: hidden;
+  z-index: 9;
   transition: all .3s;
   .modal-overlay{
     position: absolute;

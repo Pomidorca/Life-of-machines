@@ -15,6 +15,7 @@ export const useMachineStore = defineStore('machine', {
         selectedMachineModelIds: [],
         selectedMachineMarksIds: [],
         selectedMachineIds: [],
+        emptySelected: false,
         loading: false,
         error: null,
     }),
@@ -153,4 +154,14 @@ export const useMachineStore = defineStore('machine', {
             this.selectedMachineType = machineType;
         },
     },
+    getters: {
+        filtersEmpty(state) {
+            return (
+                (!state.selectedMachineMarksIds || state.selectedMachineMarksIds.length === 0) &&
+                (!state.selectedMachineModelIds || state.selectedMachineModelIds.length === 0) &&
+                (!state.selectedMachineIds || state.selectedMachineIds.length === 0) &&
+                (!state.machineClassIds || state.machineClassIds.length === 0)
+            );
+        }
+    }
 });

@@ -104,8 +104,6 @@ export const useActiveStore = defineStore('active', {
             const filterDate = localStorage.getItem('filterDate');
             const level = localStorage.getItem('level')
 
-            console.log(level)
-
             let toggle;
 
             if (filterDate) {
@@ -184,7 +182,6 @@ export const useActiveStore = defineStore('active', {
 
                 await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level)
                     .then((response) => {
-                        console.log(response.data)
                         this.lineDate = transformLinedate(response.data)
                     })
                     .catch((e) => {
