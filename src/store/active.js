@@ -328,7 +328,7 @@ function transformLinedate(data) {
     };
 }
 
-function transformchangeStructuredate(data,) {
+function transformchangeStructuredate(data) {
     if (!data || data.length === 0) {
         console.error("Ошибка: Некорректные данные получены от API:", data);
         return {
@@ -389,14 +389,14 @@ function transformbarTurnedDate(data) {
     const labels = ['Основное оборудование', 'Вспомогательное оборудование'];
     const datasets = [{
             label: 'Средний срок службы',
-            data: [data.mainAvgAge, data.supportAvgAge, data.auxiliaryAvgAge],
+            data: [data.mainAvgAge, data.auxiliaryAvgAge],
             backgroundColor: '#4078b0',
             borderColor: '#4078b0',
             borderWidth: 1
         },
         {
             label: 'Количество',
-            data: [data.mainCount, data.supportCount, data.auxiliaryCount],
+            data: [data.mainCount, data.auxiliaryCount],
             backgroundColor: '#7e9abf',
             borderColor: '#7e9abf',
             borderWidth: 1
