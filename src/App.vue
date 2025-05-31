@@ -21,7 +21,7 @@
                 <router-view v-if="!filtersEmpty"/>
                 <div class="error-status-filter flex justify-center align-center" v-else>
                   <div class="element-chart">
-                    <p class="text-center my-5">Фильтры пусты...</p>
+                    <p class="text-center my-5" >Фильтры пусты...</p>
                     <img src="/img/specialСharacters/no-selected.gif" alt="" style="height: 100px; width: 100px; margin: 50px auto;"/>
                   </div>
                 </div>

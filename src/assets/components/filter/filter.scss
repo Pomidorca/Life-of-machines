@@ -26,5 +26,9 @@
             margin-top: 50px;
         }
     }
-    @include responsive-font(18, 24)
+    p{
+        font-weight: 500;
+        line-height: 22px;
+        @include responsive-font(18, 24)
+    }
 }

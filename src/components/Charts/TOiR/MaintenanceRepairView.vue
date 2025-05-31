@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <div v-if="mode === 'GeneralInformation'">
-
-      <div class="grid grid-cols-2 gap-6">
+      <div v-if="loading" class="wrapper-loader">
+        <span class="loader"></span>
+      </div>
+      <div v-else class="grid grid-cols-2 gap-6">
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
           <Bar :options="ActualAccidentRateOptions" :data="ActualAccidentRate" />
         </div>
@@ -20,9 +22,9 @@
         </div>
       </div>
 
-      <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">
-        <Bar :options="MeanTimeBetweenFailuresOptions" :data="MeanTimeBetweenFailures" />
-      </div>
+<!--      <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white mt-10">-->
+<!--        <Bar :options="MeanTimeBetweenFailuresOptions" :data="MeanTimeBetweenFailures" />-->
+<!--      </div>-->
 
     </div>
 
@@ -77,9 +79,10 @@ ChartJS.register(
   Tooltip,
   Legend,
 )
+import { useTOIRStore } from "@/store/toir.js";
 
 export default {
-  name: 'App',
+  name: 'TOIR',
   components: {
     Line,
     Bar,
@@ -90,7 +93,24 @@ export default {
     default: 'GeneralInformation'
   },
   data() {
-    return charts
+    return {
+      ...charts,
+      toirStore: null
+    }
+  },
+  created() {
+    this.toirStore = useTOIRStore()
+  },
+  computed: {
+    loading() {
+      return this.toirStore.loading;
+    },
+    error() {
+      return this.toirStore.error;
+    }
+  },
+  mounted() {
+    this.toirStore.fetchData()
   }
 }
 </script>
