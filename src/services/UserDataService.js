@@ -12,7 +12,7 @@ export default {
      * @param {Array} machineModelIds all selected models
      * @param {Array} machineIds all selected machines
      */
-    getEarliestEntryDate( machineClassIds, machineMarkIds, machineModelIds, machineIds) {
+    getEarliestEntryDate( machineClassIds, machineMarkIds, machineModelIds, machineIds ) {
 
         const params = {
             ...(machineClassIds ? {

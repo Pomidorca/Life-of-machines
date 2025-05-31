@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import {useAuthStore} from "@/store/auth.js";
-import {resolve} from "chart.js/helpers";
+import TOIRDataService from "@/services/TOIRDataService.js";
 
 export const useTOIRStore = defineStore("TOIR", {
     state: () => {
@@ -33,10 +33,18 @@ export const useTOIRStore = defineStore("TOIR", {
                 return;
             }
 
+            const { dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level } = this.filterParams
+
             try {
 
-                console.log('im here!')
+                await TOIRDataService.getIndicatorOfOrganizationOfRepairs()
+                    .then((response) => {
 
+                        console.log(response)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
 
             } catch (e) {
                 console.log(e)
