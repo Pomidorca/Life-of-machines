@@ -33,6 +33,9 @@ export const CarryingOutVolumesOptions = {
     maintainAspectRatio: false,
     height: 300,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         title: {
             display: true,
             text: 'Выполнение объемов добычи угля и вскрышных работ',
@@ -41,15 +44,7 @@ export const CarryingOutVolumesOptions = {
             }
         },
         legend: {
-            position: 'bottom',
-            onClick: (evt, legendItem, legend) => {
-
-                console.log(legendItem.datasetIndex)
-
-                legend.chart.toggleDataVisibility(legendItem.datasetIndex)
-                legend.chart.update()
-
-            }
+            position: 'bottom'
         }
     },
     scales: {
@@ -128,11 +123,11 @@ export const DynamicsUnitCostsOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
-            position: 'bottom',
-            onClick: (evt, legendItem) => {
-                console.log(legendItem)
-            }
+            position: 'bottom'
         },
         title: {
             display: true,
@@ -190,6 +185,9 @@ export const DynamicsUnitCostsTwoOptions = {
     maintainAspectRatio: false,
     height: 300,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -242,6 +240,9 @@ export const StructureKFVOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -276,6 +277,9 @@ export const CostStructureOptions = {
     maintainAspectRatio: true,
     height: 300,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -322,6 +326,9 @@ export const DynamicsSpecificAccumulatedOptions = {
     maintainAspectRatio: true,
     height: 300,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -398,6 +405,9 @@ export const DynamicsUnitCostsThreeOptions = {
     maintainAspectRatio: true,
     height: 300,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },

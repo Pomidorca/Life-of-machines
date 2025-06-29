@@ -1,3 +1,26 @@
+/**
+ * adaptive text
+ * example: clampFontSize(context.chart, min: n (px), period: n (wv), max: n (px))
+ * @param chart
+ * @param minPx
+ * @param vwRatio
+ * @param maxPx
+ * @returns {number}
+ */
+function clampFontSize(chart, minPx, vwRatio, maxPx) {
+    const viewportWidth = chart.width;
+    const viewportRatio = vwRatio / 100;
+    const calculatedSize = viewportWidth * viewportRatio;
+
+    return Math.min(
+        maxPx,
+        Math.max(
+            minPx,
+            calculatedSize
+        )
+    );
+}
+
 export const StructureEmergencyDowntimes = {
     labels: ['032 Устранение утечек, замена уплотнений, колец, РВД', '071 Неисправимость ходовых (бортовых, РМК, ГП) редукторов', '082 Диагностика КПП, ГМП, ГТР', '032 Устранение утечек, замена уплотнений, колец, РВД', '071 Неисправность ходовых (бортовых, РМК, ГП) редукторов', '082 Диагностика КПП, ГИП, ГТР'],
     datasets: [{
@@ -123,24 +146,65 @@ export const StructureEmergencyDowntimesOptionsTwo = {
     }
 }
 
-
 export const ActualAccidentRate = {
     labels: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
-    datasets: [{
-        label: 'Значение показателя',
-        data: [2, 17, 22, 12, 2, 17, 22, 12, 42, 37, 22, 62],
-        backgroundColor: 'rgba(54, 162, 235)',
-        borderColor: 'rgba(255, 99, 132)',
-        fill: false,
-        tension: 0.1
-    }]
+    datasets: [
+        {
+            label: 'Значение показателя',
+            data: [2, 17, 22, 12, 2, 17, 22, 12, 42, 37, 22, 62],
+            backgroundColor: 'rgba(54, 162, 235, 1)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            pointRadius: 0,
+        },
+        {
+            label: 'Фон',
+            data: new Array(12).fill(100),
+            backgroundColor: 'rgba(200, 200, 200, 0.3)',
+            borderWidth: 1,
+            pointRadius: 0,
+            datalabels: { display: false }
+        },
+    ]
 }
 
 export const ActualAccidentRateOptions = {
+    id: 'actualAccidentRateChart',
     responsive: true,
     maintainAspectRatio: true,
     height: 300,
+    scales: {
+        y: {
+            stacked: true,
+            beginAtZero: true,
+            // max: 1,
+        },
+        x: {
+            stacked: true,
+        },
+    },
     plugins: {
+        datalabels: {
+            display: true,
+            formatter: function(value) {
+                return  ((1 - value) * 100).toFixed(0) + '%';
+            },
+            font: (context) => ({
+                family: 'Arial',
+                size: clampFontSize(context.chart, 14, 3, 24),
+                weight: 'bold'
+            }),
+            anchor: 'end',
+            align: 'end',
+            offset: 10,
+            clip: true
+        },
+        tooltip: {
+            enabled: true,
+            filter: function (tooltipItem) {
+                return tooltipItem.datasetIndex === 0
+            }
+        },
         title: {
             display: true,
             text: 'Коэффициент аварийности фактический (КАФ)',
@@ -149,28 +213,64 @@ export const ActualAccidentRateOptions = {
             }
         },
         legend: {
-            position: 'null'
-        }
-    }
+            position: 'none'
+        },
+        // id: 'arrowIconPlugin',
+        // afterDatasetsDraw(chart, args, options) {
+        //     console.log(chart.config._config.options.id)
+        //     if (chart.id !== 'actualAccidentRateChart') return;
+        //     const {ctx, data} = chart;
+        //     const meta = chart.getDatasetMeta(0);
+        //
+        //     meta.data.forEach((bar, index) => {
+        //         const x = bar.x;
+        //         const y = bar.y - 20;
+        //
+        //         ctx.save();
+        //         ctx.font = '16px Arial';
+        //         ctx.textAlign = 'center';
+        //         ctx.fillText('▼', x, y);
+        //         ctx.restore();
+        //     });
+        // }
+    },
 }
 
 export const OrganizationOfRepairs = {
     labels: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
-    datasets: [{
-        label: 'Значение показателя',
-        data: [49, 23, 10, 26, 16, 49, 2, 12, 39, 28, 35, 10],
-        backgroundColor: 'rgba(54, 162, 155)',
-        borderColor: 'rgba(255, 99, 132)',
-        fill: false,
-        tension: 0.1
-    }]
+    datasets: [
+        {
+            label: 'Значение показателя',
+            data: [49, 23, 10, 26, 16, 49, 2, 12, 39, 28, 35, 10],
+            backgroundColor: 'rgba(54, 162, 155)',
+            borderColor: 'rgba(255, 99, 132)',
+            fill: false,
+
+        },
+        {
+            label: 'Значение показателя',
+            data: [49, 23, 10, 26, 16, 49, 2, 12, 39, 28, 35, 10],
+            backgroundColor: 'rgb(54,85,162)',
+            borderColor: 'rgb(216,99,255)',
+            fill: false,
+        },
+    ]
 }
 
 export const OrganizationOfRepairsOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    height: 300,
     plugins: {
+        datalabels: {
+            display: true,
+            formatter: function(value) {
+                if(value === 0) return '';
+                return  ((1 - value) * 100).toFixed(2) + '%';
+            },
+            anchor: 'end',
+            align: 'top',
+            clip: true,
+        },
         title: {
             display: true,
             text: 'Организация проведения ремонтов (Попр)',
@@ -181,19 +281,38 @@ export const OrganizationOfRepairsOptions = {
         legend: {
             position: 'null'
         }
-    }
+    },
+    scales: {
+        y: {
+            stacked: false,
+            beginAtZero: true,
+        },
+        x: {
+            stacked: true,
+        },
+    },
 }
 
 export const WorkPlanningIndicator = {
     labels: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
-    datasets: [{
-        label: 'Значение показателя',
-        data: [49, 23, 10, 26, 16, 49, 10, 20, 39, 28, 35, 10],
-        backgroundColor: 'rgba(54, 162, 100)',
-        borderColor: 'rgba(255, 99, 132)',
-        fill: false,
-        tension: 0.1
-    }]
+    datasets: [
+        {
+            label: 'Значение показателя',
+            data: [49, 23, 10, 26, 16, 49, 10, 20, 39, 28, 35, 10],
+            backgroundColor: 'rgba(54, 162, 100)',
+            borderColor: 'rgba(255, 99, 132)',
+            fill: false,
+            tension: 0.1
+        },
+        {
+            label: 'Значение показателя',
+            data: [49, 23, 10, 26, 16, 49, 10, 20, 39, 28, 35, 10],
+            backgroundColor: 'rgba(54, 162, 100)',
+            borderColor: 'rgba(255, 99, 132)',
+            fill: false,
+            tension: 0.1
+        },
+    ]
 }
 
 export const WorkPlanningIndicatorOptions = {
@@ -201,17 +320,27 @@ export const WorkPlanningIndicatorOptions = {
     maintainAspectRatio: true,
     height: 300,
     plugins: {
+        datalabels: {
+            display: true,
+            formatter: function(value) {
+                if(value === 0) return '';
+                return  value.toFixed(0);
+            },
+            anchor: 'end',
+            align: 'top',
+            clip: true,
+        },
         title: {
             display: true,
-            text: 'Показатель планирования работ (Пплан)',
+            text: 'Суммарные аварийные простои, ч',
             font: {
                 size: 20
             }
         },
         legend: {
-            position: 'null'
+            position: 'bottom'
         }
-    }
+    },
 }
 
 export const TotalEmergencyDowntime = {
@@ -256,9 +385,19 @@ export const TotalEmergencyDowntimeOptions = {
     maintainAspectRatio: true,
     height: 300,
     plugins: {
+        datalabels: {
+            display: true,
+            formatter: function(value) {
+                if(value === 0) return '';
+                return  value.toFixed(0);
+            },
+            anchor: 'end',
+            align: 'top',
+            clip: true,
+        },
         title: {
             display: true,
-            text: 'Общая простои на текущий период',
+            text: 'Среднее время восстановления (MTTR), ч',
             font: {
                 size: 20
             }
@@ -333,6 +472,110 @@ export const MeanTimeBetweenFailuresOptions = {
             position: 'bottom'
         }
     }
+}
+
+export const NumberOfRefunds = {
+    labels: ['Март', 'Апрель', 'Май', 'Июнь'],
+    datasets: [{
+        label: 'Самосвал',
+        data: [357, 211, 200, 150],
+        backgroundColor: 'rgba(54, 162, 235)',
+        borderColor: 'rgba(255, 99, 132)',
+        fill: false,
+        tension: 0.1
+    }
+    ]
+}
+
+export const NumberOfRefundsOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+        datalabels: {
+            display: true,
+            anchor: 'end',
+            align: 'top',
+            clip: true,
+        },
+        title: {
+            display: true,
+            text: 'Среднее время между отказами',
+            position: 'left',
+            font: {
+                size: 20
+            }
+        },
+        legend: {
+            position: 'null'
+        }
+    },
+    scales: {
+        y: {
+            stacked: true,
+            beginAtZero: true,
+        },
+        x: {
+            stacked: true,
+        },
+    },
+}
+
+export const NumberOfBreakdownsByFaultName = {
+    labels: ['Март', 'Апрель', 'Май', 'Июнь'],
+    datasets: [{
+        label: 'Самосвал',
+        data: [357, 211, 200, 150],
+        backgroundColor: 'rgba(54, 162, 235)',
+        borderColor: 'rgba(255, 99, 132)',
+        fill: false,
+        tension: 0.1
+    }
+    ]
+}
+
+export const NumberOfBreakdownsByFaultNameOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    minHeight: 400,
+    plugins: {
+        datalabels: {
+            display: true,
+            anchor: 'end',
+            align: 'end',
+            clip: false,
+            offset: 30
+        },
+        title: {
+            display: false,
+            text: 'Среднее время между отказами',
+            font: {
+                size: 20
+            }
+        },
+        legend: {
+            position: 'null'
+        }
+    },
+    indexAxis: 'y',
+    scales: {
+        y: {
+            stacked: true,
+            beginAtZero: true,
+            grid: {
+                display: false
+            }
+        },
+        x: {
+            stacked: true,
+            grid: {
+                display: true,
+                line: {
+                    borderDash: [10, 10],
+                    color: '#CCCCCC',
+                },
+            },
+        },
+    },
 }
 
 export const RequiredNumberParts = {

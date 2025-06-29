@@ -180,14 +180,14 @@ export const useActiveStore = defineStore('active', {
 
             try {
 
-                // await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level)
-                //     .then((response) => {
-                //         this.lineDate = transformLinedate(response.data)
-                //     })
-                //     .catch((e) => {
-                //         console.log(e)
-                //         throw new Error(e)
-                //     })
+                await ActiveDataService.getActiveStructure(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType, level)
+                    .then((response) => {
+                        this.lineDate = transformLinedate(response.data)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        throw new Error(e)
+                    })
 
                 await ActiveDataService.getAverageAge(dateStart, dateEnd, machineClassIds, machineMarkIds, machineModelIds, machineIds, breakdownType)
                     .then((response) => {
@@ -205,8 +205,6 @@ export const useActiveStore = defineStore('active', {
 
                         this.barTurnedTwoDate = transformbarTurnedTwoDate(response.data);
 
-                        console.log(response.data)
-                        console.log(this.barTurnedTwoDate)
                     })
                     .catch((e) => {
                         console.log(e)

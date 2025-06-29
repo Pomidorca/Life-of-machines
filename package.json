@@ -13,6 +13,7 @@
     "@primevue/themes": "^4.0.7",
     "axios": "^1.7.9",
     "chart.js": "^4.4.6",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "dotenv": "^16.4.7",
     "frappe-gantt": "^0.8.1",
     "pinia": "^2.2.6",

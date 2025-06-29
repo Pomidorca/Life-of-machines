@@ -449,7 +449,7 @@ export const useTEPStore = defineStore("TEP", {
                                 yAxisID: 'y-costTwo',
                             });
                         });
-                        console.log(this.initialDynamicsSpecificAccumulated)
+
                         this.initialDynamicsSpecificAccumulated.labels = graphData.labels
                         this.initialDynamicsSpecificAccumulated.datasets = graphData.datasets
 

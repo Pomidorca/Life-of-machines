@@ -5,6 +5,9 @@ export const LineOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         title: {
             display: true,
             text: 'Изменения структуры парка оборудования',
@@ -82,6 +85,9 @@ export const changeStructureOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -108,6 +114,9 @@ export const barOptionsTurned = {
     height: 300,
     indexAxis: 'y',
     plugins: {
+        datalabels: {
+            display: false,
+        },
         title: {
             display: true,
             text: 'Струкрура парка оборудования на текущий период',
@@ -128,6 +137,9 @@ export const barOptionsTurnedTwo = {
     height: 300,
     indexAxis: 'y',
     plugins: {
+        datalabels: {
+            display: false,
+        },
         title: {
             display: true,
             text: 'Распределение парка оборудования по количеству работ',

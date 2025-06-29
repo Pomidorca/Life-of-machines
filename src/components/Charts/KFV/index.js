@@ -32,6 +32,9 @@ export const ChangesStructureKFVOptions = {
     maintainAspectRatio: false,
     height: 300,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         title: {
             display: true,
             text: 'Изменения структуры КФВ среднесписочной единицы техники',
@@ -84,6 +87,9 @@ export const StructureKFVOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -116,6 +122,9 @@ export const detailedStructureCfvOneOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -141,6 +150,9 @@ export const detailedStructureCfvTwoOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         legend: {
             position: 'bottom'
         },
@@ -184,6 +196,9 @@ export const ChangeOperatingTimeOptions = {
     maintainAspectRatio: false,
     height: 600,
     plugins: {
+        datalabels: {
+            display: false,
+        },
         title: {
             display: true,
             text: 'Изменение времени работы на линии от срока эксплуатации оборудования',

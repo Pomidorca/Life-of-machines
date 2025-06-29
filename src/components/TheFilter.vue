@@ -67,6 +67,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useTEPStore } from "@/store/tep.js";
 import { pages } from '@/utilities/pagesData.js'
 import { useDateStore } from '@/store/date';
+import {useTOIRStore} from "@/store/toir.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -75,6 +76,7 @@ const machineStore = useMachineStore();
 const kfvStore = useKFVStore();
 const tepStore = useTEPStore();
 const dateStore = useDateStore();
+const toirStore = useTOIRStore();
 const startDate = ref(new Date(defaultStartYear, 0, 1));
 const endDate = ref(new Date(defaultEndYear, 11, 31));
 const toggle = ref('year');
@@ -172,6 +174,7 @@ const updateUrl = () => {
 const updateYearRange = () => {
     const startYear = startDate.value ? new Date(startDate.value).getFullYear() : 2000;
     const endYear = endDate.value ? new Date(endDate.value).getFullYear() : 2024;
+    saveStateToStorage()
 
     if (startYear > endYear) {
         console.error("Ошибка: 'Начало' не может быть позже 'Конца'.");
@@ -191,6 +194,7 @@ const updateYearRange = () => {
     activeStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     kfvStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear });
     tepStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear }, timeInterval)
+    toirStore.updateFilterParams({ yearStart: startYear, yearEnd: endYear }, timeInterval)
     
     saveStateToStorage();
 };
