@@ -60,6 +60,60 @@ export default {
             }
         });
     },
+    getTheWorkPlanningIndicator( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds ) {
+
+        const params = {
+            ...(
+                dateStart ? {
+                dateStart: dateStart
+            } : {}
+            ),
+            ...(
+                dateEnd ? {
+                dateEnd: dateEnd
+            } : {}
+            ),
+            ...(
+                machineClassIds ? {
+                machineClassIds: machineClassIds
+            } : {}
+            ),
+            ...(
+                machineClassIds ? {
+                    machineClassIds: machineClassIds
+                } : {}
+            ),
+            ...(
+                machineMarkIds ? {
+                    machineMarkIds: machineMarkIds
+                } : {}
+            ),
+            ...(
+                machineModelIds ? {
+                    machineModelIds: machineModelIds
+                } : {}
+            ),
+            ...(
+                machineIds ? {
+                    machineIds: machineIds
+                } : {}
+            ),
+            ...(
+                breakdownType ? {
+                    breakdownType: breakdownType
+                } : {
+                    breakdownType: 'year'
+                }
+            )
+        }
+
+        return http.get('/toir/theWorkPlanningIndicator', {
+            params,
+            paramsSerializer: {
+                indexes: false
+            }
+        });
+    },
     /**
      * function for get total emergency downtime
      * @param dateStart
@@ -353,6 +407,60 @@ export default {
         }
 
         return http.get('/toir/breakdownCountsByFaultName', {
+            params,
+            paramsSerializer: {
+                indexes: false
+            }
+        });
+    },
+    getCountRequiredSpareParts( dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds ) {
+
+        const params = {
+            ...(
+                dateStart ? {
+                    dateStart: dateStart
+                } : {}
+            ),
+            ...(
+                dateEnd ? {
+                    dateEnd: dateEnd
+                } : {}
+            ),
+            ...(
+                machineClassIds ? {
+                    machineClassIds: machineClassIds
+                } : {}
+            ),
+            ...(
+                machineClassIds ? {
+                    machineClassIds: machineClassIds
+                } : {}
+            ),
+            ...(
+                machineMarkIds ? {
+                    machineMarkIds: machineMarkIds
+                } : {}
+            ),
+            ...(
+                machineModelIds ? {
+                    machineModelIds: machineModelIds
+                } : {}
+            ),
+            ...(
+                machineIds ? {
+                    machineIds: machineIds
+                } : {}
+            ),
+            ...(
+                breakdownType ? {
+                    breakdownType: breakdownType
+                } : {
+                    breakdownType: 'year'
+                }
+            )
+        }
+
+        return http.get('/toir/countRequiredSpareParts', {
             params,
             paramsSerializer: {
                 indexes: false

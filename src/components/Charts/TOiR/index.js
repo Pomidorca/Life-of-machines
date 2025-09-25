@@ -236,26 +236,87 @@ export const ActualAccidentRateOptions = {
     },
 }
 
+export const OrganizationOfRepairsSecond = {
+    labels: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+    datasets: [
+        {
+            label: 'Значение показателя',
+            data: [1, 0.7, 0.2],
+            backgroundColor: 'rgb(54,108,162)',
+            borderColor: 'rgb(54,108,162)',
+            fill: false,
+        },
+    ],
+};
+
+export const OrganizationOfRepairsOptionsSecond = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+        datalabels: {
+            display: true,
+            formatter: function(value, context) {
+                if (context.datasetIndex !== 1) return '';
+                if(value === 0) return '';
+                return  (100 -((1 - value) * 100).toFixed(2)) + '%';
+            },
+            anchor: 'end',
+            align: 'top',
+            clip: true,
+        },
+        title: {
+            display: true,
+            text: 'Страховой объем запасных частей, шт',
+            font: {
+                size: 20
+            }
+        },
+        legend: {
+            position: 'bottom'
+        }
+    },
+    scales: {
+        y: {
+            stacked: true,
+            beginAtZero: true,
+        },
+        x: {
+            stacked: true,
+        },
+    },
+}
+
 export const OrganizationOfRepairs = {
     labels: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
     datasets: [
         {
             label: 'Значение показателя',
-            data: [49, 23, 10, 26, 16, 49, 2, 12, 39, 28, 35, 10],
-            backgroundColor: 'rgba(54, 162, 155)',
-            borderColor: 'rgba(255, 99, 132)',
+            data: [1, 0.7, 0.2],
+            backgroundColor: 'rgb(54,108,162)',
+            borderColor: 'rgb(54,108,162)',
             fill: false,
-
         },
         {
-            label: 'Значение показателя',
-            data: [49, 23, 10, 26, 16, 49, 2, 12, 39, 28, 35, 10],
-            backgroundColor: 'rgb(54,85,162)',
-            borderColor: 'rgb(216,99,255)',
-            fill: false,
+            label: 'Граничное значение',
+            data: [0, 0.3, 0.8],
+            backgroundColor: function(context) {
+                const chart = context.chart;
+                const {ctx, chartArea} = chart;
+                if (!chartArea) {
+                    return null;
+                }
+
+                const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                gradient.addColorStop(0, 'rgba(176, 60, 60, 1)');
+                gradient.addColorStop(1, 'rgba(237, 221, 83, 0)');
+                return gradient;
+            },
+            borderColor: 'rgba(255, 99, 132, 1)',
+            fill: true,
         },
-    ]
-}
+    ],
+};
+
 
 export const OrganizationOfRepairsOptions = {
     responsive: true,
@@ -263,9 +324,10 @@ export const OrganizationOfRepairsOptions = {
     plugins: {
         datalabels: {
             display: true,
-            formatter: function(value) {
+            formatter: function(value, context) {
+                if (context.datasetIndex !== 1) return '';
                 if(value === 0) return '';
-                return  ((1 - value) * 100).toFixed(2) + '%';
+                return  (100 -((1 - value) * 100).toFixed(2)) + '%';
             },
             anchor: 'end',
             align: 'top',
@@ -279,12 +341,12 @@ export const OrganizationOfRepairsOptions = {
             }
         },
         legend: {
-            position: 'null'
+            position: 'bottom'
         }
     },
     scales: {
         y: {
-            stacked: false,
+            stacked: true,
             beginAtZero: true,
         },
         x: {

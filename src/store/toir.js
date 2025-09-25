@@ -3,8 +3,14 @@ import {useAuthStore} from "@/store/auth.js";
 import TOIRDataService from "@/services/TOIRDataService.js";
 import {useMachineStore} from "@/store/machine.js";
 import {
-    ActualAccidentRate, NumberOfBreakdownsByFaultName, NumberOfBreakdownsByFaultNameOptions,
-    NumberOfRefunds, NumberOfRefundsOptions,
+    ActualAccidentRate,
+    NumberOfBreakdownsByFaultName,
+    NumberOfBreakdownsByFaultNameOptions,
+    NumberOfRefunds,
+    NumberOfRefundsOptions,
+    OrganizationOfRepairs,
+    OrganizationOfRepairsOptionsSecond,
+    OrganizationOfRepairsSecond,
     TotalEmergencyDowntime,
     WorkPlanningIndicator
 } from "@/components/Charts/TOiR/index.js";
@@ -27,6 +33,9 @@ export const useTOIRStore = defineStore("TOIR", {
             breakdownsChartHeight: 400,
             initialNumberOfRefunds: NumberOfRefunds,
             initialNumberOfRefundsOptions: NumberOfRefundsOptions,
+            initialOrganizationOfRepairs: OrganizationOfRepairs,
+            initialOrganizationOfRepairsSecond: OrganizationOfRepairsSecond,
+            initialOrganizationOfRepairsOptionsSecond: OrganizationOfRepairsOptionsSecond,
             initialActualAccidentRate: ActualAccidentRate,
             initialWorkPlanningIndicator: WorkPlanningIndicator,
             initialTotalEmergencyDowntime: TotalEmergencyDowntime,
@@ -151,6 +160,32 @@ export const useTOIRStore = defineStore("TOIR", {
                     })
                     .catch((e) => {
                         throw new Error(e)
+                    })
+                await TOIRDataService.getTheWorkPlanningIndicator(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+
+                        const data = response.data;
+                        const labels = [];
+                        const coefficients = [];
+                        const differences = [];
+
+                        data.forEach(item => {
+                            if (!labels.includes(item.combinedDate)) {
+                                labels.push(item.combinedDate);
+                            }
+                            coefficients.push(item.coefficient);
+                            differences.push( 1 - item.coefficient );
+                        });
+
+                        this.initialOrganizationOfRepairs.labels = labels;
+
+                        this.initialOrganizationOfRepairs.datasets[1].data = differences;
+
+                        this.initialOrganizationOfRepairs.datasets[0].data = coefficients;
+
+                    })
+                    .catch((e) => {
+                        console.log(e)
                     })
 
                 await TOIRDataService.getEmergencyDowntime(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
@@ -341,6 +376,29 @@ export const useTOIRStore = defineStore("TOIR", {
                         this.initialNumberOfBreakdownsByFaultName.datasets = Array.from(datasetsMap.values());
                         this.initialNumberOfBreakdownsByFaultNameOptions.scales.x.max = yBorder
                         console.log(data)
+
+                    })
+                    .catch((e) => {
+                        throw new Error(e)
+                    })
+                await TOIRDataService.getCountRequiredSpareParts(dateStart, dateEnd, breakdownType, machineClassIds, machineMarkIds, machineModelIds, machineIds)
+                    .then((response) => {
+                        const data = response.data
+                        console.log('getCountRequiredSpareParts МОЙ', response.data)
+                        const labelsSet = new Set();
+                        console.log(data[0].data)
+                        data[0].data.forEach(item => {
+                            labelsSet.add(item.breakdownGroupName)
+                        })
+
+                        const labels = Array.from(labelsSet)
+                        console.log('labels', labels)
+                        this.initialOrganizationOfRepairsSecond
+                        this.initialOrganizationOfRepairsOptionsSecond
+                        const machineName = data[0].data[0].markName || 'Без названия';
+                        this.initialOrganizationOfRepairsOptionsSecond.plugins.title.text = 'Страховой объем запасных частей, шт ' + `( ${machineName} )`
+                        console.log(machineName)
+                        // this.initialOrganizationOfRepairsOptionsSecond = getOrganizationOfRepairsOptionsSecond(machineName);
 
                     })
                     .catch((e) => {

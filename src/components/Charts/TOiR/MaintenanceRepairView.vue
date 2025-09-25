@@ -9,7 +9,6 @@
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
           <Bar :options="ActualAccidentRateOptions" :data="ActualAccidentRate" />
         </div>
-
         <div class="drop-shadow-2xl rounded-2xl block px-6 py-3.5 bg-white">
           <Bar :options="OrganizationOfRepairsOptions" :data="OrganizationOfRepairs" />
         </div>
@@ -33,8 +32,11 @@
         <div class="col-span-2 drop-shadow-2xl rounded-2xl block px-6 bg-white">
           <Bar :options="NumberOfRefundsOptions" :data="NumberOfRefunds" />
         </div>
-        <div ref="breakdownsChartContainer"  class="element-chart col-span-2 drop-shadow-2xl rounded-2xl block px-6 bg-white" :style="{ height: breakdownsChartHeight + 'px' }">
+        <div ref="breakdownsChartContainer"  class="element-chart col-span-1 drop-shadow-2xl rounded-2xl block px-6 bg-white" :style="{ height: breakdownsChartHeight + 'px' }" style="max-height: 1000px">
           <Bar :options="NumberOfBreakdownsByFaultNameOptions" :data="NumberOfBreakdownsByFaultName" />
+        </div>
+        <div ref="breakdownsChartContainer"  class="element-chart col-span-1 drop-shadow-2xl rounded-2xl block px-6 bg-white">
+          <Bar :options="OrganizationOfRepairsOptionsSecond" :data="OrganizationOfRepairsSecond" />
         </div>
       </div>
     </div>
