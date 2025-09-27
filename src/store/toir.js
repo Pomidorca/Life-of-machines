@@ -192,42 +192,57 @@ export const useTOIRStore = defineStore("TOIR", {
                     .then((response) => {
                         const data = response.data
 
-                        const labelsSet = new Set();
-                        const datasetsMap = new Map();
+                        if (response.data.length) {
 
-                        data.forEach(item => {
-                            item.data.forEach(el => {
-                                labelsSet.add(el.combinedDate);
-                            });
-                        });
+                            const labelsSet = new Set();
+                            const datasetsMap = new Map();
 
-                        const labels = Array.from(labelsSet).sort();
-
-                        data.forEach((item, index) => {
-                            const labelKey = item.markName || item.machineClassName;
-                            const colorIndex = index % this.colors.length;
-
-                            const dataset = {
-                                label: labelKey,
-                                data: new Array(labels.length).fill(null),
-                                backgroundColor: this.colors[colorIndex].background,
-                                borderColor: this.colors[colorIndex].border,
-                                fill: false,
-                                tension: 0.1
-                            };
-
-                            item.data.forEach(el => {
-                                const dateIndex = labels.indexOf(el.combinedDate);
-                                if (dateIndex !== -1) {
-                                    dataset.data[dateIndex] = el.unplannedRepair;
-                                }
+                            data.forEach(item => {
+                                item.data.forEach(el => {
+                                    labelsSet.add(el.combinedDate);
+                                });
                             });
 
-                            datasetsMap.set(labelKey, dataset);
-                        });
+                            const labels = Array.from(labelsSet).sort();
 
-                        this.initialWorkPlanningIndicator.labels = labels;
-                        this.initialWorkPlanningIndicator.datasets = Array.from(datasetsMap.values());
+                            data.forEach((item, index) => {
+                                const labelKey = item.markName || item.machineClassName;
+                                const colorIndex = index % this.colors.length;
+
+                                const dataset = {
+                                    label: labelKey,
+                                    data: new Array(labels.length).fill(null),
+                                    backgroundColor: this.colors[colorIndex].background,
+                                    borderColor: this.colors[colorIndex].border,
+                                    fill: false,
+                                    tension: 0.1
+                                };
+
+                                item.data.forEach(el => {
+                                    const dateIndex = labels.indexOf(el.combinedDate);
+                                    if (dateIndex !== -1) {
+                                        dataset.data[dateIndex] = el.unplannedRepair;
+                                    }
+                                });
+
+                                datasetsMap.set(labelKey, dataset);
+                            });
+
+                            this.initialWorkPlanningIndicator.labels = labels;
+                            this.initialWorkPlanningIndicator.datasets = Array.from(datasetsMap.values());
+
+                        } else {
+                            this.initialWorkPlanningIndicator.datasets = [
+                                {
+                                    label: 'Данных нет',
+                                    data: [],
+                                    backgroundColor: 'rgba(54, 162, 100)',
+                                    borderColor: 'rgba(255, 99, 132)',
+                                    fill: false,
+                                    tension: 0.1
+                                },
+                            ]
+                        }
 
                     })
                     .catch((e) => {
@@ -237,42 +252,55 @@ export const useTOIRStore = defineStore("TOIR", {
                     .then((response) => {
                         const data = response.data
 
-                        const labelsSet = new Set();
-                        const datasetsMap = new Map();
+                        if (response.data.length) {
+                            console.log('daga', response.data)
+                            const labelsSet = new Set();
+                            const datasetsMap = new Map();
 
-                        data.forEach(item => {
-                            item.data.forEach(el => {
-                                labelsSet.add(el.combinedDate);
+                            data.forEach(item => {
+                                item.data.forEach(el => {
+                                    labelsSet.add(el.combinedDate);
+                                });
                             });
-                        });
 
-                        const labels = Array.from(labelsSet).sort();
+                            const labels = Array.from(labelsSet).sort();
 
-                        data.forEach((item, index) => {
-                            const labelKey = item.markName || item.machineClassName;
-                            const colorIndex = index % this.colors.length;
+                            data.forEach((item, index) => {
+                                const labelKey = item.markName || item.machineClassName;
+                                const colorIndex = index % this.colors.length;
 
-                            const dataset = {
-                                label: labelKey,
-                                data: new Array(labels.length).fill(null),
-                                backgroundColor: this.colorsSecond[colorIndex].background,
-                                borderColor: this.colorsSecond[colorIndex].border,
+                                const dataset = {
+                                    label: labelKey,
+                                    data: new Array(labels.length).fill(null),
+                                    backgroundColor: this.colorsSecond[colorIndex].background,
+                                    borderColor: this.colorsSecond[colorIndex].border,
+                                    fill: false,
+                                    tension: 0.1
+                                };
+
+                                item.data.forEach(el => {
+                                    const dateIndex = labels.indexOf(el.combinedDate);
+                                    if (dateIndex !== -1) {
+                                        dataset.data[dateIndex] = el.averageRepairTime;
+                                    }
+                                });
+
+                                datasetsMap.set(labelKey, dataset);
+                            });
+
+                            this.initialTotalEmergencyDowntime.labels = labels;
+                            this.initialTotalEmergencyDowntime.datasets = Array.from(datasetsMap.values());
+                        } else {
+                            this.initialTotalEmergencyDowntime.datasets = [{
+                                label: 'Данных нет',
+                                data: [],
+                                backgroundColor: 'rgba(54, 162, 235)',
+                                borderColor: 'rgba(255, 99, 132)',
                                 fill: false,
                                 tension: 0.1
-                            };
+                            }]
+                        }
 
-                            item.data.forEach(el => {
-                                const dateIndex = labels.indexOf(el.combinedDate);
-                                if (dateIndex !== -1) {
-                                    dataset.data[dateIndex] = el.averageRepairTime;
-                                }
-                            });
-
-                            datasetsMap.set(labelKey, dataset);
-                        });
-
-                        this.initialTotalEmergencyDowntime.labels = labels;
-                        this.initialTotalEmergencyDowntime.datasets = Array.from(datasetsMap.values());
 
                     })
                     .catch((e) => {
@@ -385,24 +413,28 @@ export const useTOIRStore = defineStore("TOIR", {
                     .then((response) => {
                         const data = response.data
                         console.log('getCountRequiredSpareParts МОЙ', response.data)
-                        const labelsSet = new Set();
-                        const datasets = []
-                        console.log(data[0].data)
-                        data[0].data[0].data.forEach(item => {
-                            console.log(item.requiredSparePartsCount.count)
-                            labelsSet.add(item.breakdownGroupName)
-                            if (item.requiredSparePartsCount.count) {
-                                datasets.push(item.requiredSparePartsCount.count || 0)
-                            }
-                        })
+                        if (response.data.length) {
+                            const labelsSet = new Set();
+                            const datasets = []
+                            console.log(data[0].data)
+                            data[0].data[0].data.forEach(item => {
+                                console.log(item.requiredSparePartsCount.count)
+                                labelsSet.add(item.breakdownGroupName)
+                                if (item.requiredSparePartsCount.count) {
+                                    datasets.push(item.requiredSparePartsCount.count || 0)
+                                }
+                            })
 
-                        const labels = Array.from(labelsSet)
-                        console.log('labels', labels)
-                        this.initialOrganizationOfRepairsSecond.labels = labels;
-                        this.initialOrganizationOfRepairsSecond.datasets[0].data = datasets;
-                        const machineName = data[0].data[0].markName || 'Без названия';
-                        this.initialOrganizationOfRepairsOptionsSecond.plugins.title.text = 'Страховой объем запасных частей, шт ' + `( ${machineName} )`
-                        console.log(machineName)
+                            const labels = Array.from(labelsSet)
+                            console.log('labels', labels)
+                            this.initialOrganizationOfRepairsSecond.labels = labels;
+                            this.initialOrganizationOfRepairsSecond.datasets[0].data = datasets;
+                            const machineName = data[0].data[0].markName || 'Без названия';
+                            this.initialOrganizationOfRepairsOptionsSecond.plugins.title.text = 'Страховой объем запасных частей, шт ' + `( ${machineName} )`
+                            console.log(machineName)
+                        } else {
+                            this.initialOrganizationOfRepairsSecond.datasets[0].data = []
+                        }
                         // this.initialOrganizationOfRepairsOptionsSecond = getOrganizationOfRepairsOptionsSecond(machineName);
 
                     })
