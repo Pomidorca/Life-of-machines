@@ -386,15 +386,20 @@ export const useTOIRStore = defineStore("TOIR", {
                         const data = response.data
                         console.log('getCountRequiredSpareParts МОЙ', response.data)
                         const labelsSet = new Set();
+                        const datasets = []
                         console.log(data[0].data)
-                        data[0].data.forEach(item => {
+                        data[0].data[0].data.forEach(item => {
+                            console.log(item.requiredSparePartsCount.count)
                             labelsSet.add(item.breakdownGroupName)
+                            if (item.requiredSparePartsCount.count) {
+                                datasets.push(item.requiredSparePartsCount.count || 0)
+                            }
                         })
 
                         const labels = Array.from(labelsSet)
                         console.log('labels', labels)
-                        this.initialOrganizationOfRepairsSecond
-                        this.initialOrganizationOfRepairsOptionsSecond
+                        this.initialOrganizationOfRepairsSecond.labels = labels;
+                        this.initialOrganizationOfRepairsSecond.datasets[0].data = datasets;
                         const machineName = data[0].data[0].markName || 'Без названия';
                         this.initialOrganizationOfRepairsOptionsSecond.plugins.title.text = 'Страховой объем запасных частей, шт ' + `( ${machineName} )`
                         console.log(machineName)

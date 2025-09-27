@@ -272,7 +272,7 @@ export const OrganizationOfRepairsOptionsSecond = {
             }
         },
         legend: {
-            position: 'bottom'
+            position: 'null'
         }
     },
     scales: {
